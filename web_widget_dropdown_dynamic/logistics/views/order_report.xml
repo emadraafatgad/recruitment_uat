@@ -1,0 +1,113 @@
+
+<odoo>
+   <template id="operation_order_report_temp">
+
+            <div class="page">
+
+                        <div class="col-xs-3" border="1">
+                            <span style="font-weight:bold;">Order No: </span><span t-field="o.name"/>
+                        </div>
+                        <div  style="margin-top:10px;">
+                             <span style="font-weight:bold;margin-top:15px;">Container Type: </span><span t-field="o.container_type.name"/>
+                        </div>
+                       <div style="margin-top:10px;">
+                             <span style="font-weight:bold;">Booking No: </span><span style="margin-left:100px;" t-field="o.reserve_no"/>
+                        </div>
+                       <div style="margin-top:10px;">
+                             <span style="font-weight:bold;">Forwarder: </span><span style="margin-left:200px;" t-field="o.forwarder"/>
+                        </div>
+                        <div style="margin-top:10px;">
+                             <span style="font-weight:bold;">Shipping Line: </span><span  t-field="o.shipping_line"/>
+                        </div>
+                       <div style="margin-top:10px;">
+                             <span style="font-weight:bold;">Containers No: </span><span t-field="o.container_no"/>
+                        </div>
+                       <div style="margin-top:10px;">
+                             <span style="font-weight:bold;">Commodity: </span><span style="margin-left:200px;" t-field="o.product.name"/>
+                       </div>
+                <table width="700">
+                    <tr>
+                       <td><span style="font-weight:bold;">Container Weight: </span></td>
+                       <td><span t-field="o.container_weight"/></td>
+                       <td><span style="font-weight:bold;">Total Weight: </span></td>
+                        <td><span t-field="o.total_weight"/></td>
+                    </tr>
+                    <tr>
+                      <td><span style="font-weight:bold;">Container Bags No: </span></td>
+                       <td><span t-field="o.container_bag_no"/></td>
+                       <td><span style="font-weight:bold;">Total Bags: </span></td>
+                       <td><span t-field="o.total_bags"/></td>
+                    </tr>
+                </table>
+
+                <div style="margin-top:10px;">
+                    <span style="font-weight:bold;">Bag Type:</span>
+                    <span t-field="o.total_bags"/>
+                    <span t-field="o.bag_type"/>
+                </div>
+                <div style="margin-top:10px;">
+                             <span style="font-weight:bold;">Packing: </span><span t-field="o.packing"/>
+                </div>
+                <div style="margin-top:10px;">
+                             <span style="font-weight:bold;">Containers Withdrawl Port: </span><span t-field="o.shipment_port"/>
+                </div>
+                <table width="800">
+                    <tr>
+                       <td><span style="font-weight:bold;">POL: </span></td>
+                        <td><span t-field="o.shipment_port"/></td>
+                        <td><span style="font-weight:bold;">POD: </span></td>
+                        <td><span t-field="o.arrival_port"/></td>
+                    </tr>
+                    <tr>
+                        <td><span style="font-weight:bold;">Loading Place: </span></td>
+                        <td><span t-field="o.loading_place"/></td>
+                        <td><span style="font-weight:bold;">Start Loading Date: </span></td>
+                        <td><span t-field="o.start_date"/></td>
+                    </tr>
+                    <tr>
+                        <td><span style="font-weight:bold;">Cut Off: </span></td>
+                        <td><span t-field="o.end_date"/></td>
+                        <td><span style="font-weight:bold;">Sailing Date: </span></td>
+                        <td><span t-field="o.travel_date"/></td>
+                    </tr>
+                    <tr>
+                        <td><span style="font-weight:bold;">Inspection Company1: </span></td>
+                        <td><span t-field="o.inspection_company1"/></td>
+                        <td><span style="font-weight:bold;">Inspection Company1: </span></td>
+                        <td><span t-field="o.inspection_company1"/></td>
+                    </tr>
+
+                </table>
+
+                <div style="margin-top:10px;">
+                             <span style="font-weight:bold;">Agree: </span><span t-field="o.agree"/>
+                </div>
+                <div style="margin-top:10px;">
+                             <span style="font-weight:bold;">Client Code: </span><span t-field="o.customer_code"/>
+                </div>
+                 <div style="margin-top:10px;">
+                             <span style="font-weight:bold;">Notes: </span><span t-field="o.notes"/>
+                </div>
+            </div>
+
+
+
+    </template>
+    <template id="operation_order_report">
+        <t t-call="web.external_layout">
+    <t t-call="web.html_container">
+        <t t-foreach="docs" t-as="o">
+            <t t-call="logistics.operation_order_report_temp"/>
+        </t>
+    </t>
+        </t>
+</template>
+<report
+            id="operation_order_report_id"
+            model="operation.order"
+            string="Order Report"
+            report_type="qweb-pdf"
+            name="logistics.operation_order_report"
+            file="logistics.operation_order_report"
+        />
+</odoo>

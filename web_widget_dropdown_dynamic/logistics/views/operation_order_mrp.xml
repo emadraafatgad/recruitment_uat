@@ -1,0 +1,111 @@
+<odoo>
+<record id="operation_order_mrp_code" model="ir.sequence">
+        <field name="name">Order MRP Plan Code</field>
+        <field name="code">operation.order.mrp</field>
+        <field name="prefix">Manu/%(year)s/</field>
+        <field name="padding">4</field>
+        <field name="company_id" eval="False"/>
+    </record>
+     <record id="operation_order_mrp_action" model="ir.actions.act_window">
+        <field name="name">Order MRP Plan</field>
+        <field name="res_model">operation.order.mrp</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form,kanban,search</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+    </record>
+    <record model="ir.ui.view" id="operation_order_mrp_tree">
+        <field name="name">Operation Order MRP Tree</field>
+        <field name="model">operation.order.mrp</field>
+        <field name="arch" type="xml">
+            <tree>
+                 <field name="code"/>
+                 <field name="state"/>
+             </tree>
+        </field>
+    </record>
+
+    <record id="view_operation_order_mrp_form" model="ir.ui.view">
+        <field name="name">Operation Order MRP Form</field>
+        <field name="model">operation.order.mrp</field>
+        <field name="arch" type="xml">
+            <form>
+                 <header>
+                     <button name="action_confirm" string="Confirm" type="object" class="oe_highlight" states="new"/>
+                     <field name="state" widget="statusbar" statusbar_visible="new,confirmed"/>
+                </header>
+                <sheet>
+
+
+                             <h1>
+                            <field name="code" readonly="1"/>
+                             </h1>
+                    <group>
+                        <group>
+                            <field name="order_no"/>
+                            <field name="shipment_plan"/>
+                            <field name="product"/>
+                            <field name="packing"/>
+                        </group>
+                         <group>
+                            <field name="container_no"/>
+                            <field name="container_weight"/>
+                            <field name="total_weight"/>
+                            <field name="company_id"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="consumed_materials" string="Consumed Materials">
+                            <field name="plan_lines" attrs="{'readonly':[('state','=','confirmed')]}">
+                                <tree editable="top">
+                                    <field name="product_id" required="1"/>
+                                    <field name="product_uom" required="1"/>
+                                    <field name="product_qty" string="Qty"/>
+                                    <field name="plan_id" invisible="1"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+
+                 </sheet>
+
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <record id="view_bom_inherit" model="ir.ui.view">
+            <field name="name">BOM Inherit</field>
+            <field name="model">mrp.bom</field>
+            <field name="inherit_id" ref="mrp.mrp_bom_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='product_qty']/.." position="after">
+                    <field name="plan_id"/>
+
+            </xpath>
+            </field>
+    </record>
+    <record id="tree_bom_inherit" model="ir.ui.view">
+            <field name="name">BOM Tree Inherit</field>
+            <field name="model">mrp.bom</field>
+            <field name="inherit_id" ref="mrp.mrp_bom_tree_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//tree" position="replace">
+                   <tree string="Bill of Materials">
+                    <field name="active" invisible="1"/>
+                    <field name="sequence" invisible="1"/>
+                    <field name="plan_id"/>
+                    <field name="product_tmpl_id"/>
+                    <field name="product_id" groups="product.group_product_variant"/>
+                    <field name="product_qty"/>
+                    <field name="product_uom_id" groups="uom.group_uom"/>
+                    <field name="routing_id" groups="mrp.group_mrp_routings"/>
+                </tree>
+
+            </xpath>
+            </field>
+    </record>
+    <menuitem id="menu_operation_order_mrp" sequence="3" name="Operation Order" parent ="menu_logistics_info" action="operation_order_mrp_action" groups="logistics.group_operation_order_user"/>
+    </odoo>

@@ -1,0 +1,139 @@
+<odoo>
+    <record id="medical_list_code" model="ir.sequence">
+        <field name="name">Medical List</field>
+        <field name="code">medical.list</field>
+        <field name="prefix">BM/%(year)s/</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+    <record id="medical_list_action" model="ir.actions.act_window">
+        <field name="name">Big Medical</field>
+        <field name="res_model">medical.list</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+    </record>
+
+    <record id="view_medical_list_form" model="ir.ui.view">
+        <field name="name">Medical List</field>
+        <field name="model">medical.list</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="invoice" states="new"
+                            string="Invoice" type="object" class="oe_highlight"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="new,invoiced,done"/>
+                </header>
+                <sheet>
+                    <h1>
+                        <field name="name"/>
+                    </h1>
+                    <group>
+                        <group>
+                            <field name="hospital" options="{'no_create_edit':true}"
+                                   attrs="{'readonly':[('state','!=','new')]}"/>
+                            <field name="examination_date" attrs="{'readonly':[('state','!=','new')]}"/>
+                        </group>
+                        <group>
+                            <field name="total_lines" invisible="0"/>
+                            <field name="list_now_len" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Requests">
+                            <field name="medical_request" attrs="{'readonly':[('state','=','done')]}">
+                                <tree editable="top">
+                                    <field name="labor_id" string="Laborer" readonly="1"/>
+                                    <field name="national_id" invisible="1" readonly="1"/>
+                                    <field name="passport_no" readonly="1"/>
+                                    <field name="gcc_no" readonly="1"/>
+                                    <field name="hospital"
+                                           attrs="{'readonly':[('state','in',('fit','unfit','rejected'))]}"/>
+                                    <field name="check_date"
+                                           attrs="{'readonly':[('state','in',('fit','unfit','rejected'))]}"/>
+                                    <field name="deadline" invisible="1" />
+                                    <field name="medical_check"
+                                           attrs="{'readonly':[('state','in',('fit','unfit','rejected'))]}"/>
+                                    <field name="reason"
+                                           attrs="{'invisible':[('medical_check','!=','unfit')],'required':[('medical_check', '=', 'unfit')]}"/>
+                                    <field name="state" readonly="1"/>
+                                    <field name="recheck_appear" invisible="1"/>
+                                    <field name="confirm_appear" invisible="1"/>
+                                    <field name="invoiced" invisible="1"/>
+                                    <button name="action_done" attrs="{'invisible':[('confirm_appear','=',False)]}"
+                                            string="Confirm" type="object"
+                                            class="oe_highlight"/>
+                                    <button name="action_recheck" attrs="{'invisible':[('recheck_appear','=',False)]}"
+                                            string="Recheck" type="object"
+                                            class="oe_highlight"/>
+                                    <button name="action_reject" attrs="{'invisible':[('confirm_appear','=',False)]}"
+                                            string="Reject" type="object"
+                                            class="oe_highlight"/>
+                                </tree>
+                            </field>
+
+
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_medical_list_tree">
+        <field name="name">Medical List</field>
+        <field name="model">medical.list</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="hospital"/>
+                <field name="examination_date" attrs="{'readonly':[('state','!=','new')]}"/>
+                <field name="total_lines"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+    <record id="medical_list_search" model="ir.ui.view">
+        <field name="name">Medical List Search</field>
+        <field name="model">medical.list</field>
+        <field name="arch" type="xml">
+
+            <search>
+                <field name="hospital"/>
+                <field name="medical_request" string="Labour"
+                       filter_domain="[('medical_request.labor_id', 'ilike', self)]"/>
+                <separator/>
+                <filter name="new" string="New"
+                        domain="[('state','=','new')]"/>
+                <filter name="invoiced" string="Invoiced"
+                        domain="[('state','=','invoiced')]"/>
+                <filter name="done" string="Done"
+                        domain="[('state','=','done')]"/>
+
+                <filter string="Today" name="today" domain="[('create_date','&gt;=',time.strftime('%%Y-%%m-%%d'))]"/>
+                <filter string="This Week" name="this_week" domain="[
+                                '&amp;',
+                                ('create_date', '>=', (context_today() + relativedelta(weeks=-1,days=1,weekday=0)).strftime('%Y-%m-%d')),
+                                ('create_date', '&lt;=', (context_today() + relativedelta(weekday=6)).strftime('%Y-%m-%d')),]"/>
+                <filter string="This Month" name="this_month"
+                        domain="[('create_date','&gt;=',time.strftime('%%Y-%%m-01'))]"/>
+                <filter string="This Year" name="this_year"
+                        domain="[('create_date','&gt;=',time.strftime('%%Y-01-01'))]"/>
+
+
+            </search>
+        </field>
+    </record>
+    <menuitem id="menu_medical_list" sequence="2" name="Big Medical Invoice" parent="main_menu_big_medical"
+              action="medical_list_action"/>
+
+
+</odoo>

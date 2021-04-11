@@ -1,0 +1,194 @@
+<odoo>
+     <record id="operation_order_code" model="ir.sequence">
+        <field name="name">Operation Order Code</field>
+        <field name="code">operation.order</field>
+        <field name="prefix"> </field>
+        <field name="padding">4</field>
+        <field name="company_id" eval="False"/>
+    </record>
+     <record id="operation_order_action" model="ir.actions.act_window">
+        <field name="name">Operation Order</field>
+        <field name="res_model">operation.order</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form,kanban,search</field>
+        <field name="domain">[('status','=','done')]</field>
+        <field name="context">{}</field>
+    </record>
+    <record model="ir.ui.view" id="operation_order_tree">
+        <field name="name">Operation Order Tree</field>
+        <field name="model">operation.order</field>
+        <field name="arch" type="xml">
+            <tree string="Operation Order">
+                 <field name="name"/>
+                 <field name="forwarder"/>
+                 <field name="shipping_line"/>
+                 <field name="product"/>
+                 <field name="packing"/>
+                 <field name="shipment_port"/>
+                 <field name="arrival_port"/>
+                 <field name="total_weight"/>
+                 <field name="amount"/>
+                 <field name="state"/>
+             </tree>
+        </field>
+    </record>
+
+    <record id="view_operation_order_form" model="ir.ui.view">
+        <field name="name">Operation Order Form</field>
+        <field name="model">operation.order</field>
+        <field name="arch" type="xml">
+            <form string="Operation Order">
+                 <header>
+                     <button name="action_confirm" string="Confirm" type="object" class="oe_highlight" states="new"/>
+                     <button name="action_invoice" string="Invoice" type="object" class="oe_highlight" attrs="{'invisible':['|',('show', '=',True),('state', '=','new')]}"/>
+                     <button name="action_deliver" string="Deliver" type="object" attrs="{'invisible':['|',('show_delivery', '=',True),('state', '=','new')]}"/>
+                    <field name="status" widget="statusbar"
+                               statusbar_visible="new,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button type="object" name="action_view_invoice" class="oe_stat_button" icon="fa-pencil-square-o" attrs="{'invisible':[('invoice_ids','=',[])]}">
+                            <field name="invoice_count" widget="statinfo" string="Invoices"/>
+                            <field name="invoice_ids" invisible="1"/>
+                            <field name="show" invisible="1"/>
+                        </button>
+                        <button type="object" name="action_view_delivery" class="oe_stat_button" icon="fa-truck" attrs="{'invisible':[('delivery_ids','=',[])]}">
+                            <field name="delivery_count" widget="statinfo" string="Delivery"/>
+                            <field name="delivery_ids" invisible="1"/>
+                            <field name="show_delivery" invisible="1"/>
+                        </button>
+                    </div>
+
+                        <div class="oe_title">
+                            <span class="o_form_label" >Order No</span>
+                             <h1>
+                            <field name="name" readonly="1"/>
+                             </h1>
+                        </div>
+                    <group>
+                        <group>
+                            <field name="state" invisible="1"/>
+<!--                            <field name="shipment_plan" options="{'no_create_edit':True}" />-->
+                            <field name="contract_id"/>
+                            <field name="product"/>
+                            <field name="reserve_no" />
+                            <field name="forwarder" />
+                            <field name="shipping_line" />
+                            <field name="vessel_name" />
+                            <field name="customer" invisible="1" string="Client"/>
+                            <field name="container_no" attrs="{'readonly':[('status','=','done')]}"/>
+                            <field name="commodity_type" invisible="1"/>
+                        </group>
+
+                    </group>
+
+                    <group>
+                        <group>
+                            <field name="container_weight" attrs="{'readonly':[('status','=','done')]}"/>
+                            <field name="price_unit" string="Unit Rate" attrs="{'readonly':[('status','=','done')]}"/>
+                        </group>
+                        <group>
+                            <field name="total_weight"/>
+
+                        </group>
+
+                    </group>
+                    <group>
+                        <group>
+                          <field name="bag_type"/>
+                        <field name="packing" />
+                        </group>
+
+                    </group>
+                    <group>
+                        <group>
+                            <field name="exit_port"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="shipment_port" />
+                            <field name="loading_place" />
+                            <field name="end_date" />
+                            <field name="inspection_company1"/>
+                        </group>
+                        <group>
+                           <field name="arrival_port" />
+                           <field name="start_date" />
+                           <field name="travel_date" />
+                           <field name="inspection_company2"/>
+                        </group>
+                    </group>
+                     <group>
+                         <field name="agree"/>
+                         <field name="invoice_no"/>
+                     </group>
+                     <group>
+                            <group>
+                                <field name="bank_certificate"/>
+                                <field name="customer_code"/>
+                                <field name="location_id" invisible="1"/>
+                            </group>
+                             <group>
+                                <field name="delivered_qty"/>
+                                <field name="company_id"/>
+                            </group>
+                     </group>
+
+                    <group>
+                        <field name="notes"/>
+                    </group>
+
+
+
+                 </sheet>
+
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <record id="view_operation_order_filter" model="ir.ui.view">
+            <field name="name">operation.order.search</field>
+            <field name="model">operation.order</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="product" string="Commodity"/>
+                    <field name="forwarder" string="Forwarder"/>
+                    <field name="price_unit" string="Forwarder"/>
+                    <field name="packing"/>
+                    <field name="arrival_port" string="POD"/>
+                    <field name="end_date" string="Cut Off"/>
+                    <field name="travel_date" string="Sailing Date"/>
+                    <field name="inspection_company1"/>
+                    <field name="inspection_company2"/>
+                    <separator/>
+                    <filter name="new" string="New"
+                            domain="[('state','=','new')]"/>
+                    <filter name="confirmed" string="Confirmed"
+                            domain="[('state','=','confirmed')]"/>
+                    <filter name="delivered" string="Delivered"
+                            domain="[('show_delivery','=',True)]"/>
+                    <filter name="invoiced" string="Invoiced"
+                            domain="[('show','=',True)]"/>
+                    <filter name="clearance_finished" string="Clearance Finished"
+                            domain="[('clearance_finished','=',True)]"/>
+                    <filter string="Today" name="today" domain="[('create_date','&gt;=',time.strftime('%%Y-%%m-%%d'))]"/>
+                    <filter string="This Week" name="this_week" domain="[
+                                '&amp;',
+                                ('create_date', '>=', (context_today() + relativedelta(weeks=-1,days=1,weekday=0)).strftime('%Y-%m-%d')),
+                                ('create_date', '&lt;=', (context_today() + relativedelta(weekday=6)).strftime('%Y-%m-%d')),]"/>
+                    <filter string="This Month" name="this_month" domain="[('create_date','&gt;=',time.strftime('%%Y-%%m-01'))]"/>
+                    <filter string="This Year" name="this_year" domain="[('create_date','&gt;=',time.strftime('%%Y-01-01'))]"/>
+
+                </search>
+            </field>
+        </record>
+
+
+     <menuitem id="menu_operation_order" sequence="2" name="Operation Order" parent ="menu_logistics_info" action="operation_order_action" groups="logistics.group_operation_order_user"/>
+
+
+</odoo>

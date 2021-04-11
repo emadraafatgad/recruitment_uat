@@ -1,0 +1,116 @@
+<odoo>
+     <record id="travel_list_code" model="ir.sequence">
+        <field name="name">Travel List Code</field>
+        <field name="code">travel.list</field>
+        <field name="prefix">Travel/%(year)s/</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+    <record id="travel_list_action" model="ir.actions.act_window">
+        <field name="name">Travel List</field>
+        <field name="res_model">travel.list</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+    </record>
+
+    <record id="view_travel_list_form" model="ir.ui.view">
+        <field name="name">Travel List Form</field>
+        <field name="model">travel.list</field>
+        <field name="arch" type="xml">
+            <form>
+               <header>
+                    <button name="action_inprogress" states="new"
+                                string="InProgress" type="object"
+                                class="oe_highlight"/>
+                    <field name="state" widget="statusbar"
+                               statusbar_visible="new,in_progress,done"/>
+                </header>
+                <sheet>
+                    <h1>
+                        <field name="name"/>
+                    </h1>
+                    <group>
+                        <group>
+                            <field name="travel_company" options="{'no_create_edit':true}" required="1" attrs="{'readonly':[('state','=','done')]}"/>
+                            <field name="list_total_count" invisible="1"/>
+                            <field name="list_now_len" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                     <page string="List">
+                       <field name="travel_list"  attrs="{'readonly':[('state','=','done')]}">
+                           <tree editable="top">
+                  <field name="name"/>
+                 <field name="labor_id"  string="Laborer" readonly="1"/>
+                 <field name="passport_no" readonly="1"/>
+                 <field name="agency" readonly="1"/>
+                 <field name="agency_code" string="Code/Agency" readonly="1"/>
+                 <field name="destination_city" readonly="1"/>
+                 <field name="state" readonly="1"/>
+                 <field name="travel_list_id" invisible="1"/>
+                 <field name="travel_company" invisible="1"/>
+                 <field name="reservation_no"/>
+                 <field name="departure_date"/>
+                 <field name="confirmation_date"/>
+                 <field name="flight_details"/>
+                 <field name="state"/>
+                               <button name="action_done" states="in_progress"
+                                string="Done" type="object"
+                                class="oe_highlight"/>
+                           </tree>
+                               </field>
+                     </page>
+                   </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_travel_list_tree">
+        <field name="name">Travel List Tree</field>
+        <field name="model">travel.list</field>
+        <field name="arch" type="xml">
+            <tree >
+                <field name="name"/>
+                <field name="travel_company"/>
+             </tree>
+        </field>
+    </record>
+    <record id="view_travel_list_search" model="ir.ui.view">
+            <field name="name">Travel List Search</field>
+            <field name="model">travel.list</field>
+            <field name="arch" type="xml">
+
+                <search>
+                <separator/>
+                    <field name="travel_company"/>
+                    <filter name="new" string="New"
+                            domain="[('state','=','new')]"/>
+                    <filter name="done" string="Done"
+                            domain="[('state','=','done')]"/>
+                    <filter string="Today" name="today" domain="[('create_date','&gt;=',time.strftime('%%Y-%%m-%%d'))]"/>
+                    <filter string="This Week" name="this_week" domain="[
+                                '&amp;',
+                                ('create_date', '>=', (context_today() + relativedelta(weeks=-1,days=1,weekday=0)).strftime('%Y-%m-%d')),
+                                ('create_date', '&lt;=', (context_today() + relativedelta(weekday=6)).strftime('%Y-%m-%d')),]"/>
+                    <filter string="This Month" name="this_month" domain="[('create_date','&gt;=',time.strftime('%%Y-%%m-01'))]"/>
+                    <filter string="This Year" name="this_year" domain="[('create_date','&gt;=',time.strftime('%%Y-01-01'))]"/>
+
+
+                </search>
+            </field>
+        </record>
+
+    <menuitem id="menu_travel_list" sequence="2" name="Bookings" parent="menu_travel_company"
+              action="travel_list_action"/>
+
+
+</odoo>

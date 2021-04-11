@@ -1,0 +1,88 @@
+<odoo>
+     <record id="interpol_make_invoice_code" model="ir.sequence">
+        <field name="name">Interpol Make Invoice</field>
+        <field name="code">interpol.make.invoice</field>
+        <field name="prefix">Int-list/</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="interpol_make_invoice_action" model="ir.actions.act_window">
+        <field name="name">Interpol Make Invoice</field>
+        <field name="res_model">interpol.make.invoice</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+    </record>
+
+    <record id="view_interpol_make_invoice_form" model="ir.ui.view">
+        <field name="name">Interpol Make Invoice Form</field>
+        <field name="model">interpol.make.invoice</field>
+        <field name="arch" type="xml">
+            <form string="Interpol Make Invoice">
+                <header>
+                    <button name="action_invoice" states="new"
+                                string="Invoice" type="object"
+                                class="oe_highlight"/>
+
+                    <field name="state" widget="statusbar"
+                               statusbar_visible="new,to_invoice,invoiced"/>
+                </header>
+                <sheet>
+                    <h1>
+                        <field name="name"/>
+                    </h1>
+                    <group>
+                        <group>
+                            <field name="placing_issue" attrs="{'readonly':[('state','!=','new')],'required':[('state','=','new')]}"/>
+                            <field name="product" invisible="1"/>
+                            <field name="to_invoice_date"/>
+                        </group>
+                        <group>
+                            <field name="issued_date"/>
+                            <field name="invoice_date"/>
+                            <field name="list_now_len" invisible="1"/>
+                        </group>
+
+                    </group>
+                  <notebook>
+                     <page string="Requests">
+                       <field name="interpol_request" domain="[('state','=','new')]" attrs="{'readonly':[('state','!=','new')],'required':[('state','=','new')]}">
+                           <tree>
+                  <field name="name" editable="top"/>
+                 <field name="labor_id"  string="Laborer" readonly="1"/>
+                 <field name="interpol_no"/>
+                 <field name="interpol_start_date"/>
+                 <field name="interpol_end_date"/>
+                 <field name="state"/>
+                           </tree>
+                               </field>
+                     </page>
+                   </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_interpol_make_invoice_tree">
+        <field name="name">Interpol Make Invoice Tree</field>
+        <field name="model">interpol.make.invoice</field>
+        <field name="arch" type="xml">
+            <tree string="Request">
+                 <field name="name" />
+                 <field name="state" />
+             </tree>
+        </field>
+    </record>
+
+    <menuitem id="menu_interpol_make_invoice" sequence="2" name="To Invoice" parent="main_menu_interpol"
+              action="interpol_make_invoice_action" />
+
+
+
+</odoo>

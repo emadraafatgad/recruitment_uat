@@ -1,0 +1,167 @@
+
+<odoo>
+   <template id="labor_cv_report_temp">
+        <t t-set="o" t-value="o.with_context(lang=o.agency.lang)"/>
+            <div class="page">
+
+                 <div>
+                     <img t-if="o.image" t-att-src="image_data_uri(o.image)"  style="max-height: 150px;float: right;margin-right:55px" />
+                  </div>
+
+<table border="1" width="600">
+    <tr>
+       <td><span style="font-weight:bold;">COMPANY NAME</span></td>
+        <td><span t-field="o.agency.name"/></td>
+    </tr>
+    <tr>
+       <td><span style="font-weight:bold;">APPLICATION NUMBER</span></td>
+        <td><span t-field="o.agency_code.name"/></td>
+    </tr>
+    <tr>
+       <td><span style="font-weight:bold;">POSITION APPLYING FOR</span></td>
+        <td><span t-field="o.occupation"/></td>
+    </tr>
+    <tr>
+       <td><span style="font-weight:bold;">MONTHLY SALARY</span></td>
+        <td><span t-field="o.salary"/><span t-field="o.salary"/></td>
+    </tr>
+    <tr>
+       <td><span style="font-weight:bold;">CONTRACT PERIOD </span></td>
+        <td><span> 2 YRS</span></td>
+    </tr>
+    <tr>
+       <td><span style="font-weight:bold;">MOBILE NUMBER</span></td>
+        <td><span t-field="o.phone"/></td>
+    </tr>
+    <tr>
+       <td><span style="font-weight:bold;">Full Name</span></td>
+        <td><span t-field="o.name"/></td>
+    </tr>
+
+
+</table>
+
+                <table border="1" width="800" style="margin-top:5px;">
+                    <caption style="font-weight:bold;text-align:left">
+                        DETAILS OF APPLICANT -- PASSPORT DETAILS
+                    </caption>
+                    <tr>
+                      <td><span style="font-weight:bold;">NATIONALITY</span></td>
+                      <td><span>UGANDAN</span></td>
+                      <td><span style="font-weight:bold;">PASSPORT NO.</span></td>
+                      <td><span t-field="o.passport_no"/></td>
+                    </tr>
+                    <tr>
+                      <td><span style="font-weight:bold;">RELIGION</span></td>
+                      <td><span t-field="o.religion"/></td>
+                      <td><span style="font-weight:bold;">DATE ISSUED</span></td>
+                      <td><span t-field="o.pass_start_date"/></td>
+                    </tr>
+
+                    <tr>
+                      <td><span style="font-weight:bold;">DATE OF BIRTH</span></td>
+                      <td><span t-field="o.date_of_birth"/></td>
+                      <td><span style="font-weight:bold;">PLACE ISSUED</span></td>
+                      <td><span t-field="o.pass_from"/></td>
+                    </tr>
+                    <tr>
+                      <td><span style="font-weight:bold;">AGE</span></td>
+                        <td><span t-field="o.age"/><span> YRS</span></td>
+                      <td><span style="font-weight:bold;">DATE OF EXPIRY</span></td>
+                      <td><span t-field="o.pass_end_date"/></td>
+                    </tr>
+                    <tr>
+                      <td><span style="font-weight:bold;">PLACE OF BIRTH</span></td>
+                        <td> </td>
+                        <td rowspan="20" colspan="2"><img t-if="o.large_image" t-att-src="image_data_uri(o.large_image)" style="max-height:400px;max-width:400;" />
+                        </td>
+
+                    </tr>
+                    <tr>
+                      <td><span style="font-weight:bold;">MARITAL STATUS</span></td>
+                        <td><span t-field="o.marital_status"/></td>
+
+                    </tr>
+                    <tr>
+                      <td><span style="font-weight:bold;">NO. OF CHILDREN</span></td>
+                        <td><span t-field="o.children"/></td>
+                    </tr>
+                    <tr>
+
+                      <td><span style="font-weight:bold;">HEIGHT</span></td>
+                        <td ><span t-field="o.height" /></td>
+                    </tr>
+
+                    <tr>
+                      <td><span style="font-weight:bold;">WEIGHT</span></td>
+                        <td><span t-field="o.weight"/></td>
+                       <!-- <td colspan="2" rowspan="8"><img t-if="o.large_image" t-att-src="image_data_uri(o.large_image)" style="max-height:500px;max-width:500;" /></td>-->
+                    </tr>
+
+                    <tr>
+                      <td colspan="2" style="font-weight:bold;text-align:center;">LANGUAGES YOU CAN SPEAK</td>
+                    </tr>
+                     <tr t-foreach="o.language" t-as="lang">
+                      <td colspan="2"><span t-field="lang.name" /></td>
+                    </tr>
+
+
+                    <tr>
+                      <td  colspan="2" style="font-weight:bold;text-align:center;">HIGHEST EDUCATIONAL ATTAINMENT</td>
+                    </tr>
+                     <tr>
+                      <td style="font-weight:bold;">EDUCATION</td>
+                      <td><span t-field="o.education_certificate"/></td>
+                     </tr>
+                    <tr>
+                      <td colspan="2" style="font-weight:bold;text-align:center;">Experiance</td>
+                    </tr>
+                    <tr t-foreach="o.experience_ids" t-as="exper">
+                      <td  >
+                          <span style="font-weight:bold;" t-field="exper.country_id.name"/></td>
+                    <td>
+                          <span style="font-weight:bold;" t-field="exper.year_count"/> years
+                      </td>
+                     </tr>
+                     <tr>
+                      <td colspan="2" style="font-weight:bold;text-align:center;">Skills</td>
+                    </tr>
+                    <tr t-foreach="o.specifications" t-as="spec">
+                      <td colspan="2"><span t-field="spec.name" /></td>
+                    </tr>
+                </table>
+
+                <div style="border:groove; width:795; padding-bottom:30px; margin-top:5px;">
+                  <span style="font-weight:bold;"> Remarks:  </span><span t-field="o.general_remarks" />
+                </div>
+
+            </div>
+
+    </template>
+    <template id="labor_cv_report">
+    <t t-call="web.html_container">
+        <t t-foreach="docs" t-as="o">
+            <t t-call="master_data.labor_cv_report_temp" t-lang="o.agent.lang"/>
+        </t>
+    </t>
+</template>
+<record id="paperformat_lowmargin_labor_cv" model="report.paperformat">
+    <field name="name">European A4 low margin</field>
+    <field name="default" eval="True" />
+    <field name="format">A4</field>
+    <field name="page_height">0</field>
+    <field name="page_width">0</field>
+    <field name="orientation">Portrait</field>
+    <field name="margin_top">10</field>
+    <field name="margin_bottom">10</field>
+    <field name="margin_left">7</field>
+    <field name="margin_right">7</field>
+    <field name="header_line" eval="False" />
+    <field name="header_spacing">0</field>
+    <field name="dpi">90</field>
+</record>
+
+<!--<record id="master_data.labor_cv_report_id" model="ir.actions.report">-->
+<!--    <field name="paperformat_id" ref="master_data.paperformat_lowmargin_labor_cv" />-->
+<!--</record>-->
+</odoo>

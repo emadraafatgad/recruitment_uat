@@ -1,0 +1,60 @@
+
+<odoo>
+   <template id="passport_broker_report_temp">
+    <t t-call="web.external_layout">
+        <t t-set="o" t-value="o.with_context(lang=o.broker.lang)"/>
+            <div class="page">
+               <h2 style="color:#00008B">Passport Broker Report</h2>
+
+                        <div class="row mt8 mb8">
+                            <div class="col-6">
+                                <strong>Broker:</strong>
+                                <p t-field="o.broker"/>
+                            </div>
+                            <div class="col-6">
+                                <strong>list Length:</strong>
+                                 <p t-field="o.list_total_count"/></div>
+                        </div>
+
+             <table border="1" width="1000">
+                <thead>
+                    <tr>
+                        <th><strong>code</strong></th>
+                        <th><strong>Name</strong></th>
+                        <th><strong>ID</strong></th>
+                        <th><strong>PRN</strong></th>
+                        <th><strong>Invoice Number</strong></th>
+                        <th><strong>Passport Number</strong></th>
+                        <th><strong>Placing Issue</strong></th>
+
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr t-foreach="o.passport_request" t-as="req">
+                        <td><span t-field="req.labor_id.identification_code"/></td>
+                        <td><span t-field="req.labor_id.name"/></td>
+                        <td><span t-field="req.national_id"/></td>
+                        <td><span t-field="req.prn"/></td>
+                        <td><span t-field="req.invoice_no"/></td>
+                        <td><span t-field="req.passport_no"/></td>
+                        <td><span t-field="req.pass_from"/></td>
+
+                    </tr>
+                </tbody>
+            </table>
+
+            </div>
+
+    </t>
+
+
+    </template>
+    <template id="passport_broker_report">
+    <t t-call="web.html_container">
+        <t t-foreach="docs" t-as="o">
+            <t t-call="master_data.passport_broker_report_temp" t-lang="o.broker.lang"/>
+        </t>
+    </t>
+</template>
+</odoo>

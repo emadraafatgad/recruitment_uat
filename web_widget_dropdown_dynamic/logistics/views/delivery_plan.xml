@@ -1,0 +1,156 @@
+<odoo>
+     <record id="delivery_plan_code" model="ir.sequence">
+        <field name="name">Shipment Plan Code</field>
+        <field name="code">delivery.plan</field>
+        <field name="prefix"> </field>
+        <field name="padding">4</field>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="delivery_plan_line_code" model="ir.sequence">
+        <field name="name">Shipment Plan Line Code</field>
+        <field name="code">delivery.plan.line</field>
+        <field name="prefix">PL/%(year)s/</field>
+        <field name="padding">4</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+    <record id="delivery_plan_action" model="ir.actions.act_window">
+        <field name="name">Shipment Plan</field>
+        <field name="res_model">delivery.plan</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+    </record>
+    <record id="view_delivery_plan_form" model="ir.ui.view">
+        <field name="name">Shipment Plan Form</field>
+        <field name="model">delivery.plan</field>
+        <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="action_confirm" states="new"
+                                string="Confirm" type="object" class="oe_highlight" groups="logistics.group_shipment_plan_manager"/>
+                        <button name="create_order" states="shipment"
+                                string="Create Order" type="object" class="oe_highlight" invisible="1"/>
+                    <field name="state" widget="statusbar"
+                               statusbar_visible="new,shipment"/>
+                </header>
+                    <sheet>
+                        <h1>
+                            <field name="origin" readonly="1"/>
+                        </h1>
+                        <group>
+                              <group>
+<!--                                  <field name="product_id" attrs="{'readonly':[('state','=','shipment')]}" widget="many2many_tags"/>-->
+                                  <field name="partner_id" attrs="{'readonly':[('state','=','shipment')]}"/>
+                                   <field name="contract_id" invisible="1"/>
+                               </group>
+                                <group>
+                                    <field name="partial_shipment" attrs="{'readonly':[('state','=','shipment')]}"/>
+                                    <field name="shipment_company" attrs="{'readonly':[('state','=','shipment')]}"/>
+                                    <field name="company_id" attrs="{'readonly':[('state','=','shipment')]}"/>
+                                </group>
+                                <group>
+                                </group>
+                            </group>
+                        <notebook>
+                            <page string="Contract Lines">
+                                <field name="shipment_lines">
+                                    <tree editable="bottom">
+                                       <field name="product_id"/>
+                                         <field name="contract_id" invisible="1"/>
+                                        <field name="description"/>
+                                       <field name="quantity"/>
+                                       <field name="price_unit"/>
+                                       <field name="delivery_date"/>
+                                       <field name="from_port"/>
+                                       <field name="to_port"/>
+                                       <field name="packing"/>
+                                       <field name="shipment_plan" invisible="1"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                        <notebook>
+                            <page string="Orders">
+                                <field name="line_ids" context="{'default_contract_id': contract_id}" >
+                                    <tree editable="bottom">
+                                        <field name="state"/>
+<!--                                        <field name="shipment_plan_id"/>-->
+                                         <field name="contract_id" invisible="1"/>
+                                        <field name="shipment_plan_line_id" />
+                                        <field name="product" invisible="1" attrs="{'readonly':[('state','=','confirmed')]}"/>
+                                        <field name="travel_date"/>
+                                        <field name="estimated_arrival"/>
+                                        <field name="vessel_name"/>
+                                        <field name="container_no"/>
+                                        <field name="container_weight"/>
+                                        <field name="total_weight"/>
+                                        <field name="packing"/>
+                                        <field name="loading_place" />
+                                        <field name="shipment_port" />
+                                        <field name="arrival_port" />
+                                        <field name="forwarder" />
+                                        <field name="shipping_line" />
+                                        <field name="bill_of_lading" />
+                                        <field name="reserve_no" />
+                                        <field name="price_unit" attrs="{'readonly':[('state','=','confirmed')]}"/>
+                                        <field name="name"/>
+                                       <button name="action_confirm" string="Confirm" type="object" class="oe_highlight" states="new"/>
+                                       <field name="shipment_plan" invisible="1"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+        </field>
+    </record>
+
+    <record id="view_delivery_plan_tree" model="ir.ui.view">
+        <field name="name">Delivery Plan Tree</field>
+        <field name="model">delivery.plan</field>
+        <field name="arch" type="xml">
+             <tree>
+                <field name="origin"/>
+<!--                 <field name="product_id" string="Commodity" widget="many2many_tags"/>-->
+                <field name="partner_id"/>
+                <field name="shipment_company"/>
+                <field name="state"/>
+             </tree>
+        </field>
+    </record>
+<record id="view_delivery_plan_filter" model="ir.ui.view">
+            <field name="name">delivery.plan.search</field>
+            <field name="model">delivery.plan</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="partner_id" string="Client"/>
+<!--                    <field name="product_id" string="Commodity"/>-->
+                    <field name="shipment_company" string="Forwarder"/>
+                    <separator/>
+                    <filter name="new" string="New"
+                            domain="[('state','=','new')]"/>
+                    <filter name="shipment" string="Shipment"
+                            domain="[('state','=','shipment')]"/>
+                    <filter string="Today" name="today" domain="[('create_date','&gt;=',time.strftime('%%Y-%%m-%%d'))]"/>
+                    <filter string="This Week" name="this_week" domain="[
+                                '&amp;',
+                                ('create_date', '>=', (context_today() + relativedelta(weeks=-1,days=1,weekday=0)).strftime('%Y-%m-%d')),
+                                ('create_date', '&lt;=', (context_today() + relativedelta(weekday=6)).strftime('%Y-%m-%d')),]"/>
+                    <filter string="This Month" name="this_month" domain="[('create_date','&gt;=',time.strftime('%%Y-%%m-01'))]"/>
+                    <filter string="This Year" name="this_year" domain="[('create_date','&gt;=',time.strftime('%%Y-01-01'))]"/>
+                  <group expand="0" string="Group By">
+                      <filter string="Client" name="client" domain="[]" context="{'group_by':'partner_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+     <menuitem id="menu_logistics_info" name="Logistics"/>
+     <menuitem id="menu_delivery_plan" sequence="1" name="Shipment Plan" parent="menu_logistics_info" action="delivery_plan_action" groups="logistics.group_shipment_plan_user"/>
+</odoo>

@@ -1,0 +1,59 @@
+
+<odoo>
+
+    <record model="ir.module.category" id="module_category_shipment_plan">
+        <field name="name">Shipment Plan</field>
+        <field name="sequence">1</field>
+    </record>
+
+    <record id="group_shipment_plan_user" model="res.groups">
+        <field name="name">User</field>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="category_id" ref="module_category_shipment_plan"/>
+
+    </record>
+
+    <record id="group_shipment_plan_manager" model="res.groups">
+        <field name="name">Manager</field>
+        <field name="implied_ids" eval="[(4, ref('logistics.group_shipment_plan_user'))]"/>
+        <field name="category_id" ref="module_category_shipment_plan"/>
+    </record>
+
+    <record model="ir.module.category" id="module_category_operation_order">
+        <field name="name">Operation Order</field>
+        <field name="sequence">2</field>
+    </record>
+
+    <record id="group_operation_order_user" model="res.groups">
+        <field name="name">User</field>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="category_id" ref="module_category_operation_order"/>
+
+    </record>
+
+    <record id="group_operation_order_manager" model="res.groups">
+        <field name="name">Manager</field>
+        <field name="implied_ids" eval="[(4, ref('logistics.group_operation_order_user'))]"/>
+        <field name="category_id" ref="module_category_operation_order"/>
+    </record>
+
+    <record model="ir.module.category" id="module_category_clearance">
+        <field name="name">Clearance</field>
+        <field name="sequence">3</field>
+    </record>
+
+    <record id="group_clearance_user" model="res.groups">
+        <field name="name">User</field>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="category_id" ref="module_category_clearance"/>
+
+    </record>
+
+    <record id="group_clearance_manager" model="res.groups">
+        <field name="name">Manager</field>
+        <field name="implied_ids" eval="[(4, ref('logistics.group_clearance_user'))]"/>
+        <field name="category_id" ref="module_category_clearance"/>
+    </record>
+
+
+</odoo>

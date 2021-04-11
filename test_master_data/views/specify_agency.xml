@@ -1,0 +1,229 @@
+<odoo>
+    <record id="specify_agent_code" model="ir.sequence">
+        <field name="name">Specify Agent</field>
+        <field name="code">specify.agent</field>
+        <field name="prefix"/>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+    <record id="specify_agency_search_view" model="ir.ui.view">
+        <field name="name">Specify Agency Search</field>
+        <field name="model">specify.agent</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="labor_id" string="Labourer"/>
+                <field name="occupation"/>
+                <field name="religion"/>
+                <field name="agency"/>
+                <field name="employer"/>
+                <field name="visa_no"/>
+                <filter name="state_available" string="Agency Specified"
+                        domain="[('state','=','available')]"/>
+                <filter name="state_sent" string="CV Sent"
+                        domain="[('state','=','sent')]"/>
+                <filter name="state_selected" string="Selected"
+                        domain="[('state','=','selected')]"/>
+                <filter string="Today" name="today" domain="[('create_date','&gt;=',time.strftime('%%Y-%%m-%%d'))]"/>
+                <filter string="This Week" name="this_week" domain="[
+                                '&amp;',
+                                ('create_date', '>=', (context_today() + relativedelta(weeks=-1,days=1,weekday=0)).strftime('%Y-%m-%d')),
+                                ('create_date', '&lt;=', (context_today() + relativedelta(weekday=6)).strftime('%Y-%m-%d')),]"/>
+                <filter string="This Month" name="this_month"
+                        domain="[('create_date','&gt;=',time.strftime('%%Y-%%m-01'))]"/>
+                <filter string="This Year" name="this_year"
+                        domain="[('create_date','&gt;=',time.strftime('%%Y-01-01'))]"/>
+
+                <group expand="0" string="Group By...">
+                    <filter name="state" string="State" icon="terp-partner" domain="[]" context="{'group_by':'state'}"/>
+                </group>
+                <group expand="0" string="Group By...">
+                    <filter name="agency" string="Agency" icon="terp-partner" domain="[]"
+                            context="{'group_by':'agency'}"/>
+                </group>
+                <group expand="0" string="Group By...">
+                    <filter name="religion" string="Agency" icon="terp-partner" domain="[]"
+                            context="{'group_by':'religion'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="specify_agent_action" model="ir.actions.act_window">
+        <field name="name">Specify Agency</field>
+        <field name="res_model">specify.agent</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('state','!=','draft')]</field>
+        <field name="context">{}</field>
+    </record>
+    <record id="specify_agent_action_draft_cv" model="ir.actions.act_window">
+        <field name="name">Specify Agency</field>
+        <field name="res_model">specify.agent</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('state','in',('draft','available'))]</field>
+        <field name="context">{}</field>
+    </record>
+
+    <record id="specify_agent_action_done" model="ir.actions.act_window">
+        <field name="name">Done</field>
+        <field name="res_model">specify.agent</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('state','=','done')]</field>
+        <field name="context">{}</field>
+    </record>
+
+    <record id="view_specify_agent_form" model="ir.ui.view">
+        <field name="name">Specify Agent</field>
+        <field name="model">specify.agent</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="move_to_available"
+                            string="Specify" type="object"
+                            class="oe_highlight" states="draft"/>
+                    <button name="set_to_draft"
+                            string="Set Draft" type="object"
+                            class="oe_highlight" states="available"/>
+                    <button name="action_send_cv" attrs="{'invisible':[('state', '!=','available')]}"
+                            string="Send CV By Email" type="object"
+                            class="oe_highlight"/>
+                    <button name="action_resend_cv" attrs="{'invisible':[('state', 'not in',('sent'))]}"
+                            string="Resend CV By Email" type="object"/>
+                    <button name="select"
+                            string="Select" type="object"
+                            class="oe_highlight" states="sent"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,available,selected"/>
+                </header>
+                <sheet>
+                    <h1>
+                        <field name="name"/>
+                    </h1>
+
+                    <group>
+
+                        <group>
+                            <field name="labor_id" readonly="1"/>
+                            <field name="passport_no" readonly="1"/>
+                            <field name="religion" readonly="1"/>
+                            <field name="age" readonly="1"/>
+                            <field name="agency" options="{'no_create_edit':true}"
+                                   attrs="{'readonly':[('state','!=','draft')]}"/>
+                        </group>
+                        <group>
+                            <field name="employer" attrs="{'readonly':[('state','in',('selected'))]}"/>
+                            <field name="visa_no" attrs="{'readonly':[('state','in',('selected'))]}"/>
+                            <field name="employer_mobile" attrs="{'readonly':[('state','in',('selected'))]}"/>
+                            <field name="destination_city" attrs="{'readonly':[('state','in',('selected'))]}"/>
+
+
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="date_info" string="Date Information">
+                            <group>
+                                <group>
+                                    <field name="request_date" readonly="1"/>
+                                </group>
+                            </group>
+
+                            <group>
+                                <group>
+                                    <field name="available_date" readonly="1"/>
+                                </group>
+                                <group>
+                                    <field name="select_date" readonly="1"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_specify_agent_tree">
+        <field name="name">Specify Agent</field>
+        <field name="model">specify.agent</field>
+        <field name="arch" type="xml">
+            <tree default_order="create_date desc">
+                <field name="name" string="Code/Agency"/>
+                <field name="labor_id" string="Labourer"/>
+                <field name="occupation"/>
+                <field name="age"/>
+                <field name="religion"/>
+                <field name="agency"/>
+                <field name="employer"/>
+                <field name="destination_city"/>
+                <field name="visa_no"/>
+                <field name="state"/>
+                <button name="set_to_draft"
+                        string="Set Draft" type="object"
+                        class="oe_highlight" states="available"/>
+            </tree>
+        </field>
+    </record>
+    <record id="mass_enter_agency_form_view" model="ir.ui.view">
+        <field name="name">Enter Agency Form</field>
+        <field name="model">mass.agency</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <group>
+                        <field name="agency"/>
+                    </group>
+                </group>
+                <footer>
+                    <button string="Enter" name="enter_agency" type="object" default_focus="1" class="btn-primary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <act_window id="action_mass_agency"
+                multi="True"
+                key2="client_action_multi" name="Specify Agency"
+                res_model="mass.agency" src_model="specify.agent"
+                view_mode="form" target="new" view_type="form"/>
+
+    <record id="send_cv_from_agency_action_server" model="ir.actions.server">
+        <field name="name">Send CV</field>
+        <field name="type">ir.actions.server</field>
+        <field name="model_id" ref="mail.model_mail_compose_message"/>
+        <field name="binding_model_id" ref="model_specify_agent"/>
+        <field name="state">code</field>
+        <field name="code">
+            action = env['specify.agent'].send_more_cv()
+        </field>
+    </record>
+
+    <record id="mail_compose_message_inherit_labourer_view" model="ir.ui.view">
+        <field name="model">mail.compose.message</field>
+        <field name="inherit_id" ref="mail.email_compose_message_wizard_form"/>
+        <field name="arch" type="xml">
+            <field name="subject" position="after">
+                <field name="labor_ids" widget="many2many_tags" invisible="1"/>
+            </field>
+        </field>
+    </record>
+
+
+    <menuitem id="menu_specify_agent_root" sequence="61" name="Specify Agency"
+              groups="test_master_data.group_registeration_user" parent="menu_recruitment_root"/>
+    <menuitem id="menu_specify_agent" sequence="1" name="Specify Agency" parent="menu_specify_agent_root"
+              action="specify_agent_action"/>
+    <menuitem id="menu_specify_agent_draft_cv" sequence="2" name="CV Available" parent="menu_specify_agent_root"
+              action="specify_agent_action_draft_cv"/>
+
+    <!-- <menuitem id="menu_specify_agent_done" sequence="2" name="Done" parent="menu_specify_agent_root"
+               action="specify_agent_action_done" />-->
+
+
+</odoo>

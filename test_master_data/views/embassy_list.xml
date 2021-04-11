@@ -1,0 +1,82 @@
+<odoo>
+     <record id="embassy_list_code" model="ir.sequence">
+        <field name="name">Embassy List Code</field>
+        <field name="code">embassy.list</field>
+        <field name="prefix">emplist</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="embassy_list_action" model="ir.actions.act_window">
+        <field name="name">Embassy List</field>
+        <field name="res_model">embassy.list</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+    </record>
+
+    <record id="view_embassy_list_form" model="ir.ui.view">
+        <field name="name">Embassy List</field>
+        <field name="model">embassy.list</field>
+        <field name="arch" type="xml">
+            <form >
+                <header>
+                   <button name="action_confirm" states="new"
+                                string="Confirm" type="object"
+                                class="oe_highlight"/>
+                    <field name="state" widget="statusbar"
+                               statusbar_visible="new,confirmed"/>
+                </header>
+                <sheet>
+                    <h1>
+                        <field name="name"/>
+                    </h1>
+                  <group>
+                      <group>
+                          <field name="assign_date"/>
+                      </group>
+                      <group>
+                          <field name="receive_date"/>
+                      </group>
+                  </group>
+                   <notebook>
+                     <page string="List">
+                       <field name="embassy_list" domain="[('state','=','stamping')]">
+                           <tree editable="top">
+                 <field name="labor_id"  string="Laborer" readonly="1"/>
+                 <field name="passport_no" readonly="1"/>
+                 <field name="agency" readonly="1"/>
+                 <field name="employer"/>
+                 <field name="city"/>
+                 <field name="state" readonly="1"/>
+                           </tree>
+                               </field>
+                     </page>
+                   </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_embassy_list_tree">
+        <field name="name">Embassy List Tree</field>
+        <field name="model">embassy.list</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="assign_date"/>
+                <field name="receive_date"/>
+                <field name="state"/>
+             </tree>
+        </field>
+    </record>
+     <menuitem id="menu_embassy_List" sequence="4" name="Embassy List" parent="menu_embassy_main"
+              action="embassy_list_action"/>
+
+
+</odoo>

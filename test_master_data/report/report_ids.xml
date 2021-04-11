@@ -1,0 +1,43 @@
+
+ <odoo>
+    <data>
+
+        <report
+            id="labor_cv_report_id"
+            model="labor.profile"
+            string="CV"
+            report_type="qweb-pdf"
+            name="test_master_data.labor_cv_report"
+            file="test_master_data.labor_cv_report"
+        />
+
+        <report
+            id="passport_report_id"
+            model="passport.broker"
+            string="Passport Broker Report"
+            report_type="qweb-pdf"
+            name="test_master_data.passport_broker_report"
+            file="test_master_data.passport_broker_report"
+        />
+
+        <report
+            id="broker_report_id"
+            model="interpol.broker"
+            string="Interpol Broker Report"
+            report_type="qweb-pdf"
+            name="test_master_data.interpol_broker_report"
+            file="test_master_data.interpol_broker_report"
+        />
+
+         <report
+            id="clearance_xlx_report_id"
+            model="clearance.list"
+            string="Clearance Excel"
+            report_type="xlsx"
+            name="test_master_data.report_clearance_xlx"
+            file="test_master_data.report_clearance_xlx"
+        />
+
+
+    </data>
+</odoo>

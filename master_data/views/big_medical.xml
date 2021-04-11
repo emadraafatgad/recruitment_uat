@@ -1,0 +1,221 @@
+<odoo>
+    <record id="big_medical_code" model="ir.sequence">
+        <field name="name">Big Medical Code</field>
+        <field name="code">big.medical</field>
+        <field name="prefix">Gcc/%(year)s/</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+    <record id="big_medical_action" model="ir.actions.act_window">
+        <field name="name">Gcc</field>
+        <field name="res_model">big.medical</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+    </record>
+
+
+    <record id="view_big_medical_form" model="ir.ui.view">
+        <field name="name">Big Medical</field>
+        <field name="model">big.medical</field>
+        <field name="arch" type="xml">
+            <form string="Big Medical">
+                <header>
+                    <button name="move_gcc" states="new" string="Confirm" type="object" class="oe_highlight"/>
+                    <button name="action_done" attrs="{'invisible':[('confirm_appear','=',False)]}" string="Confirm" type="object" class="oe_highlight"/>
+                    <button name="action_recheck" attrs="{'invisible':[('recheck_appear','=',False)]}" string="Recheck" type="object" class="oe_highlight"/>
+                    <button name="action_reject" attrs="{'invisible':[('confirm_appear','=',False)]}" string="Reject" type="object" class="oe_highlight"/>
+                    <field name="state" widget="statusbar" statusbar_visible="new,pending,fit"/>
+                </header>
+                <sheet>
+                    <h1>
+                        <field name="name"/>
+                    </h1>
+                    <group>
+                        <group string="Labourer Information">
+                            <field name="labor_id" readonly="1"/>
+                            <field name="national_id" invisible="1"/>
+                            <field name="passport_no" readonly="1"/>
+                            <field name="invoiced" invisible="1"/>
+                            <field name="recheck_appear" invisible="1"/>
+                            <field name="confirm_appear" invisible="1"/>
+                            <field name="invoiced" invisible="1"/>
+                        </group>
+                        <group string="Big Medical">
+                            <field name="hospital"  widget="res_partner_many2one" context="{'default_customer': 0, 'search_default_supplier': 1, 'default_supplier': 1, 'default_is_company': True, 'default_vendor_type': 'hospital','default_cost':60}" domain="[('supplier', '=', True),('vendor_type', '=', 'hospital')]"
+                                   attrs="{'readonly':[('state', '!=', 'new')]}"/>
+                        <field name="medical_check"
+                                   attrs="{'readonly':[('state', '!=', 'hospital')],'required':[('state', '=', 'hospital')]}"/>
+                            <field name="reason" attrs="{'invisible':[('medical_check', '!=', 'unfit')],
+                                'required':[('medical_check', '=', 'unfit')],'readonly':[('state', '!=', 'hospital')]}"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="GCC Dates">
+                            <field name="interpol_done"/>
+                            <field name="gcc" invisible="1"/>
+                            <field name="gcc_no" attrs="{'readonly':[('state', '!=', 'new')]}"/>
+                            <field name="booking_date" attrs="{'readonly':[('state', '!=', 'new')]}"/>
+                            <field name="check_date" attrs="{'readonly':[('state', '!=', 'new')]}"/>
+                            <field name="deadline" attrs="{'readonly':[('state', '!=', 'new')]}"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_big_medical_labor_form" model="ir.ui.view">
+        <field name="name">Big Medical</field>
+        <field name="model">big.medical</field>
+        <field name="arch" type="xml">
+            <form string="Big Medical">
+                <header>
+                    <button name="move_gcc" states="new"
+                            string="Confirm" type="object" class="oe_highlight"/>
+                     <button name="action_done" attrs="{'invisible':[('confirm_appear','=',False)]}" string="Confirm" type="object" class="oe_highlight"/>
+                    <button name="action_recheck" attrs="{'invisible':[('recheck_appear','=',False)]}" string="Recheck" type="object" class="oe_highlight"/>
+                    <button name="action_reject" attrs="{'invisible':[('confirm_appear','=',False)]}" string="Reject" type="object" class="oe_highlight"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="new,pending,fit"/>
+                </header>
+                <sheet>
+                    <h1>
+                        <field name="name"/>
+                    </h1>
+                    <group>
+                        <group string="Labourer Information">
+                            <field name="labor_id" readonly="1"/>
+                            <field name="invoiced" invisible="1"/>
+                            <field name="recheck_appear" invisible="1"/>
+                            <field name="confirm_appear" invisible="1"/>
+                            <field name="national_id" invisible="1"/>
+                            <field name="passport_no" readonly="1"/>
+                            <field name="invoiced" invisible="1"/>
+                        </group>
+                        <group string="Big Medical">
+                            <field name="hospital"
+                                   attrs="{'readonly':[('state', '!=', 'new')]}"/>
+                            <field name="medical_check"
+                                           attrs="{'readonly':[('state','in',('fit','unfit','rejected'))]}"/>
+                                    <field name="reason"
+                                           attrs="{'invisible':[('medical_check','!=','unfit')],'required':[('medical_check', '=', 'unfit')]}"/>
+<!--                        <field name="medical_check"-->
+<!--                                   attrs="{'readonly':[('state', '!=', 'hospital')],'required':[('state', '=', 'hospital')]}"/>-->
+<!--                            <field name="reason" attrs="{'invisible':[('medical_check', '!=', 'unfit')],-->
+<!--                                'required':[('medical_check', '=', 'unfit')],'readonly':[('state', '!=', 'hospital')]}"/>-->
+                        </group>
+                    </group>
+                    <group>
+                        <group string="GCC Dates">
+                            <field name="gcc" invisible="1"/>
+<!--                            <field name="gcc_no" attrs="{'readonly':[('state', '!=', 'new')]}"/>-->
+<!--                            <field name="booking_date" attrs="{'readonly':[('state', '!=', 'new')]}"/>-->
+                            <field name="check_date" readonly="1"/>
+                            <field name="deadline" readonly="1"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="gcc_medical_search" model="ir.ui.view">
+        <field name="name">GCC and medical search</field>
+        <field name="model">big.medical</field>
+        <field name="arch" type="xml">
+
+            <search>
+                <field name="labor_id" string="Labour Name"/>
+                <field name="passport_no" string="Passport"/>
+<!--                <field name="gcc_no"/>-->
+                <separator/>
+                <filter name="new" string="New"
+                        domain="[('state','=','new')]"/>
+                <filter name="gcc" string="Gcc"
+                        domain="[('state','=','gcc')]"/>
+                <filter name="hospital" string="Hospital"
+                        domain="[('state','=','hospital')]"/>
+                <filter name="done" string="Done"
+                        domain="[('state','=','done')]"/>
+                <filter string="Today" name="today" domain="[('create_date','&gt;=',time.strftime('%%Y-%%m-%%d'))]"/>
+                <filter string="This Week" name="this_week" domain="[
+                                '&amp;',
+                                ('create_date', '>=', (context_today() + relativedelta(weeks=-1,days=1,weekday=0)).strftime('%Y-%m-%d')),
+                                ('create_date', '&lt;=', (context_today() + relativedelta(weekday=6)).strftime('%Y-%m-%d')),]"/>
+                <filter string="This Month" name="this_month"
+                        domain="[('create_date','&gt;=',time.strftime('%%Y-%%m-01'))]"/>
+                <filter string="This Year" name="this_year"
+                        domain="[('create_date','&gt;=',time.strftime('%%Y-01-01'))]"/>
+
+            </search>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_big_medical_tree">
+        <field name="name">Big Medical Tree</field>
+        <field name="model">big.medical</field>
+        <field name="arch" type="xml">
+            <tree string="Big Medical">
+                <field name="name"/>
+                <field name="labor_id" string="Laborer"/>
+                <field name="national_id" invisible="1"/>
+                <field name="passport_no" readonly="1"/>
+                <field name="hospital"/>
+<!--                <field name="medical_check"/>-->
+                <field name="company_id" invisible="1"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+    <menuitem id="main_menu_big_medical" sequence="60" name="Big Medical" parent="menu_recruitment_root"/>
+    <menuitem id="menu_big_medical" sequence="1" name="GCC" parent="main_menu_big_medical" action="big_medical_action"/>
+
+    <record model="ir.ui.view" id="view_big_medical_labour_tree">
+        <field name="name">Big Medical Tree</field>
+        <field name="model">big.medical</field>
+        <field name="arch" type="xml">
+            <tree string="Big Medical">
+                <field name="name"/>
+                <field name="labor_id" string="Laborer"/>
+                <field name="hospital"/>
+                <field name="passport_no" readonly="1"/>
+                <field name="check_date" attrs="{'readonly':[('state', '!=', 'new')]}"/>
+                <field name="deadline" attrs="{'readonly':[('state', '!=', 'new')]}"/>
+<!--                <field name="national_id" readonly="1"/>-->
+                <field name="medical_check"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="big_medical_labor_action" model="ir.actions.act_window">
+        <field name="name">Big Medical</field>
+        <field name="res_model">big.medical</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('invoiced','=',True)]</field>
+        <field name="view_ids"
+               eval="[(5, 0, 0),
+               (0, 0, {'view_mode': 'tree', 'view_id': ref('view_big_medical_labour_tree')}),
+                      (0, 0, {'view_mode': 'form', 'view_id': ref('view_big_medical_labor_form')})]"/>
+<!--                      (0, 0, {'view_mode': 'graph', 'view_id': ref('crm_opportunity_report_view_graph')}),-->
+        <field name="context">{}</field>
+    </record>
+
+    <menuitem id="menu_big_labour_medical" sequence="70" name="Big Medical" parent="main_menu_big_medical"
+              action="big_medical_labor_action"/>
+</odoo>

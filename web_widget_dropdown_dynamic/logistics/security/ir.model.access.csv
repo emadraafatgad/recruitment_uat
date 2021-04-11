@@ -1,0 +1,26 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_delivery_plan,delivery_plan,model_delivery_plan,,1,0,0,0
+access_delivery_plan_manager,delivery_plan_manger,model_delivery_plan,logistics.group_shipment_plan_manager,1,1,1,1
+access_delivery_plan_contract,delivery_plan_contract,model_delivery_plan,sales_team.group_sale_salesman,1,1,1,0
+access_delivery_plan_line_contract,delivery_plan_line_contract,model_delivery_plan_line,sales_team.group_sale_salesman,1,1,1,0
+access_delivery_plan_line,delivery_plan_line,model_delivery_plan_line,,1,0,0,0
+access_delivery_plan_line_manager,delivery_plan_line_manager,model_delivery_plan_line,logistics.group_shipment_plan_manager,1,1,1,1
+access_operation_order,operation.order,model_operation_order,,1,0,0,0
+access_operation_order_shipment_manager,operation_order_shipment_manager,model_operation_order,logistics.group_shipment_plan_manager,1,1,1,0
+access_operation_order_manager,operation.order.manager,model_operation_order,logistics.group_operation_order_manager,1,1,1,1
+access_operation_order_clearance_manager,operation.order.clearance.manager,model_operation_order,logistics.group_clearance_manager,1,1,1,1
+access_operation_order_mrp,operation.order.mrp,model_operation_order_mrp,,1,0,0,0
+access_operation_order_mrp_manager,operation.order.mrp.manager,model_operation_order_mrp,logistics.group_operation_order_manager,1,1,1,1
+access_operation_order_mrp_ship_manager,operation.order.mrp.ship.manager,model_operation_order_mrp,logistics.group_shipment_plan_manager,1,1,1,0
+access_order_mrp_line,order.mrp.line,model_order_mrp_line,,1,0,0,0
+access_order_mrp_line_manager,order.mrp.line.manager,model_order_mrp_line,logistics.group_operation_order_manager,1,1,1,1
+access_order_mrp_line_ship_manager,order.mrp.line.ship.manager,model_order_mrp_line,logistics.group_shipment_plan_manager,1,1,1,0
+access_customs_clearance,customs_clearance,model_customs_clearance,,1,0,0,0
+access_customs_clearance_manager,customs_clearance_manager,model_customs_clearance,logistics.group_clearance_manager,1,1,1,1
+access_op_manager_bom,mrp_bom_op,mrp.model_mrp_bom,logistics.group_operation_order_manager,1,1,1,0
+access_op_manager_bom_line,mrp_bom_line_op,mrp.model_mrp_bom_line,logistics.group_operation_order_manager,1,1,1,0
+access_op_manager_production,mrp_production_op,mrp.model_mrp_production,logistics.group_operation_order_manager,1,1,1,0
+access_op_manager_workorder,mrp_workorder_op,mrp.model_mrp_workorder,logistics.group_operation_order_manager,1,1,1,0
+access_loading_place,loading_place,model_loading_place,,1,1,1,1
+access_stock_picking_all,stock_picking_all,stock.model_stock_picking,,1,1,1,1
+access_account_invoice_discount,Account Discount,model_special_discount,,1,1,1,1

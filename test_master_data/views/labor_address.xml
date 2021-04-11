@@ -1,0 +1,276 @@
+<odoo>
+  <data>
+
+      <record id="labor_address_action" model="ir.actions.act_window">
+         <field name="name">Labor Village</field>
+         <field name="res_model">labor.village</field>
+         <field name="view_type">form</field>
+         <field name="view_mode">tree,form</field>
+         <field name="domain">[]</field>
+         <field name="context">{}</field>
+      </record>
+      <record id="labor_parish_action" model="ir.actions.act_window">
+         <field name="name">Labor Parish</field>
+         <field name="res_model">labor.parish</field>
+         <field name="view_type">form</field>
+         <field name="view_mode">tree,form</field>
+         <field name="domain">[]</field>
+         <field name="context">{}</field>
+      </record>
+      <record id="labor_subcounty_action" model="ir.actions.act_window">
+         <field name="name">Labor Sub County</field>
+         <field name="res_model">labor.subcounty</field>
+         <field name="view_type">form</field>
+         <field name="view_mode">tree,form</field>
+         <field name="domain">[]</field>
+         <field name="context">{}</field>
+      </record>
+      <record id="labor_county_action" model="ir.actions.act_window">
+         <field name="name">Labor county</field>
+         <field name="res_model">labor.county</field>
+         <field name="view_type">form</field>
+         <field name="view_mode">tree,form</field>
+         <field name="domain">[]</field>
+         <field name="context">{}</field>
+      </record>
+      <record id="labor_district_action" model="ir.actions.act_window">
+         <field name="name">Labor district</field>
+         <field name="res_model">labor.district</field>
+         <field name="view_type">form</field>
+         <field name="view_mode">tree,form</field>
+         <field name="domain">[]</field>
+         <field name="context">{}</field>
+      </record>
+      <record id="labor_tribe_action" model="ir.actions.act_window">
+         <field name="name">Labor Tribe</field>
+         <field name="res_model">labor.tribe</field>
+         <field name="view_type">form</field>
+         <field name="view_mode">tree,form</field>
+         <field name="domain">[]</field>
+         <field name="context">{}</field>
+      </record>
+      <record id="labor_clan_action" model="ir.actions.act_window">
+         <field name="name">Labor Clan</field>
+         <field name="res_model">labor.clan</field>
+         <field name="view_type">form</field>
+         <field name="view_mode">tree,form</field>
+         <field name="domain">[]</field>
+         <field name="context">{}</field>
+      </record>
+
+      <record id="view_labor_address_form" model="ir.ui.view">
+        <field name="name">Labor village</field>
+        <field name="model">labor.village</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+      </record>
+
+      <record model="ir.ui.view" id="view_labor_address_tree">
+        <field name="name">Labor Village</field>
+        <field name="model">labor.village</field>
+        <field name="arch" type="xml">
+            <tree editable="top">
+                 <field name="name" />
+             </tree>
+        </field>
+      </record>
+      <record id="view_labor_parish_form" model="ir.ui.view">
+        <field name="name">Labor Parish</field>
+        <field name="model">labor.parish</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+      </record>
+      <record model="ir.ui.view" id="view_labor_parish_tree">
+        <field name="name">Labor Parish</field>
+        <field name="model">labor.parish</field>
+        <field name="arch" type="xml">
+            <tree editable="top">
+                 <field name="name" />
+             </tree>
+        </field>
+      </record>
+      <record id="view_labor_subcounty_form" model="ir.ui.view">
+        <field name="name">Labor sub county</field>
+        <field name="model">labor.subcounty</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+      </record>
+      <record model="ir.ui.view" id="view_labor_subcounty_tree">
+        <field name="name">Labor sub county</field>
+        <field name="model">labor.subcounty</field>
+        <field name="arch" type="xml">
+            <tree editable="top">
+                 <field name="name" />
+             </tree>
+        </field>
+      </record>
+      <record id="view_labor_county_form" model="ir.ui.view">
+        <field name="name">Labor County</field>
+        <field name="model">labor.county</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+      </record>
+       <record model="ir.ui.view" id="view_labor_county_tree">
+        <field name="name">Labor sub county</field>
+        <field name="model">labor.county</field>
+        <field name="arch" type="xml">
+            <tree editable="top">
+                 <field name="name" />
+             </tree>
+        </field>
+      </record>
+      <record id="view_labor_district_form" model="ir.ui.view">
+        <field name="name">Labor District</field>
+        <field name="model">labor.district</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+      </record>
+      <record model="ir.ui.view" id="view_labor_district_tree">
+        <field name="name">Labor District</field>
+        <field name="model">labor.district</field>
+        <field name="arch" type="xml">
+            <tree editable="top">
+                 <field name="name" />
+             </tree>
+        </field>
+      </record>
+      <record id="view_labor_tribe_form" model="ir.ui.view">
+        <field name="name">Labor Tribe</field>
+        <field name="model">labor.tribe</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+      </record>
+       <record model="ir.ui.view" id="view_labor_tribe_tree">
+        <field name="name">Labor Tribe</field>
+        <field name="model">labor.tribe</field>
+        <field name="arch" type="xml">
+            <tree editable="top">
+                 <field name="name" />
+             </tree>
+        </field>
+      </record>
+      <record id="view_labor_clan_form" model="ir.ui.view">
+        <field name="name">Labor Clan</field>
+        <field name="model">labor.clan</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+      </record>
+      <record model="ir.ui.view" id="view_labor_clan_tree">
+        <field name="name">Labor Clan</field>
+        <field name="model">labor.clan</field>
+        <field name="arch" type="xml">
+            <tree editable="top">
+                 <field name="name" />
+             </tree>
+        </field>
+      </record>
+
+      <menuitem id="menu_labor_address" sequence="5" name="Laborer Address" parent="menu_recruitment_configuration"/>
+      <menuitem id="menu_labor_village" sequence="10" name="Village" parent="menu_labor_address" action="labor_address_action"/>
+      <menuitem id="menu_labor_parish" sequence="10" name="Parish" parent="menu_labor_address" action="labor_parish_action"/>
+      <menuitem id="menu_labor_subcounty" sequence="10" name="Sub Couny" parent="menu_labor_address" action="labor_subcounty_action"/>
+      <menuitem id="menu_labor_county" sequence="10" name="County" parent="menu_labor_address" action="labor_county_action"/>
+      <menuitem id="menu_labor_district" sequence="10" name="District" parent="menu_labor_address" action="labor_district_action"/>
+      <menuitem id="menu_labor_tribe" sequence="10" name="Tribe" parent="menu_labor_address" action="labor_tribe_action"/>
+      <menuitem id="menu_labor_clan" sequence="10" name="Clan" parent="menu_labor_address" action="labor_clan_action"/>
+
+ </data>
+</odoo>

@@ -1,0 +1,93 @@
+<odoo>
+    <data>
+
+        <record id="service_request_main_action" model="ir.actions.act_window">
+            <field name="name">Service Request</field>
+            <field name="res_model">service.request</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,pivot</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first Service Request
+                </p>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="service_request_tree">
+            <field name="name">service.request.tree</field>
+            <field name="model">service.request</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="partner_id"/>
+                        <field name="request_date" />
+                        <field name="time" widget="float_time"/>
+                        <field name="coiffure_id" />
+                        <field name="Customer_type"/>
+                        <field name="customer_name" />
+                        <field name="phone" />
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="service_request_pivot">
+            <field name="name">service.request.pivot</field>
+            <field name="model">service.request</field>
+            <field name="arch" type="xml">
+                <pivot>
+                    <field name="request_date" type="col"/>
+<!--                    <field name="coiffure_id" />-->
+                    <field name="final_color" type="row"/>
+                </pivot>
+            </field>
+        </record>
+
+
+        <!--    Quick create opportunity form    -->
+        <record model="ir.ui.view" id="service_request_form">
+            <field name="name">service.request.form</field>
+            <field name="model">service.request</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="request_date" />
+                            <field name="time" widget="float_time"/>
+                            <field name="coiffure_id" />
+                        </group>
+                        <group>
+                            <field name="Customer_type"/>
+                            <field name="partner_id" attrs=""/>
+                            <field name="customer_name" />
+                            <field name="phone" />
+                        </group>
+                        <group>
+                            <field name="picture" widget="image" class="oe_avatar"
+							options="{'size':[90,90]}" />
+                        </group>
+                        <group>
+                            <field name="add_tips"/>
+                            <field name="add_advice"/>
+
+                        </group>
+                        <group>
+                            <field name="final_picture"/>
+                            <field name="final_color"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- menu items -->
+        <menuitem name="Service Request" id="service_request_root_menu"
+                  sequence="60"/>
+        <menuitem name="Service Request" id="service_request_main_menu"
+                  action="service_request_main_action"
+                  parent="service_request_root_menu"
+                  sequence="10"/>
+
+        <!--                  action="classera_school_admission_action"-->
+
+
+    </data>
+</odoo>

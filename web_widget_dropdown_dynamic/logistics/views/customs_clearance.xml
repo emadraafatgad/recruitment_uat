@@ -1,0 +1,153 @@
+<odoo>
+     <record id="customs_clearance_code" model="ir.sequence">
+        <field name="name">Customs Clearance Code</field>
+        <field name="code">customs.clearance</field>
+        <field name="prefix">wa/%(year)s/</field>
+        <field name="padding">4</field>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="export_agree_code" model="ir.sequence">
+        <field name="name">Export Agree Code</field>
+        <field name="code">export.agree</field>
+        <field name="prefix">%(year)s/</field>
+        <field name="padding">4</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+    <record id="customs_clearance_action" model="ir.actions.act_window">
+        <field name="name">Clearance</field>
+        <field name="res_model">customs.clearance</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+    </record>
+    <record id="customs_clearance_view_form" model="ir.ui.view">
+        <field name="name">Customs Clearance Form</field>
+        <field name="model">customs.clearance</field>
+        <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="action_confirm" states="new"
+                                string="Confirm" type="object" class="oe_highlight" groups="logistics.group_clearance_manager"/>
+
+
+
+                    <field name="state" widget="statusbar"
+                               statusbar_visible="new,confirmed"/>
+                </header>
+                    <sheet>
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                       <group>
+                           <group>
+                               <field name="export_agree" attrs="{'readonly':[('state','!=','new')]}"/>
+                               <field name="agree_qty"/>
+                               <field name="amount"/>
+                                <field name="total_after_increase"/>
+                                <field name="price" attrs="{'readonly':[('state','!=','new')]}"/>
+                                <field name="pol" attrs="{'readonly':[('state','!=','new')]}"/>
+                                <field name="arrival_port" attrs="{'readonly':[('state','!=','new')]}"/>
+                               <field name="country"  attrs="{'readonly':[('state','!=','new')]}"/>
+
+
+
+                           </group>
+                            <group>
+                                <field name="concentration" attrs="{'readonly':[('state','!=','new')]}"/>
+                               <field name="raw_supplier" attrs="{'readonly':[('state','!=','new')]}"/>
+                               <field name="supplier_invoice" attrs="{'readonly':[('state','!=','new')]}"/>
+                                <field name="port_send_date" attrs="{'readonly':[('state','!=','new')]}"/>
+                               <field name="agree_expiry_date" attrs="{'readonly':[('state','!=','new')]}"/>
+                                <field name="bank" attrs="{'readonly':[('state','!=','new')]}"/>
+                               <field name="bank_certificate" attrs="{'readonly':[('state','!=','new')]}"/>
+                           </group>
+                       </group>
+
+                        <notebook>
+                            <page string="Orders">
+                                <field name="order_ids" attrs="{'readonly':[('state', '=', 'confirmed')]}">
+                                    <tree editable="top">
+                                        <field name="name"/>
+                                        <field name="product"/>
+                                        <field name="customer_code"/>
+                                        <field name="reserve_no"/>
+                                        <field name="exit_port"/>
+                                        <field name="shipment_port"/>
+                                        <field name="arrival_port"/>
+                                        <field name="total_weight"/>
+                                        <field name="price_unit"/>
+                                        <field name="bank_certificate" readonly="0"/>
+
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+
+                    </sheet>
+                    <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+        </field>
+    </record>
+    <record id="view_customs_clearance_tree" model="ir.ui.view">
+        <field name="name">Customs Clearance Tree</field>
+        <field name="model">customs.clearance</field>
+        <field name="arch" type="xml">
+             <tree>
+                <field name="name" string="Agree"/>
+                <field name="agree_qty"/>
+                <field name="raw_supplier"/>
+                <field name="concentration"/>
+                <field name="arrival_port"/>
+                <field name="bank"/>
+                <field name="price"/>
+                <field name="amount"/>
+                <field name="total_after_increase"/>
+                <field name="supplier_invoice"/>
+                <field name="export_agree"/>
+                <field name="bank_certificate"/>
+                <field name="port_send_date"/>
+                <field name="country"/>
+                <field name="agree_expiry_date"/>
+                <field name="state"/>
+             </tree>
+        </field>
+    </record>
+     <record id="view_customs_clearance_filter" model="ir.ui.view">
+            <field name="name">customs.clearance.search</field>
+            <field name="model">customs.clearance</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="arrival_port" string="POD"/>
+                    <field name="country"/>
+                    <field name="price" string="Unit Rate"/>
+
+                    <separator/>
+                    <filter name="new" string="New"
+                            domain="[('state','=','new')]"/>
+                    <filter name="confirmed" string="Confirmed"
+                            domain="[('state','=','confirmed')]"/>
+                    <filter string="Today" name="today" domain="[('create_date','&gt;=',time.strftime('%%Y-%%m-%%d'))]"/>
+                    <filter string="This Week" name="this_week" domain="[
+                                '&amp;',
+                                ('create_date', '>=', (context_today() + relativedelta(weeks=-1,days=1,weekday=0)).strftime('%Y-%m-%d')),
+                                ('create_date', '&lt;=', (context_today() + relativedelta(weekday=6)).strftime('%Y-%m-%d')),]"/>
+                    <filter string="This Month" name="this_month" domain="[('create_date','&gt;=',time.strftime('%%Y-%%m-01'))]"/>
+                    <filter string="This Year" name="this_year" domain="[('create_date','&gt;=',time.strftime('%%Y-01-01'))]"/>
+                       <group expand="0" string="Group By">
+                           <filter string="POD" name="pod" domain="[]" context="{'group_by':'arrival_port'}"/>
+                           <filter string="Country" name="pod" domain="[]" context="{'group_by':'country'}"/>
+                           <filter string="Unit Rate" name="pod" domain="[]" context="{'group_by':'price'}"/>
+                    </group>
+
+                </search>
+            </field>
+        </record>
+     <menuitem id="menu_Customs Clearance" sequence="4" name="Clearance" parent="menu_logistics_info" action="customs_clearance_action" groups="logistics.group_clearance_user"/>
+
+</odoo>

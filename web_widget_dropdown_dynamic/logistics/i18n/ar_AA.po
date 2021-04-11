@@ -1,0 +1,1240 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* logistics
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 12.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-12-09 11:09+0000\n"
+"PO-Revision-Date: 2020-12-09 11:09+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: logistics
+#: model_terms:ir.ui.view,arch_db:logistics.view_operation_order_form
+msgid "<span class=\"o_form_label\">Order No</span>"
+msgstr "رقم امر الشغل"
+
+#. module: logistics
+#: model_terms:ir.ui.view,arch_db:logistics.operation_order_report_temp
+msgid "<span style=\"font-weight:bold;\">Agree: </span>"
+msgstr "الموافقة:  "
+
+#. module: logistics
+#: model_terms:ir.ui.view,arch_db:logistics.operation_order_report_temp
+msgid "<span style=\"font-weight:bold;\">Bag Type:</span>"
+msgstr "نوع الشيكارة:  "
+
+#. module: logistics
+#: model_terms:ir.ui.view,arch_db:logistics.operation_order_report_temp
+msgid "<span style=\"font-weight:bold;\">Booking No: </span>"
+msgstr "حجز رقم:  "
+
+#. module: logistics
+#: model_terms:ir.ui.view,arch_db:logistics.operation_order_report_temp
+msgid "<span style=\"font-weight:bold;\">Client Code: </span>"
+msgstr "كود العمبل:  "
+
+#. module: logistics
+#: model_terms:ir.ui.view,arch_db:logistics.operation_order_report_temp
+msgid "<span style=\"font-weight:bold;\">Commodity: </span>"
+msgstr "البضاعة:  "
+
+#. module: logistics
+#: model_terms:ir.ui.view,arch_db:logistics.operation_order_report_temp
+msgid "<span style=\"font-weight:bold;\">Container Bags No: </span>"
+msgstr "عدد شكائر الحاوية:"
+
+#. module: logistics
+#: model_terms:ir.ui.view,arch_db:logistics.operation_order_report_temp
+msgid "<span style=\"font-weight:bold;\">Container Weight: </span>"
+msgstr "وزن الحاوية:"
+
+#. module: logistics
+#: model_terms:ir.ui.view,arch_db:logistics.operation_order_report_temp
+msgid "<span style=\"font-weight:bold;\">Containers No: </span>"
+msgstr "عدد الحاويات:  "
+
+#. module: logistics
+#: model_terms:ir.ui.view,arch_db:logistics.operation_order_report_temp
+msgid "<span style=\"font-weight:bold;\">Containers Withdrawl Port: </span>"
+msgstr "ميناء خروج الحاويات:  "
+
+#. module: logistics
+#: model_terms:ir.ui.view,arch_db:logistics.operation_order_report_temp
+msgid "<span style=\"font-weight:bold;\">Cut Off: </span>"
+msgstr "اخر ميعاد للوصول للميناء:"
+
+#. module: logistics
+#: model_terms:ir.ui.view,arch_db:logistics.operation_order_report_temp
+msgid "<span style=\"font-weight:bold;\">Forwarder: </span>"
+msgstr "وكيل الخط:  "
+
+#. module: logistics
+#: model_terms:ir.ui.view,arch_db:logistics.operation_order_report_temp
+msgid "<span style=\"font-weight:bold;\">Inspection Company1: </span>"
+msgstr "شركة التفتيش1:  "
+
+#. module: logistics
+#: model_terms:ir.ui.view,arch_db:logistics.operation_order_report_temp
+msgid "<span style=\"font-weight:bold;\">Loading Place: </span>"
+msgstr "موقع التحميل:  "
+
+#. module: logistics
+#: model_terms:ir.ui.view,arch_db:logistics.operation_order_report_temp
+msgid "<span style=\"font-weight:bold;\">Notes: </span>"
+msgstr "ملاحظات:  "
+
+#. module: logistics
+#: model_terms:ir.ui.view,arch_db:logistics.operation_order_report_temp
+msgid "<span style=\"font-weight:bold;\">Order No: </span>"
+msgstr "رقم امر الشغل:  "
+
+#. module: logistics
+#: model_terms:ir.ui.view,arch_db:logistics.operation_order_report_temp
+msgid "<span style=\"font-weight:bold;\">POD: </span>"
+msgstr "ميناء الوصول:"
+
+#. module: logistics
+#: model_terms:ir.ui.view,arch_db:logistics.operation_order_report_temp
+msgid "<span style=\"font-weight:bold;\">POL: </span>"
+msgstr "ميناء الشحن:"
+
+#. module: logistics
+#: model_terms:ir.ui.view,arch_db:logistics.operation_order_report_temp
+msgid "<span style=\"font-weight:bold;\">Packing: </span>"
+msgstr "التعبئة:  "
+
+#. module: logistics
+#: model_terms:ir.ui.view,arch_db:logistics.operation_order_report_temp
+msgid "<span style=\"font-weight:bold;\">Sailing Date: </span>"
+msgstr "تاريخ السفر:"
+
+#. module: logistics
+#: model_terms:ir.ui.view,arch_db:logistics.operation_order_report_temp
+msgid "<span style=\"font-weight:bold;\">Shipping Line: </span>"
+msgstr "خط الشحن:  "
+
+#. module: logistics
+#: model_terms:ir.ui.view,arch_db:logistics.operation_order_report_temp
+msgid "<span style=\"font-weight:bold;\">Start Loading Date: </span>"
+msgstr "تاريخ يداية دخول الحاويات الي الميناء:"
+
+#. module: logistics
+#: model_terms:ir.ui.view,arch_db:logistics.operation_order_report_temp
+msgid "<span style=\"font-weight:bold;\">Total Bags: </span>"
+msgstr "اجمالي عدد الشكائر:"
+
+#. module: logistics
+#: model_terms:ir.ui.view,arch_db:logistics.operation_order_report_temp
+msgid "<span style=\"font-weight:bold;\">Total Weight: </span>"
+msgstr "اجمالي الوزن:"
+
+#. module: logistics
+#: model_terms:ir.ui.view,arch_db:logistics.operation_order_report_temp
+msgid "<span style=\"font-weight:bold;margin-top:15px;\">Container Type: </span>"
+msgstr "نوع الحاوية:  "
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_customs_clearance__access_warning
+#: model:ir.model.fields,field_description:logistics.field_delivery_plan__access_warning
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__access_warning
+msgid "Access warning"
+msgstr "تحذير من خطأ بالوصول"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_customs_clearance__message_needaction
+#: model:ir.model.fields,field_description:logistics.field_delivery_plan__message_needaction
+#: model:ir.model.fields,field_description:logistics.field_operation_order__message_needaction
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__message_needaction
+msgid "Action Needed"
+msgstr "إجراء مطلوب"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_customs_clearance__activity_ids
+#: model:ir.model.fields,field_description:logistics.field_delivery_plan__activity_ids
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__activity_ids
+msgid "Activities"
+msgstr "الأنشطة"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_customs_clearance__activity_state
+#: model:ir.model.fields,field_description:logistics.field_delivery_plan__activity_state
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__activity_state
+msgid "Activity State"
+msgstr "حالة النشاط"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_operation_order__agree
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__agree
+#: model_terms:ir.ui.view,arch_db:logistics.view_customs_clearance_tree
+msgid "Agree"
+msgstr "الموافقة"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_customs_clearance__amount
+#: model:ir.model.fields,field_description:logistics.field_operation_order__amount
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__amount
+msgid "Amount"
+msgstr "السعر الاجمالي"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_customs_clearance__message_attachment_count
+#: model:ir.model.fields,field_description:logistics.field_delivery_plan__message_attachment_count
+#: model:ir.model.fields,field_description:logistics.field_operation_order__message_attachment_count
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__message_attachment_count
+msgid "Attachment Count"
+msgstr "عدد المرفقات"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_operation_order__bill_of_lading
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__bill_of_lading
+msgid "BL Ref."
+msgstr "بوليصة الشحن"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_operation_order__bag_type
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__bag_type
+msgid "Bag Type"
+msgstr "نوع الشيكارة"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_customs_clearance__bank
+msgid "Bank"
+msgstr "البنك"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_customs_clearance__bank_certificate
+#: model:ir.model.fields,field_description:logistics.field_operation_order__bank_certificate
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__bank_certificate
+msgid "Bank Certificate"
+msgstr "الشهادة البنكية"
+
+#. module: logistics
+#: model:ir.model,name:logistics.model_mrp_bom
+msgid "Bill of Material"
+msgstr "قائمة المواد"
+
+#. module: logistics
+#: model_terms:ir.ui.view,arch_db:logistics.tree_bom_inherit
+msgid "Bill of Materials"
+msgstr "قائمة المواد"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_operation_order__reserve_no
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__reserve_no
+msgid "Booking No"
+msgstr "حجز رقم"
+
+#. module: logistics
+#: model:ir.actions.act_window,name:logistics.customs_clearance_action
+#: model:ir.model,name:logistics.model_customs_clearance
+#: model:ir.ui.menu,name:logistics.menu_Customs Clearance
+msgid "Clearance"
+msgstr "التخليص الجمركي"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_operation_order__clearance_finished
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__clearance_finished
+#: model_terms:ir.ui.view,arch_db:logistics.view_operation_order_filter
+msgid "Clearance Finished"
+msgstr "انتهي التخليص الجمركي"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_delivery_plan__partner_id
+#: model:ir.model.fields,field_description:logistics.field_operation_order__customer
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__customer
+#: model_terms:ir.ui.view,arch_db:logistics.view_delivery_plan_filter
+#: model_terms:ir.ui.view,arch_db:logistics.view_operation_order_form
+msgid "Client"
+msgstr "العميل"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_operation_order__customer_code
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__customer_code
+msgid "Client Code"
+msgstr "كود العميل"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__code
+msgid "Code"
+msgstr "الكود"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_delivery_plan__product_id
+#: model:ir.model.fields,field_description:logistics.field_operation_order__product
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__product
+#: model_terms:ir.ui.view,arch_db:logistics.view_delivery_plan_filter
+#: model_terms:ir.ui.view,arch_db:logistics.view_operation_order_filter
+msgid "Commodity"
+msgstr "البضاعة"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_delivery_plan__commodity_type
+#: model:ir.model.fields,field_description:logistics.field_operation_order__commodity_type
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__commodity_type
+msgid "Commodity Type"
+msgstr ""
+
+#. module: logistics
+#: model_terms:ir.ui.view,arch_db:logistics.customs_clearance_view_form
+#: model_terms:ir.ui.view,arch_db:logistics.view_delivery_plan_form
+#: model_terms:ir.ui.view,arch_db:logistics.view_operation_order_form
+#: model_terms:ir.ui.view,arch_db:logistics.view_operation_order_mrp_form
+msgid "Confirm"
+msgstr "تأكيد"
+
+#. module: logistics
+#: selection:customs.clearance,state:0
+#: model_terms:ir.ui.view,arch_db:logistics.view_customs_clearance_filter
+#: model_terms:ir.ui.view,arch_db:logistics.view_operation_order_filter
+#: selection:operation.order,state:0
+#: selection:operation.order.mrp,state:0
+msgid "Confirmed"
+msgstr "مؤكد"
+
+#. module: logistics
+#: model_terms:ir.ui.view,arch_db:logistics.view_operation_order_mrp_form
+msgid "Consumed Materials"
+msgstr "المواد المستهلكة"
+
+#. module: logistics
+#: model:ir.model,name:logistics.model_res_partner
+msgid "Contact"
+msgstr "جهة الاتصال"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_operation_order__container_bag_no
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__container_bag_no
+msgid "Container Bags NO."
+msgstr "عدد شكائر الحاوية"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_operation_order__container_type
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__container_type
+msgid "Container Type"
+msgstr " نوع الحاوية"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_operation_order__container_weight
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__container_weight
+msgid "Container Weight"
+msgstr "وزن الحاوية"
+
+#. module: logistics
+#: code:addons/logistics/models/operation.py:92
+#, python-format
+msgid "Container bags no must be bigger than Zero."
+msgstr "يجب ان تكون عدد شكائر الحاوية اكبر من الصفر"
+
+#. module: logistics
+#: code:addons/logistics/models/operation.py:88
+#, python-format
+msgid "Container no must be bigger than Zero."
+msgstr "يجب ان يكون عدد الحاويات اكبر من الصفر"
+
+#. module: logistics
+#: code:addons/logistics/models/operation.py:90
+#, python-format
+msgid "Container weight must be bigger than Zero."
+msgstr "يجب ان يكون وزن الحاوية اكبر من الصفر"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_operation_order__container_no
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__container_no
+msgid "Containers No"
+msgstr "عدد الحاويات"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_operation_order__exit_port
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__exit_port
+msgid "Containers Withdrawl Port"
+msgstr "ميناء خروج الحاويات"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_delivery_plan__origin
+msgid "Contract ref"
+msgstr "عقد رقم"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_customs_clearance__country
+#: model_terms:ir.ui.view,arch_db:logistics.view_customs_clearance_filter
+msgid "Country"
+msgstr "دولة"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_customs_clearance__create_uid
+#: model:ir.model.fields,field_description:logistics.field_delivery_plan__create_uid
+#: model:ir.model.fields,field_description:logistics.field_loading_place__create_uid
+#: model:ir.model.fields,field_description:logistics.field_operation_order__create_uid
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__create_uid
+#: model:ir.model.fields,field_description:logistics.field_order_mrp_line__create_uid
+msgid "Created by"
+msgstr "أنشئ بواسطة"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_customs_clearance__create_date
+#: model:ir.model.fields,field_description:logistics.field_delivery_plan__create_date
+#: model:ir.model.fields,field_description:logistics.field_loading_place__create_date
+#: model:ir.model.fields,field_description:logistics.field_operation_order__create_date
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__create_date
+#: model:ir.model.fields,field_description:logistics.field_order_mrp_line__create_date
+msgid "Created on"
+msgstr "أنشئ في"
+
+#. module: logistics
+#: model:ir.model.fields,help:logistics.field_customs_clearance__access_url
+#: model:ir.model.fields,help:logistics.field_delivery_plan__access_url
+#: model:ir.model.fields,help:logistics.field_operation_order_mrp__access_url
+msgid "Customer Portal URL"
+msgstr "رابط بوابة العملاء"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_operation_order__end_date
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__end_date
+#: model_terms:ir.ui.view,arch_db:logistics.view_operation_order_filter
+msgid "Cut Off"
+msgstr "اخر ميعاد للوصول للميناء"
+
+#. module: logistics
+#: model:ir.model.fields,help:logistics.field_order_mrp_line__product_uom
+msgid "Default unit of measure used for purchase orders. It must be in the same category as the default unit of measure."
+msgstr "وحدة القياس الافتراضية المستخدمة بأوامر الشراء. يجب أن تكون من نفس فئة وحدة القياس الافتراضية."
+
+#. module: logistics
+#: model_terms:ir.ui.view,arch_db:logistics.view_operation_order_form
+msgid "Deliver"
+msgstr "تسليم"
+
+#. module: logistics
+#: model_terms:ir.ui.view,arch_db:logistics.view_operation_order_filter
+msgid "Delivered"
+msgstr "سلم للعميل"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_operation_order__delivered_qty
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__delivered_qty
+msgid "Delivered Qty"
+msgstr "الكمية المسلمة"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_operation_order__delivery_count
+#: model:ir.model.fields,field_description:logistics.field_operation_order__delivery_ids
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__delivery_count
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__delivery_ids
+#: model_terms:ir.ui.view,arch_db:logistics.view_operation_order_form
+msgid "Delivery"
+msgstr "التوصيل"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_operation_order__delivery_date
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__delivery_date
+msgid "Delivery Date"
+msgstr "تاريخ التسليم"
+
+#. module: logistics
+#: model:ir.model,name:logistics.model_delivery_plan
+msgid "Delivery Plan"
+msgstr "خطة الشحن"
+
+#. module: logistics
+#: model:ir.model,name:logistics.model_delivery_plan_line
+msgid "Delivery Plan Line"
+msgstr ""
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_customs_clearance__display_name
+#: model:ir.model.fields,field_description:logistics.field_delivery_plan__display_name
+#: model:ir.model.fields,field_description:logistics.field_loading_place__display_name
+#: model:ir.model.fields,field_description:logistics.field_operation_order__display_name
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__display_name
+#: model:ir.model.fields,field_description:logistics.field_order_mrp_line__display_name
+msgid "Display Name"
+msgstr "الاسم المعروض"
+
+#. module: logistics
+#: selection:delivery.plan,state:0
+msgid "Done"
+msgstr "انتهت"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_delivery_plan__delivery_date
+msgid "ETD"
+msgstr "تاريخ التسليم"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_customs_clearance__agree_expiry_date
+msgid "Expiry Date"
+msgstr "ناريخ انتهاء الموافقات"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_customs_clearance__export_agree
+msgid "Export Agree"
+msgstr "موافقة تصديرية للميناء"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_customs_clearance__message_follower_ids
+#: model:ir.model.fields,field_description:logistics.field_delivery_plan__message_follower_ids
+#: model:ir.model.fields,field_description:logistics.field_operation_order__message_follower_ids
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__message_follower_ids
+msgid "Followers"
+msgstr "المتابعون"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_customs_clearance__message_channel_ids
+#: model:ir.model.fields,field_description:logistics.field_delivery_plan__message_channel_ids
+#: model:ir.model.fields,field_description:logistics.field_operation_order__message_channel_ids
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__message_channel_ids
+msgid "Followers (Channels)"
+msgstr "المتابعون (القنوات)"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_customs_clearance__message_partner_ids
+#: model:ir.model.fields,field_description:logistics.field_delivery_plan__message_partner_ids
+#: model:ir.model.fields,field_description:logistics.field_operation_order__message_partner_ids
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__message_partner_ids
+msgid "Followers (Partners)"
+msgstr "المتابعون (الشركاء)"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_delivery_plan__shipment_company
+#: model:ir.model.fields,field_description:logistics.field_operation_order__forwarder
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__forwarder
+#: model_terms:ir.ui.view,arch_db:logistics.view_delivery_plan_filter
+#: model_terms:ir.ui.view,arch_db:logistics.view_operation_order_filter
+msgid "Forwarder"
+msgstr "وكيل الخط"
+
+#. module: logistics
+#: model_terms:ir.ui.view,arch_db:logistics.view_delivery_plan_form
+msgid "General Info"
+msgstr "معلومات عامة"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_customs_clearance__concentration
+msgid "Grade"
+msgstr "التركيز"
+
+#. module: logistics
+#: model_terms:ir.ui.view,arch_db:logistics.view_customs_clearance_filter
+#: model_terms:ir.ui.view,arch_db:logistics.view_delivery_plan_filter
+msgid "Group By"
+msgstr "تجميع حسب"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_customs_clearance__id
+#: model:ir.model.fields,field_description:logistics.field_delivery_plan__id
+#: model:ir.model.fields,field_description:logistics.field_loading_place__id
+#: model:ir.model.fields,field_description:logistics.field_operation_order__id
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__id
+#: model:ir.model.fields,field_description:logistics.field_order_mrp_line__id
+msgid "ID"
+msgstr "المعرف"
+
+#. module: logistics
+#: model:ir.model.fields,help:logistics.field_customs_clearance__message_unread
+#: model:ir.model.fields,help:logistics.field_delivery_plan__message_unread
+#: model:ir.model.fields,help:logistics.field_operation_order__message_unread
+#: model:ir.model.fields,help:logistics.field_operation_order_mrp__message_unread
+msgid "If checked new messages require your attention."
+msgstr "إذا كان محددًا، فهناك رسائل جديدة تحتاج لرؤيتها."
+
+#. module: logistics
+#: model:ir.model.fields,help:logistics.field_customs_clearance__message_needaction
+#: model:ir.model.fields,help:logistics.field_delivery_plan__message_needaction
+#: model:ir.model.fields,help:logistics.field_operation_order__message_needaction
+#: model:ir.model.fields,help:logistics.field_operation_order_mrp__message_needaction
+msgid "If checked, new messages require your attention."
+msgstr "إذا كان محددًا، فهناك رسائل جديدة تحتاج لرؤيتها."
+
+#. module: logistics
+#: model:ir.model.fields,help:logistics.field_customs_clearance__message_has_error
+#: model:ir.model.fields,help:logistics.field_delivery_plan__message_has_error
+#: model:ir.model.fields,help:logistics.field_operation_order__message_has_error
+#: model:ir.model.fields,help:logistics.field_operation_order_mrp__message_has_error
+msgid "If checked, some messages have a delivery error."
+msgstr "إذا كان محددًا، فقد حدث خطأ في تسليم بعض الرسائل."
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_operation_order__inspection_company1
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__inspection_company1
+msgid "Inspection Company1"
+msgstr "شركة التفتيش1"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_operation_order__inspection_company2
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__inspection_company2
+msgid "Inspection Company2"
+msgstr "شركة التفتيش2"
+
+#. module: logistics
+#: model:ir.model,name:logistics.model_account_invoice
+#: model:ir.model.fields,field_description:logistics.field_operation_order__invoice_count
+#: model:ir.model.fields,field_description:logistics.field_operation_order__invoice_id
+#: model:ir.model.fields,field_description:logistics.field_operation_order__invoice_ids
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__invoice_count
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__invoice_id
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__invoice_ids
+#: model_terms:ir.ui.view,arch_db:logistics.view_operation_order_form
+msgid "Invoice"
+msgstr "الفاتورة"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_operation_order__invoice_no
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__invoice_no
+msgid "Invoice Number"
+msgstr "رقم الفانورة"
+
+#. module: logistics
+#: model_terms:ir.ui.view,arch_db:logistics.view_operation_order_filter
+msgid "Invoiced"
+msgstr "الكمية المفوترة"
+
+#. module: logistics
+#: model_terms:ir.ui.view,arch_db:logistics.view_operation_order_form
+msgid "Invoices"
+msgstr "الفواتير"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_customs_clearance__message_is_follower
+#: model:ir.model.fields,field_description:logistics.field_delivery_plan__message_is_follower
+#: model:ir.model.fields,field_description:logistics.field_operation_order__message_is_follower
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__message_is_follower
+msgid "Is Follower"
+msgstr "متابع"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_customs_clearance__port_send_date
+msgid "Issued Date"
+msgstr "ناريخ ارسالها الميناء"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_customs_clearance____last_update
+#: model:ir.model.fields,field_description:logistics.field_delivery_plan____last_update
+#: model:ir.model.fields,field_description:logistics.field_loading_place____last_update
+#: model:ir.model.fields,field_description:logistics.field_operation_order____last_update
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp____last_update
+#: model:ir.model.fields,field_description:logistics.field_order_mrp_line____last_update
+msgid "Last Modified on"
+msgstr "آخر تعديل في"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_customs_clearance__write_uid
+#: model:ir.model.fields,field_description:logistics.field_delivery_plan__write_uid
+#: model:ir.model.fields,field_description:logistics.field_loading_place__write_uid
+#: model:ir.model.fields,field_description:logistics.field_operation_order__write_uid
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__write_uid
+#: model:ir.model.fields,field_description:logistics.field_order_mrp_line__write_uid
+msgid "Last Updated by"
+msgstr "آخر تحديث بواسطة"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_customs_clearance__write_date
+#: model:ir.model.fields,field_description:logistics.field_delivery_plan__write_date
+#: model:ir.model.fields,field_description:logistics.field_loading_place__write_date
+#: model:ir.model.fields,field_description:logistics.field_operation_order__write_date
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__write_date
+#: model:ir.model.fields,field_description:logistics.field_order_mrp_line__write_date
+msgid "Last Updated on"
+msgstr "آخر تحديث في"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_delivery_plan__line_ids
+msgid "Line"
+msgstr "بند"
+
+#. module: logistics
+#: model:ir.model,name:logistics.model_loading_place
+#: model:ir.model.fields,field_description:logistics.field_operation_order__loading_place
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__loading_place
+msgid "Loading Place"
+msgstr "موقع التحميل"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_operation_order__location_id
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__location_id
+msgid "Location"
+msgstr "المكان"
+
+#. module: logistics
+#: model:ir.ui.menu,name:logistics.menu_logistics_info
+msgid "Logistics"
+msgstr "سلاسل الامداد"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_customs_clearance__message_main_attachment_id
+#: model:ir.model.fields,field_description:logistics.field_delivery_plan__message_main_attachment_id
+#: model:ir.model.fields,field_description:logistics.field_operation_order__message_main_attachment_id
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__message_main_attachment_id
+msgid "Main Attachment"
+msgstr "المرفق الرئيسي"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_customs_clearance__message_has_error
+#: model:ir.model.fields,field_description:logistics.field_delivery_plan__message_has_error
+#: model:ir.model.fields,field_description:logistics.field_operation_order__message_has_error
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__message_has_error
+msgid "Message Delivery error"
+msgstr "خطأ في تسليم الرسائل"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_customs_clearance__message_ids
+#: model:ir.model.fields,field_description:logistics.field_delivery_plan__message_ids
+#: model:ir.model.fields,field_description:logistics.field_operation_order__message_ids
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__message_ids
+msgid "Messages"
+msgstr "الرسائل"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_loading_place__name
+msgid "Name"
+msgstr "الاسم"
+
+#. module: logistics
+#: selection:customs.clearance,state:0
+#: selection:delivery.plan,state:0
+#: model_terms:ir.ui.view,arch_db:logistics.view_customs_clearance_filter
+#: model_terms:ir.ui.view,arch_db:logistics.view_delivery_plan_filter
+#: model_terms:ir.ui.view,arch_db:logistics.view_operation_order_filter
+#: selection:operation.order,state:0
+#: selection:operation.order.mrp,state:0
+msgid "New"
+msgstr "جديد"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_customs_clearance__activity_date_deadline
+#: model:ir.model.fields,field_description:logistics.field_delivery_plan__activity_date_deadline
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__activity_date_deadline
+msgid "Next Activity Deadline"
+msgstr "الموعد النهائي للنشاط التالي"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_customs_clearance__activity_summary
+#: model:ir.model.fields,field_description:logistics.field_delivery_plan__activity_summary
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__activity_summary
+msgid "Next Activity Summary"
+msgstr "ملخص النشاط التالي"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_customs_clearance__activity_type_id
+#: model:ir.model.fields,field_description:logistics.field_delivery_plan__activity_type_id
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__activity_type_id
+msgid "Next Activity Type"
+msgstr "نوع النشاط التالي"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_operation_order__notes
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__notes
+msgid "Notes"
+msgstr "ملاحظات"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_customs_clearance__message_needaction_counter
+#: model:ir.model.fields,field_description:logistics.field_delivery_plan__message_needaction_counter
+#: model:ir.model.fields,field_description:logistics.field_operation_order__message_needaction_counter
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__message_needaction_counter
+msgid "Number of Actions"
+msgstr "عدد الإجراءات"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_customs_clearance__message_has_error_counter
+#: model:ir.model.fields,field_description:logistics.field_delivery_plan__message_has_error_counter
+#: model:ir.model.fields,field_description:logistics.field_operation_order__message_has_error_counter
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__message_has_error_counter
+msgid "Number of error"
+msgstr "عدد الأخطاء"
+
+#. module: logistics
+#: model:ir.model.fields,help:logistics.field_customs_clearance__message_needaction_counter
+#: model:ir.model.fields,help:logistics.field_delivery_plan__message_needaction_counter
+#: model:ir.model.fields,help:logistics.field_operation_order__message_needaction_counter
+#: model:ir.model.fields,help:logistics.field_operation_order_mrp__message_needaction_counter
+msgid "Number of messages which requires an action"
+msgstr "عدد الرسائل التي تتطلب إجراء"
+
+#. module: logistics
+#: model:ir.model.fields,help:logistics.field_customs_clearance__message_has_error_counter
+#: model:ir.model.fields,help:logistics.field_delivery_plan__message_has_error_counter
+#: model:ir.model.fields,help:logistics.field_operation_order__message_has_error_counter
+#: model:ir.model.fields,help:logistics.field_operation_order_mrp__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr "عدد الرسائل الحادث بها خطأ في التسليم"
+
+#. module: logistics
+#: model:ir.model.fields,help:logistics.field_customs_clearance__message_unread_counter
+#: model:ir.model.fields,help:logistics.field_delivery_plan__message_unread_counter
+#: model:ir.model.fields,help:logistics.field_operation_order__message_unread_counter
+#: model:ir.model.fields,help:logistics.field_operation_order_mrp__message_unread_counter
+msgid "Number of unread messages"
+msgstr "عدد الرسائل الجديدة"
+
+#. module: logistics
+#: selection:delivery.plan,state:0
+#: model:ir.actions.act_window,name:logistics.operation_order_action
+#: model:ir.model,name:logistics.model_operation_order
+#: model:ir.ui.menu,name:logistics.menu_operation_order
+#: model:ir.ui.menu,name:logistics.menu_operation_order_mrp
+#: model_terms:ir.ui.view,arch_db:logistics.operation_order_tree
+#: model_terms:ir.ui.view,arch_db:logistics.view_operation_order_form
+msgid "Operation Order"
+msgstr "امر الشغل"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_customs_clearance__order_ids
+msgid "Order"
+msgstr ""
+
+#. module: logistics
+#: model:ir.actions.act_window,name:logistics.operation_order_mrp_action
+msgid "Order MRP Plan"
+msgstr "خطة تصنيع امر الشغل"
+
+#. module: logistics
+#: model:ir.model,name:logistics.model_operation_order_mrp
+msgid "Order Manufacturing"
+msgstr "خطة تصنيع امر الشغل"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_operation_order__name
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__name
+msgid "Order No"
+msgstr "امر الشغل"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_mrp_bom__plan_id
+msgid "Order Plan"
+msgstr ""
+
+#. module: logistics
+#: model:ir.actions.report,name:logistics.operation_order_report_id
+msgid "Order Report"
+msgstr "امر الشغل"
+
+#. module: logistics
+#: sql_constraint:operation.order.mrp:0
+msgid "Order no must be unique !"
+msgstr "رقم امر الشغل يجب ألا يكون مكررا"
+
+#. module: logistics
+#: model_terms:ir.ui.view,arch_db:logistics.customs_clearance_view_form
+msgid "Orders"
+msgstr "الاوامر"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__order_no
+msgid "Origin"
+msgstr "رقم امر الشغل"
+
+#. module: logistics
+#: selection:customs.clearance,activity_state:0
+#: selection:delivery.plan,activity_state:0
+#: selection:operation.order.mrp,activity_state:0
+msgid "Overdue"
+msgstr ""
+
+#. module: logistics
+#: model_terms:ir.ui.view,arch_db:logistics.view_delivery_plan_form
+msgid "PLan lines"
+msgstr "بنود الخطة"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_customs_clearance__arrival_port
+#: model:ir.model.fields,field_description:logistics.field_delivery_plan__to_port
+#: model:ir.model.fields,field_description:logistics.field_operation_order__arrival_port
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__arrival_port
+#: model_terms:ir.ui.view,arch_db:logistics.view_customs_clearance_filter
+#: model_terms:ir.ui.view,arch_db:logistics.view_operation_order_filter
+msgid "POD"
+msgstr "ميناء الوصول"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_customs_clearance__pol
+#: model:ir.model.fields,field_description:logistics.field_delivery_plan__from_port
+#: model:ir.model.fields,field_description:logistics.field_operation_order__shipment_port
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__shipment_port
+msgid "POL"
+msgstr "ميناء الشحن"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_delivery_plan__packing
+#: model:ir.model.fields,field_description:logistics.field_operation_order__packing
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__packing
+#: model_terms:ir.ui.view,arch_db:logistics.view_delivery_plan_filter
+msgid "Packing"
+msgstr "التعبئة"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_order_mrp_line__plan_id
+msgid "Plan"
+msgstr ""
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__plan_lines
+msgid "Plan Lines"
+msgstr "بنود الخطة"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_delivery_plan__name
+msgid "Plan ref"
+msgstr "رقم خطة الشحن"
+
+#. module: logistics
+#: selection:customs.clearance,activity_state:0
+#: selection:delivery.plan,activity_state:0
+#: selection:operation.order.mrp,activity_state:0
+msgid "Planned"
+msgstr ""
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_customs_clearance__access_url
+#: model:ir.model.fields,field_description:logistics.field_delivery_plan__access_url
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__access_url
+msgid "Portal Access URL"
+msgstr "رابط الوصول لبوابة العملاء"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_order_mrp_line__product_id
+msgid "Product"
+msgstr "المنتج"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_order_mrp_line__product_qty
+msgid "Product Qty"
+msgstr "كمية المنتج"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_order_mrp_line__product_uom
+msgid "Product Uom"
+msgstr "وحدة قياس المنتج"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_delivery_plan__quantity
+msgid "QTY"
+msgstr "الكمية"
+
+#. module: logistics
+#: model_terms:ir.ui.view,arch_db:logistics.view_operation_order_mrp_form
+msgid "Qty"
+msgstr "الكمية"
+
+#. module: logistics
+#: code:addons/logistics/models/operation_order_mrp.py:24
+#, python-format
+msgid "Qty of lines must be bigger than zero."
+msgstr "يجب ان تكون كمية البنود اكبر من الصفر "
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_customs_clearance__activity_user_id
+#: model:ir.model.fields,field_description:logistics.field_delivery_plan__activity_user_id
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__activity_user_id
+msgid "Responsible User"
+msgstr "المستخدم المسئول"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_operation_order__travel_date
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__travel_date
+#: model_terms:ir.ui.view,arch_db:logistics.view_operation_order_filter
+msgid "Sailing Date"
+msgstr "تاريخ السفر"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_customs_clearance__access_token
+#: model:ir.model.fields,field_description:logistics.field_delivery_plan__access_token
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__access_token
+msgid "Security Token"
+msgstr "رمز الحماية"
+
+#. module: logistics
+#: model_terms:ir.ui.view,arch_db:logistics.view_delivery_plan_form
+msgid "Send Shipment"
+msgstr "ارسلت لوكيل الخط"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_customs_clearance__name
+msgid "Sequence"
+msgstr "التسلسل"
+
+#. module: logistics
+#: selection:delivery.plan,state:0
+#: model_terms:ir.ui.view,arch_db:logistics.view_delivery_plan_filter
+msgid "Shipment"
+msgstr "ارسلت لوكيل الخط"
+
+#. module: logistics
+#: model:ir.actions.act_window,name:logistics.delivery_plan_action
+#: model:ir.model.fields,field_description:logistics.field_operation_order__shipment_plan
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__shipment_plan
+#: model:ir.ui.menu,name:logistics.menu_delivery_plan
+msgid "Shipment Plan"
+msgstr "خطة الشحن"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_operation_order__shipping_line
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__shipping_line
+msgid "Shipping Line"
+msgstr "خط الشحن"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_operation_order__show
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__show
+msgid "Show"
+msgstr ""
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_operation_order__show_delivery
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__show_delivery
+msgid "Show Delivery"
+msgstr ""
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_operation_order__start_date
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__start_date
+msgid "Start Loading Date"
+msgstr "تاريخ بداية دخول الحاويات الي الميناء"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_customs_clearance__state
+#: model:ir.model.fields,field_description:logistics.field_operation_order__state
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__state
+msgid "State"
+msgstr "الحالة"
+
+#. module: logistics
+#: model:ir.model.fields,help:logistics.field_customs_clearance__activity_state
+#: model:ir.model.fields,help:logistics.field_delivery_plan__activity_state
+#: model:ir.model.fields,help:logistics.field_operation_order_mrp__activity_state
+msgid "Status based on activities\n"
+"Overdue: Due date is already passed\n"
+"Today: Activity date is today\n"
+"Planned: Future activities."
+msgstr "الحالة على أساس الأنشطة\n"
+"المتأخرة: تاريخ الاستحقاق مر\n"
+"اليوم: تاريخ النشاط هو اليوم\n"
+"المخطط: الأنشطة المستقبلية."
+
+#. module: logistics
+#: model:ir.model,name:logistics.model_stock_move
+msgid "Stock Move"
+msgstr "حركة المخزون"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_customs_clearance__raw_supplier
+msgid "Supplier"
+msgstr "مورد الخام"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_customs_clearance__supplier_invoice
+msgid "Supplier Invoice"
+msgstr "فاتورة المورد"
+
+#. module: logistics
+#: model_terms:ir.ui.view,arch_db:logistics.view_customs_clearance_filter
+#: model_terms:ir.ui.view,arch_db:logistics.view_delivery_plan_filter
+#: model_terms:ir.ui.view,arch_db:logistics.view_operation_order_filter
+msgid "This Month"
+msgstr "هذا الشهر"
+
+#. module: logistics
+#: model_terms:ir.ui.view,arch_db:logistics.view_customs_clearance_filter
+#: model_terms:ir.ui.view,arch_db:logistics.view_delivery_plan_filter
+#: model_terms:ir.ui.view,arch_db:logistics.view_operation_order_filter
+msgid "This Week"
+msgstr "هذا الاسبوع"
+
+#. module: logistics
+#: model_terms:ir.ui.view,arch_db:logistics.view_customs_clearance_filter
+#: model_terms:ir.ui.view,arch_db:logistics.view_delivery_plan_filter
+#: model_terms:ir.ui.view,arch_db:logistics.view_operation_order_filter
+msgid "This Year"
+msgstr "هذا العام"
+
+#. module: logistics
+#: selection:customs.clearance,activity_state:0
+#: selection:delivery.plan,activity_state:0
+#: model_terms:ir.ui.view,arch_db:logistics.view_customs_clearance_filter
+#: model_terms:ir.ui.view,arch_db:logistics.view_delivery_plan_filter
+#: model_terms:ir.ui.view,arch_db:logistics.view_operation_order_filter
+#: selection:operation.order.mrp,activity_state:0
+msgid "Today"
+msgstr "اليوم"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_operation_order__total_after_increase
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__total_after_increase
+msgid "Total After Increase"
+msgstr "(%10) اجمالي القيمة النقدية بعد الزيادة"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_customs_clearance__total_after_increase
+msgid "Total Amount After 10%"
+msgstr "  اجمالي القيمة النقدية بعد الزيادة (%10)"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_operation_order__total_bags
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__total_bags
+msgid "Total Bags"
+msgstr "اجمالي عدد الشكائر"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_customs_clearance__agree_qty
+msgid "Total Qty"
+msgstr "كمية الموافقة"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_operation_order__total_weight
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__total_weight
+msgid "Total Weight"
+msgstr "اجمالي الوزن"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_operation_order__price_unit
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__price_unit
+msgid "Unit Price"
+msgstr "سعر الوحدة"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_customs_clearance__price
+#: model:ir.model.fields,field_description:logistics.field_delivery_plan__price_unit
+#: model_terms:ir.ui.view,arch_db:logistics.view_customs_clearance_filter
+#: model_terms:ir.ui.view,arch_db:logistics.view_operation_order_form
+msgid "Unit Rate"
+msgstr "سعر الوحدة"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_customs_clearance__message_unread
+#: model:ir.model.fields,field_description:logistics.field_delivery_plan__message_unread
+#: model:ir.model.fields,field_description:logistics.field_operation_order__message_unread
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__message_unread
+msgid "Unread Messages"
+msgstr "الرسائل الجديدة"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_customs_clearance__message_unread_counter
+#: model:ir.model.fields,field_description:logistics.field_delivery_plan__message_unread_counter
+#: model:ir.model.fields,field_description:logistics.field_operation_order__message_unread_counter
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__message_unread_counter
+msgid "Unread Messages Counter"
+msgstr "عدد الرسائل الجديدة"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_delivery_plan__uom
+#: model:ir.model.fields,field_description:logistics.field_operation_order__uom
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__uom
+msgid "Uom"
+msgstr "وحدة القياس"
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_customs_clearance__website_message_ids
+#: model:ir.model.fields,field_description:logistics.field_delivery_plan__website_message_ids
+#: model:ir.model.fields,field_description:logistics.field_operation_order__website_message_ids
+#: model:ir.model.fields,field_description:logistics.field_operation_order_mrp__website_message_ids
+msgid "Website Messages"
+msgstr "رسائل الموقع"
+
+#. module: logistics
+#: model:ir.model.fields,help:logistics.field_customs_clearance__website_message_ids
+#: model:ir.model.fields,help:logistics.field_delivery_plan__website_message_ids
+#: model:ir.model.fields,help:logistics.field_operation_order__website_message_ids
+#: model:ir.model.fields,help:logistics.field_operation_order_mrp__website_message_ids
+msgid "Website communication history"
+msgstr "سجل تواصل الموقع"
+
+#. module: logistics
+#: code:addons/logistics/models/operation.py:84
+#, python-format
+msgid "You must enter Forwarder."
+msgstr " يجب ان تضع وكيل الخط"
+
+#. module: logistics
+#: code:addons/logistics/models/customs_clearance.py:45
+#, python-format
+msgid "You must enter all Bank certificate!"
+msgstr "يجب ان تضع جميع الشهادات البنكية"
+
+#. module: logistics
+#: code:addons/logistics/models/customs_clearance.py:40
+#, python-format
+msgid "You must enter at least one line!"
+msgstr "يجب ان تضع علي الاقل سطر او بند واحد"
+
+#. module: logistics
+#: code:addons/logistics/models/operation.py:94
+#, python-format
+msgid "You must enter bag type."
+msgstr "يجب ان تضع نوع الشيكارة"
+
+#. module: logistics
+#: code:addons/logistics/models/operation.py:82
+#, python-format
+msgid "You must enter booking no."
+msgstr "يجب ان تضع رقم الحجز"
+
+#. module: logistics
+#: code:addons/logistics/models/operation.py:100
+#, python-format
+msgid "You must enter cut off."
+msgstr "يجب ان تضع اخر ميعاد للوصول للميناء"
+
+#. module: logistics
+#: code:addons/logistics/models/operation.py:104
+#, python-format
+msgid "You must enter inspection company1."
+msgstr "يجب ان تضع شركة التفتيش1"
+
+#. module: logistics
+#: code:addons/logistics/models/operation.py:106
+#, python-format
+msgid "You must enter inspection company2."
+msgstr "يجب ان تضع شركة التفتيش2"
+
+#. module: logistics
+#: code:addons/logistics/models/operation_order_mrp.py:20
+#, python-format
+msgid "You must enter lines."
+msgstr "يجب ان تضع علي الاقل بند او سطر واحد"
+
+#. module: logistics
+#: code:addons/logistics/models/operation.py:96
+#, python-format
+msgid "You must enter loading Place."
+msgstr "يجب ان تضع موقع التحميل"
+
+#. module: logistics
+#: code:addons/logistics/models/delivery_plan.py:28
+#, python-format
+msgid "You must enter shipment company"
+msgstr "يجب ان تضع وكبل الخط"
+
+#. module: logistics
+#: code:addons/logistics/models/operation.py:86
+#, python-format
+msgid "You must enter shipping line."
+msgstr "يجب ان تضع خط الشحن"
+
+#. module: logistics
+#: code:addons/logistics/models/operation.py:98
+#, python-format
+msgid "You must enter start loading date."
+msgstr "يجب ان تضع تاربخ بداية دخول الحاويات الي الميناء"
+
+#. module: logistics
+#: code:addons/logistics/models/operation.py:102
+#, python-format
+msgid "You must enter start sailing date."
+msgstr "يجب ان تضع تاريخ السفر"
+
+#. module: logistics
+#: model:ir.model,name:logistics.model_order_mrp_line
+msgid "order.mrp.line"
+msgstr ""
+
+#. module: logistics
+#: model:ir.model.fields,field_description:logistics.field_delivery_plan__state
+msgid "status"
+msgstr "الحالة"
+

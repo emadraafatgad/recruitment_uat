@@ -1,0 +1,114 @@
+<odoo>
+  <data>
+      <record id="nira_sequence_code" model="ir.sequence">
+        <field name="name">Nira Sequence</field>
+        <field name="code">nira.letter.request</field>
+        <field name="prefix">NL</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="nira_request_action" model="ir.actions.act_window">
+        <field name="name">Nira Request</field>
+        <field name="res_model">nira.letter.request</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+    </record>
+
+    <record id="view_nira_request_form" model="ir.ui.view">
+        <field name="name">Nira Request</field>
+        <field name="model">nira.letter.request</field>
+        <field name="arch" type="xml">
+            <form string="Passport request">
+                <header>
+
+
+                    <field name="state" widget="statusbar"
+                               statusbar_visible="new,releasing,done"/>
+                </header>
+                <sheet>
+
+                    <h1>
+                        <field name="sequence" class="oe_inline"/>
+                    </h1>
+
+                    <group>
+                        <group>
+                        <field name="labourer_id"/>
+                        <field name="birth_date"/>
+                        <field name="birth_date" invisible="1"/>
+                        </group>
+
+                        <group>
+                        <field name="request_date"/>
+                        <field name="delivery_date" readonly="1"/>
+                        </group>
+                    </group>
+                    <group states="done">
+                        <group>
+                          <field name="national_id" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="start_date" readonly="1"/>
+                            <field name="end_date" readonly="1"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_nira_request_tree">
+        <field name="name">Nira Request Tree</field>
+        <field name="model">nira.letter.request</field>
+        <field name="arch" type="xml">
+            <tree string="Request">
+                <field name="labourer_id" string="Laborer"/>
+                <field name="birth_date"/>
+                <field name="state"/>
+             </tree>
+        </field>
+    </record>
+      <record id="view_nira_request_search" model="ir.ui.view">
+            <field name="name">Nira Request Search</field>
+            <field name="model">nira.letter.request</field>
+            <field name="arch" type="xml">
+
+                <search>
+                    <field name="labourer_id" string="Laborer"/>
+
+                    <field name="birth_date"/>
+                <separator/>
+                    <filter name="new" string="New"
+                            domain="[('state','=','new')]"/>
+                    <filter name="releasing" string="Releasing"
+                            domain="[('state','=','releasing')]"/>
+                    <filter name="done" string="Done"
+                            domain="[('state','=','done')]"/>
+                    <filter string="Today" name="today" domain="[('create_date','&gt;=',time.strftime('%%Y-%%m-%%d'))]"/>
+                    <filter string="This Week" name="this_week" domain="[
+                                '&amp;',
+                                ('create_date', '>=', (context_today() + relativedelta(weeks=-1,days=1,weekday=0)).strftime('%Y-%m-%d')),
+                                ('create_date', '&lt;=', (context_today() + relativedelta(weekday=6)).strftime('%Y-%m-%d')),]"/>
+                    <filter string="This Month" name="this_month" domain="[('create_date','&gt;=',time.strftime('%%Y-%%m-01'))]"/>
+                    <filter string="This Year" name="this_year" domain="[('create_date','&gt;=',time.strftime('%%Y-01-01'))]"/>
+
+
+
+                </search>
+            </field>
+        </record>
+      <menuitem id="menu_nira_main" sequence="11" name="Nira" parent="menu_recruitment_root"
+               groups="test_master_data.group_registeration_user"/>
+    <menuitem id="menu_nira_request" sequence="1" name="Candidates" parent="menu_nira_main"
+              action="nira_request_action"/>
+
+
+ </data>
+</odoo>

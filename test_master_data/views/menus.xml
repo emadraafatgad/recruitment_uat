@@ -1,0 +1,6 @@
+<odoo>
+
+     <menuitem id="menu_recruitment_root" name="Recruitment" groups="test_master_data.group_registeration_user,account.group_account_invoice"/>
+        <menuitem id="menu_recruitment_configuration" sequence="90" parent="menu_recruitment_root" name="Configuration" groups="test_master_data.group_registeration_user"/>
+
+</odoo>

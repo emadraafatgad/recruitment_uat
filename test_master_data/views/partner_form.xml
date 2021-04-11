@@ -1,0 +1,63 @@
+<odoo>
+<record id="view_partner_property_form_worker" model="ir.ui.view">
+            <field name="name">view_partner_property_form_worker</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form" />
+            <field name="arch" type="xml">
+               <xpath expr="//field[@name='company_type']" position="attributes">
+            <attribute name="attrs">{'invisible':False}</attribute>
+               </xpath>
+                <xpath expr="//field[@name='parent_id']" position="attributes">
+            <attribute name="attrs">{'invisible':True}</attribute>
+               </xpath>
+                  <xpath expr="//field[@name='website']" position="attributes">
+            <attribute name="attrs">{'invisible':True}</attribute>
+               </xpath>
+                <xpath expr="//field[@name='lang']" position="attributes">
+            <attribute name="attrs">{'invisible':True}</attribute>
+               </xpath>
+                   <xpath expr="//field[@name='category_id']" position="attributes">
+            <attribute name="attrs">{'invisible':False}</attribute></xpath>
+                <xpath expr="//field[@name='vat']" position="replace">
+<!--                      <field name="code"/>-->
+                </xpath>
+                <xpath expr="//page[@name='sales_purchases']//field[@name='customer']" position="after">
+                    <field name="is_slave"/>
+                </xpath>
+                <xpath expr="//notebook" position="before">
+                    <group string="Information" attrs="{'invisible':[('is_slave', '=', False)]}">
+                        <group>
+                            <field name="age" attrs="{'invisible':[('is_slave', '=', False)]}"/>
+
+                            <field name="gender" attrs="{'invisible':[('is_slave', '=', False)],
+                            'required':[('is_slave', '=', True)]}"/>
+                            <field name="date_of_birth" attrs="{'invisible':[('is_slave', '=', False)],
+                            'required':[('is_slave', '=', True)]}"/>
+                            <field name="pre_medical_check" attrs="{'invisible':[('is_slave', '=', False)],
+                            'required':[('is_slave', '=', True)]}"/>
+                            <field name="reason" attrs="{'invisible':[('pre_medical_check', '!=', 'Unfit')],
+                            'required':[('pre_medical_check', '=', 'Unfit')]}"/>
+                        </group>
+                        <group>
+                            <field name="broker" attrs="{'invisible':[('is_slave', '=', False)],
+                            'required':[('is_slave', '=', True)]}"/>
+                        </group>
+                    </group>
+                </xpath>
+
+
+
+                <xpath expr="//field[@name='category_id']" position="after">
+                    <field name="vendor_type" attrs="{'invisible':[('supplier', '=', False)],'required':[('supplier', '=', True)]}"/>
+                    <field name="agency" attrs="{'invisible':[('customer', '=', False)],'required':[('customer', '=', True)]}"/>
+                    <field name="short_code" attrs="{'invisible':[('agency', '=', False)],'required':[('agency', '=', True)]}"/>
+                    <field name="cost" attrs="{'invisible':[('vendor_type', 'not in', ('passport_broker','interpol_broker','passport_placing_issue','hospital','training'))]}"/>
+                    <field name="nira_cost" attrs="{'invisible':[('vendor_type', 'not in', ('agent'))],'required':[('vendor_type', '=', 'agent')]}"/>
+                    <field name="national_id_cost" attrs="{'invisible':[('vendor_type', 'not in', ('agent'))],'required':[('vendor_type', '=', 'agent')]}"/>
+                    <field name="passport_cost" attrs="{'invisible':[('vendor_type', 'not in', ('agent'))],'required':[('vendor_type', '=', 'agent')]}"/>
+                    <field name="agency_cost" attrs="{'invisible':[('agency', '=', False)]}"/>
+                </xpath>
+
+            </field>
+</record>
+</odoo>

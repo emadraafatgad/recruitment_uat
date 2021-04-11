@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="assets_backend" name="account assets" inherit_id="web.assets_backend">
+            <xpath expr="." position="inside">
+                <script type="text/javascript" src="/account_payment_widget_amount/static/src/js/account_payment_field.js"></script>
+            </xpath>
+        </template>
+
+
+
+        <!-- Inherit Form View to Modify it -->
+        <record id="view_account_payment_formsssssss" model="ir.ui.view">
+            <field name="name">account.payment</field>
+            <field name="model">account.payment</field>
+            <field name="inherit_id" ref="account.view_account_payment_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//field[@name='payment_transaction_id']" position="after">
+                    <field name="invoice_id_for_filtration"/>
+                </xpath>
+
+            </field>
+        </record>
+    </data>
+</odoo>

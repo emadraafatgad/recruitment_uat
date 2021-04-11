@@ -1,0 +1,120 @@
+<odoo>
+     <record id="interpol_code" model="ir.sequence">
+        <field name="name">Interpol Code</field>
+        <field name="code">interpol.request</field>
+        <field name="prefix">IR/%(year)s/</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="interpol_request_action" model="ir.actions.act_window">
+        <field name="name">Interpol Request</field>
+        <field name="res_model">interpol.request</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+    </record>
+
+    <record id="view_interpol_request_form" model="ir.ui.view">
+        <field name="name">Interpol Request</field>
+        <field name="model">interpol.request</field>
+        <field name="arch" type="xml">
+            <form string="Interpol Request">
+                <header>
+                    <button name="action_reject" states="assigned"
+                                string="Reject" type="object"
+                                class="oe_highlight"/>
+                    <field name="state" widget="statusbar"
+                               statusbar_visible="new,assigned,done"/>
+                </header>
+                <sheet>
+                    <h1>
+                        <field name="name"/>
+                    </h1>
+                    <group>
+                       <group>
+                            <field name="labor_id"/>
+                            <field name="national_id"/>
+                            <field name="passport_no"/>
+                       </group>
+                        <group>
+                            <field name="request_date"/>
+                            <field name="end_date"/>
+
+                       </group>
+                    </group>
+                    <notebook>
+                        <page string="Interpol Info">
+                            <group>
+                                <group>
+                                    <field name="interpol_no" />
+                                    <field name="interpol_start_date"/>
+                                    <field name="gcc_updated"/>
+                                </group>
+                                <group>
+                                    <field name="interpol_end_date" attrs="{'required':[('state','=','assigned')]}"/>
+                                    <field name="attachment" filename="filename" attrs="{'required':[('state','=','assigned')]}"/>
+                                    <field name="filename" invisible="1"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_interpol_request_tree">
+        <field name="name">Interpol Request Tree</field>
+        <field name="model">interpol.request</field>
+        <field name="arch" type="xml">
+            <tree string="Interpol Request">
+                <field name="labor" string="Laborer"/>
+                <field name="national_id"/>
+                <field name="passport_no"/>
+                <field name="state"/>
+
+             </tree>
+        </field>
+    </record>
+
+    <record id="interpol_request_search" model="ir.ui.view">
+            <field name="name">Interpol Search</field>
+            <field name="model">interpol.request</field>
+            <field name="arch" type="xml">
+
+                <search>
+                <field name="labor" string="Laborer"/>
+                <field name="passport_no"/>
+                <separator/>
+                    <filter name="new" string="New"
+                            domain="[('state','=','new')]"/>
+                    <filter name="assigned" string="Assigned"
+                            domain="[('state','=','assigned')]"/>
+                    <filter name="done" string="Done"
+                            domain="[('state','=','done')]"/>
+                    <filter string="Today" name="today" domain="[('create_date','&gt;=',time.strftime('%%Y-%%m-%%d'))]"/>
+                    <filter string="This Week" name="this_week" domain="[
+                                '&amp;',
+                                ('create_date', '>=', (context_today() + relativedelta(weeks=-1,days=1,weekday=0)).strftime('%Y-%m-%d')),
+                                ('create_date', '&lt;=', (context_today() + relativedelta(weekday=6)).strftime('%Y-%m-%d')),]"/>
+                    <filter string="This Month" name="this_month" domain="[('create_date','&gt;=',time.strftime('%%Y-%%m-01'))]"/>
+                    <filter string="This Year" name="this_year" domain="[('create_date','&gt;=',time.strftime('%%Y-01-01'))]"/>
+
+
+
+                </search>
+            </field>
+        </record>
+
+    <menuitem id="main_menu_interpol" sequence="14" name="Interpol" parent="menu_recruitment_root" />
+    <menuitem id="menu_interpol_request" sequence="1" name="Candidates" parent="main_menu_interpol"
+              action="interpol_request_action" />
+
+
+</odoo>

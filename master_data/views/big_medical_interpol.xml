@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_interpol_compute_wizard" model="ir.ui.view">
+        <field name="name">Interpol update GCC</field>
+        <field name="model">interpol.gcc.update</field>
+        <field name="arch" type="xml">
+            <form string="Parameters">
+                <p>
+                this operation will update all GCC .
+                </p>
+                <footer>
+                    <button name="update_gcc_from_interpol" string="Update GCC" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_interpol_compute" model="ir.actions.act_window">
+        <field name="name">Interpol Update Gcc</field>
+        <field name="res_model">interpol.gcc.update</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem action="action_interpol_compute" id="menu_interpol_compute" parent="main_menu_interpol" sequence="135"/>
+
+
+</odoo>
