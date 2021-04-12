@@ -53,10 +53,48 @@ class StampingList(models.Model):
         for record in request:
             for rec in record.stamping_list:
                 line.append(rec.id)
-        domain = {'stamping_list': [('id', 'not in', line),('type', '=', 'stamping')]}
+        domain = {'stamping_list': [('id', 'not in', line),('type', '=', 'stamping'),('state', 'not in', ('done','rejected'))]}
         return {'domain': domain}
 
-    # def action_create_invoice(self):
+    @api.multi
+    def action_create_invoice(self):
+        self.ensure_one()
+        if not self.stamping_list:
+            raise ValidationError(_('You must add lines in list'))
+        append_labor = []
+        name = ''
+        for rec in self.stamping_list:
+            append_labor.append(rec.labor_id.id)
+            name += rec.labor_name
+        invoice_line = []
+        purchase_journal = self.env['account.journal'].search([('type', '=', 'purchase')])[0]
+        product = self.env['product.recruitment.config'].search([('type', '=', 'embassy')])[0]
+        accounts = product.product.product_tmpl_id.get_product_accounts()
+        invoice_line.append((0, 0, {
+            'product_id': product.product.id,
+            'labors_id': [(6, 0, append_labor)],
+            'name': name,
+            'product_uom_id': product.product.uom_id.id,
+            'price_unit': product.price,
+            'discount': 0.0,
+            'quantity': float(len(self.stamping_list)),
+            'account_id': accounts.get('stock_input') and accounts['stock_input'].id or \
+                          accounts['expense'].id,
+        }))
+        cr = self.env['account.invoice'].create({
+            'partner_id': self.embassy.id,
+            'currency_id': product.currency_id.id,
+            'type': 'in_invoice',
+            'state': 'draft',
+            'partner_type': self.embassy.vendor_type,
+            'origin': self.name,
+            'journal_id': purchase_journal.id,
+            'account_id': self.embassy.property_account_payable_id.id,
+            'invoice_line_ids': invoice_line,
+        })
+        cr.action_invoice_open()
+        self.state = 'done'
+
 
 
     # @api.multi

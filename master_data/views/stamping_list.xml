@@ -25,7 +25,7 @@
                             string="Create Invoice" type="object"
                             class="oe_highlight"/>
                     <field name="state" widget="statusbar"
-                           statusbar_visible="new,in_progress,done"/>
+                           statusbar_visible="new,done"/>
                 </header>
                 <sheet>
                     <h1>
