@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+       <record id="recruitment_report_wizard_view" model="ir.ui.view">
+        <field name="name">Recruitmen Reports</field>
+        <field name="model">recruitment.report</field>
+        <field name="arch" type="xml">
+        <form string="Choose your date">
+            <p class="oe_gray">
+                </p>
+
+
+            <group name='main_group'>
+        		<group name='sub_group1' attrs="{'invisible':[('printed','=',True)]}">
+        			<field name="choose" widget="radio"/>
+        		</group>
+        		<group name='sub_group2'>
+        			<field name="file_name" invisible="1"/>
+	                <field name="report_file" readonly="1" attrs="{'invisible':[('printed','=',False)]}" filename="file_name"/>
+	                <field name="printed" invisible="1"/>
+        		</group>
+        	</group>
+                <footer>
+                        <button name="print_report"
+                                string="Print"
+                                type="object"
+                                class="btn-primary"/>
+                        <button string="Cancel" class="btn-default" special="cancel" />
+                </footer>
+
+        </form>
+        </field>
+       </record>
+        <record id="action_wizard_reports" model="ir.actions.act_window">
+        <field name="name">Passport Report</field>
+        <field name="res_model">recruitment.report</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="recruitment_report_wizard_view"/>
+        <field name="target">new</field>
+        </record>
+
+        <menuitem
+                name="Reports"
+                id="main_recruitment_reports_menu"
+                parent="master_data.menu_recruitment_root"
+                sequence="100"/>
+
+        <menuitem
+                name="Reports"
+                id="recruitment_reports_menu"
+                action="action_wizard_reports"
+                parent="main_recruitment_reports_menu"
+                sequence="1"/>
+
+
+    </data>
+</odoo>
