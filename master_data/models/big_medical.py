@@ -1,3 +1,5 @@
+from datetime import date
+
 from odoo import fields, models , api,_
 from dateutil.relativedelta import relativedelta
 from odoo.exceptions import ValidationError
@@ -36,6 +38,8 @@ class BigMedical(models.Model):
     recheck_appear =fields.Boolean(compute='compute_recheck_appear')
     confirm_appear =fields.Boolean(compute='compute_confirm_appear')
     deadline =fields.Date(compute='onchange_check_date',store=True,readonly=False,track_visibility='onchange')
+    deadline_medical =fields.Date(track_visibility='onchange',string='Deadline')
+    date_today = fields.Date(default=date.today())
 
     @api.depends('state','medical_check')
     def compute_recheck_appear(self):

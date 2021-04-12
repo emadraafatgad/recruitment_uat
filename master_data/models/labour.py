@@ -764,7 +764,7 @@ class LaborProfile(models.Model):
             'agency': False,
             'agent_invoice': False,
             'identification_code': 'New',
-            'phone': self.phoneR,
+            'phone': self.phone,
             'cv_sent': False,
             'agency_code': False,
             'specify_agency': False,

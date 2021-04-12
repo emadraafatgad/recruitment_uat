@@ -24,11 +24,14 @@
                      <button name="action_reject" states="releasing"
                                 string="Reject" type="object"
                                 class="oe_highlight" groups="master_data.group_registeration_user"/>
+                     <button name="set_to_invoiced" states="releasing"
+                                string="Set to Invoiced" type="object"
+                                class="oe_highlight"/>
                     <field name="state" widget="statusbar"
                                statusbar_visible="new,invoiced,releasing,done"
                                statusbar_colors='{"invoiced":"green"}'/>
                 </header>
-                s
+
                 <sheet>
                     <h1>
                         <field name="sequence"/>

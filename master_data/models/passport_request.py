@@ -17,7 +17,7 @@ class PassportNumber(models.Model):
     national_id = fields.Char(required=True,size=14,string='National ID')
     labor_id = fields.Many2one('labor.profile',required=True)
     labor_id_no_edit = fields.Many2one('labor.profile',required=True)
-    broker = fields.Many2one('res.partner')
+    broker = fields.Many2one('res.partner',domain=[('vendor_type','=','passport_broker')])
     religion = fields.Selection([('muslim', 'Muslim'), ('christian', 'Christian'), ('jew', 'Jew'), ('other', 'Other')],'Religion')
     request_date = fields.Datetime(readonly=True, index=True, default=fields.Datetime.now)
     invoice_date = fields.Date('Invoice Date')
@@ -38,6 +38,11 @@ class PassportNumber(models.Model):
     seq = fields.Integer()
     row_num = fields.Char()
     broker_list_id = fields.Many2one('passport.broker')
+
+    @api.multi
+    def set_to_invoiced(self):
+        self.broker = False
+        self.state = 'invoiced'
 
     @api.onchange('state')
     def onchange_state(self):

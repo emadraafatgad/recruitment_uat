@@ -50,6 +50,7 @@
                                    attrs="{'readonly':[('state', '!=', 'hospital')],'required':[('state', '=', 'hospital')]}"/>
                             <field name="reason" attrs="{'invisible':[('medical_check', '!=', 'unfit')],
                                 'required':[('medical_check', '=', 'unfit')],'readonly':[('state', '!=', 'hospital')]}"/>
+                            <field name="deadline_medical"/>
                         </group>
                     </group>
                     <group>
@@ -169,7 +170,9 @@
         <field name="name">Big Medical Tree</field>
         <field name="model">big.medical</field>
         <field name="arch" type="xml">
-            <tree string="Big Medical">
+            <tree string="Big Medical" decoration-danger="date_today >= deadline and deadline and state == 'pending'">
+                <field name="date_today" invisible="1"/>
+                <field name="deadline" invisible="1"/>
                 <field name="name"/>
                 <field name="labor_id" string="Laborer"/>
                 <field name="national_id" invisible="1"/>
@@ -188,7 +191,9 @@
         <field name="name">Big Medical Tree</field>
         <field name="model">big.medical</field>
         <field name="arch" type="xml">
-            <tree string="Big Medical">
+            <tree string="Big Medical" decoration-danger="date_today >= deadline_medical and deadline_medical and state == 'pending'">
+                <field name="date_today" invisible="1"/>
+                <field name="deadline_medical" invisible="1"/>
                 <field name="name"/>
                 <field name="labor_id" string="Laborer"/>
                 <field name="hospital"/>
