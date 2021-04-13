@@ -41,7 +41,7 @@ class SpecifyAgent(models.Model):
 
     @api.depends('state')
     def compute_edit_selected(self):
-        if self.state == 'edit_after_selected' and self.env.user.has_group('master_data.group_registeration_manager'):
+        if self.state == 'edit_after_selected' and self.env.user.has_group('master_data.group_registeration_manager') or self.state in ('draft','available','sent'):
             self.edit_selected = True
         else:
             self.edit_selected = False
