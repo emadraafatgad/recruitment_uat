@@ -216,7 +216,7 @@ class TrainingList(models.Model):
                     'district': rec.slave_id.district.id,
                     'agency': agency.agency.id,
                     'agency_code': agency.name,
-                    'destination_city': agency.destination_city,
+                    'destination_city': agency.destination_city.id,
                 })
         self.state = 'finished'
 
