@@ -169,7 +169,7 @@ class LaborEnjaz(models.Model):
                 'account_id': accounts.get('stock_input') and accounts['stock_input'].id or \
                               accounts['income'].id,
             }))
-            self.env['account.invoice'].create({
+            cr = self.env['account.invoice'].create({
                 'partner_id': self.agency.id,
                 'currency_id': product_agency.currency_id.id,
                 'state': 'draft',
@@ -180,6 +180,7 @@ class LaborEnjaz(models.Model):
                 'invoice_line_ids': invoice_line,
 
             })
+            cr.action_invoice_open()
 
         self.state = 'done'
 

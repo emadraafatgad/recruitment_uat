@@ -93,7 +93,10 @@ class StampingList(models.Model):
             'invoice_line_ids': invoice_line,
         })
         cr.action_invoice_open()
-        self.state = 'done'
+        self.list_now_len = len(self.stamping_list)
+        self.state = 'in_progress'
+        for rec in self.stamping_list:
+            rec.state = 'in_progress'
 
 
 
