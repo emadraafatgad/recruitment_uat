@@ -157,22 +157,22 @@ class LaborEnjaz(models.Model):
             invoice_line = []
             sale_journal = self.env['account.journal'].search([('type', '=', 'sale')])[0]
             product_agency = self.env['product.recruitment.config'].search([('type', '=', 'agency')])[0]
-            embassy_config = self.env['product.recruitment.config'].search([('type', '=', 'embassy')])[0]
             accounts = product_agency.product.product_tmpl_id.get_product_accounts()
             invoice_line.append((0, 0, {
                 'product_id': product_agency.product.id,
                 'labors_id': [(6, 0, append_labor)],
                 'name': self.labor_name,
                 'product_uom_id': product_agency.product.uom_id.id,
-                'price_unit': embassy_config.price,
+                'price_unit': self.agency.agency_cost,
                 'discount': 0.0,
                 'quantity': 1,
                 'account_id': accounts.get('stock_input') and accounts['stock_input'].id or \
                               accounts['income'].id,
             }))
+
             cr = self.env['account.invoice'].create({
                 'partner_id': self.agency.id,
-                'currency_id': embassy_config.currency_id.id,
+                'currency_id': product_agency.currency_id.id,
                 'state': 'draft',
                 'type': 'out_invoice',
                 'origin': self.name,
