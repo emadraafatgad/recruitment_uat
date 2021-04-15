@@ -48,6 +48,7 @@
                     </group>
 
                     <notebook>
+<<<<<<< HEAD
                         <page string="Invoiced Passport">
                             <field name="passport_request" attrs="{'readonly':[('state','=','done')]}">
                                 <tree editable="top">
@@ -68,6 +69,31 @@
                                             class="oe_highlight"/>
                                 </tree>
                             </field>
+=======
+                     <page string="Invoiced Passport">
+                       <field name="passport_request" attrs="{'readonly':[('state','=','done')]}">
+                           <tree editable="top">
+                 <field name="labor_id"  string="Laborer" readonly="1"/>
+                 <field name="national_id" readonly="1"/>
+                 <field name="prn" readonly="1"/>
+                 <field name="passport_no"/>
+                 <field name="pass_start_date"/>
+                 <field name="pass_end_date"/>
+                 <field name="filename" invisible="1"/>
+                 <field name="attachment" filename="filename"/>
+                 <field name="state" readonly="1"/>
+                 <button name="request_passport_done" states="releasing"
+                                string="Confirm" type="object"
+                                class="oe_highlight"/>
+                 <button name="set_to_release" states="invoiced"
+                                string="Set to Releasing" type="object"
+                                class="oe_highlight"/>
+                 <button name="action_reject" states="releasing"
+                                string="Reject" type="object"
+                                class="oe_highlight"/>
+                           </tree>
+                               </field>
+>>>>>>> 292c856eb334a254cad99c208b5e63ae7b6bf32b
 
 
                         </page>
