@@ -35,7 +35,7 @@ class Partner(models.Model):
     is_slave = fields.Boolean('House Maid')
     gender = fields.Selection([("Male","Male"),("Female","Female")],string="type")
     age = fields.Integer(compute='_compute_slave_age')
-    broker = fields.Many2one("master.broker",string="Brokers")
+    # broker = fields.Many2one("master.broker",string="Brokers")
     date_of_birth = fields.Date("Date of Birth")
     relative_ids = fields.One2many('partner.relatives', 'partner_id')
     pre_medical_check = fields.Selection([('Fit', 'Fit'),('Unfit', 'Unfit')],default='Fit')
