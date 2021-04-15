@@ -118,6 +118,7 @@ class TrainingList(models.Model):
         if self.bill_id:
             self.bill_state = self.bill_id.state.capitalize()
 
+
     @api.multi
     def set_to_draft(self):
         self.ensure_one()

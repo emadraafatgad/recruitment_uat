@@ -162,7 +162,7 @@
                     <button name="action_start" states="new"
                                 string="Start" type="object"
                                 class="oe_highlight"/>
-                    <button name="set_to_draft" states="in_progress"
+                    <button name="set_to_draft" states="in_progress,finished"
                                 string="Set To Draft" type="object"
                                 class="oe_highlight"/>
                     <button name="action_finish" states="in_progress"
