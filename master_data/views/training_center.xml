@@ -162,9 +162,13 @@
                     <button name="action_start" states="new"
                                 string="Start" type="object"
                                 class="oe_highlight"/>
+                    <button name="set_to_draft" states="in_progress"
+                                string="Set To Draft" type="object"
+                                class="oe_highlight"/>
                     <button name="action_finish" states="in_progress"
                                 string="Finish" type="object"
                                 class="oe_highlight"/>
+
                     <button name="create_bill"
                                 string="Create Bill" type="object"
                                 class="oe_highlight"  attrs="{'invisible':['|',('show', '=',True),('state', '=','new')]}"/>
