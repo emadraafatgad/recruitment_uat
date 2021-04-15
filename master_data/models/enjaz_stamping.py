@@ -114,33 +114,6 @@ class LaborEnjaz(models.Model):
                 raise ValidationError(_('Please, enter visa date'))
             if not self.visa_expiry_date:
                 raise ValidationError(_('Please, enter visa expiry date'))
-            invoice_line = []
-            purchase_journal = self.env['account.journal'].search([('type', '=', 'purchase')])[0]
-            product = self.env['product.recruitment.config'].search([('type', '=', 'embassy')])[0]
-            accounts = product.product.product_tmpl_id.get_product_accounts()
-            invoice_line.append((0, 0, {
-                'product_id': product.product.id,
-                'labors_id': [(6, 0, append_labor)],
-                'name': self.labor_name,
-                'product_uom_id': product.product.uom_id.id,
-                'price_unit': product.price,
-                'discount': 0.0,
-                'quantity': 1,
-                'account_id': accounts.get('stock_input') and accounts['stock_input'].id or \
-                              accounts['expense'].id,
-            }))
-            self.env['account.invoice'].create({
-                'partner_id': self.embassy.id,
-                'currency_id': product.currency_id.id,
-                'state': 'draft',
-                'type': 'in_invoice',
-                'partner_type': self.embassy.vendor_type,
-                'origin': self.name,
-                'journal_id': purchase_journal.id,
-                'account_id': self.embassy.property_account_payable_id.id,
-                'invoice_line_ids': invoice_line,
-
-            })
             clearance = self.env['labor.clearance'].search([('labor_id', '=', self.labor_id.id)])
 
             if clearance.state == 'confirmed':
