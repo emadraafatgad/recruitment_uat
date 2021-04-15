@@ -20,13 +20,13 @@
         <field name="model">passport.broker</field>
         <field name="arch" type="xml">
             <form>
-                 <header>
+                <header>
                     <button name="action_assign" states="new"
-                                string="Assign" type="object"
-                                class="oe_highlight"/>
+                            string="Assign" type="object"
+                            class="oe_highlight"/>
 
                     <field name="state" widget="statusbar"
-                               statusbar_visible="new,assigned,done"/>
+                           statusbar_visible="new,assigned,done"/>
                 </header>
                 <sheet>
                     <h1>
@@ -34,43 +34,44 @@
                     </h1>
                     <group>
                         <group>
-                            <field name="broker" options="{'no_create_edit':true}" attrs="{'readonly':[('state','in',('assigned','done'))]}"/>
+                            <field name="broker" options="{'no_create_edit':true}"
+                                   attrs="{'readonly':[('state','in',('assigned','done'))]}"/>
                             <field name="assign_date" attrs="{'readonly':[('state','!=','new')]}"/>
-                            <field name="deadline" attrs= "{'readonly':[('state','!=','new')]}"/>
+                            <field name="deadline" attrs="{'readonly':[('state','!=','new')]}"/>
                         </group>
-                         <group string="List Info">
+                        <group string="List Info">
                             <field name="list_total_count"/>
                             <field name="done_count"/>
                             <field name="remaining_count"/>
                             <field name="list_now_len" invisible="1"/>
                         </group>
-                       </group>
+                    </group>
 
                     <notebook>
-                     <page string="Invoiced Passport">
-                       <field name="passport_request" attrs="{'readonly':[('state','=','done')]}">
-                           <tree editable="top">
-                 <field name="labor_id"  string="Laborer" readonly="1"/>
-                 <field name="national_id" readonly="1"/>
-                 <field name="prn" readonly="1"/>
-                 <field name="passport_no"/>
-                 <field name="pass_start_date"/>
-                 <field name="pass_end_date"/>
-                 <field name="filename" invisible="1"/>
-                 <field name="attachment" filename="filename"/>
-                 <field name="state" readonly="1"/>
-                 <button name="request_passport_done" states="releasing"
-                                string="Confirm" type="object"
-                                class="oe_highlight"/>
-                 <button name="action_reject" states="releasing"
-                                string="Reject" type="object"
-                                class="oe_highlight"/>
-                           </tree>
-                               </field>
+                        <page string="Invoiced Passport">
+                            <field name="passport_request" attrs="{'readonly':[('state','=','done')]}">
+                                <tree editable="top">
+                                    <field name="labor_id" string="Laborer" readonly="1"/>
+                                    <field name="national_id" readonly="1"/>
+                                    <field name="prn" readonly="1"/>
+                                    <field name="passport_no"/>
+                                    <field name="pass_start_date"/>
+                                    <field name="pass_end_date"/>
+                                    <field name="filename" invisible="1"/>
+                                    <field name="attachment" filename="filename"/>
+                                    <field name="state" readonly="1"/>
+                                    <button name="request_passport_done" states="releasing"
+                                            string="Confirm" type="object"
+                                            class="oe_highlight"/>
+                                    <button name="action_reject" states="releasing"
+                                            string="Reject" type="object"
+                                            class="oe_highlight"/>
+                                </tree>
+                            </field>
 
 
-                     </page>
-                   </notebook>
+                        </page>
+                    </notebook>
                 </sheet>
                 <div class="oe_chatter">
                     <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
@@ -86,48 +87,49 @@
         <field name="model">passport.broker</field>
         <field name="arch" type="xml">
             <tree>
-                 <field name="broker" />
+                <field name="broker"/>
                 <field name="list_total_count"/>
                 <field name="done_count"/>
                 <field name="remaining_count"/>
-                 <field name="assign_date"/>
+                <field name="assign_date"/>
                 <field name="deadline"/>
-                 <field name="state" />
-             </tree>
+                <field name="state"/>
+            </tree>
         </field>
     </record>
     <record id="view_passport_broker_search" model="ir.ui.view">
-            <field name="name">Passport Broker Search</field>
-            <field name="model">passport.broker</field>
-            <field name="arch" type="xml">
+        <field name="name">Passport Broker Search</field>
+        <field name="model">passport.broker</field>
+        <field name="arch" type="xml">
 
-                <search>
-                    <field name="broker" />
-                    <separator/>
+            <search>
+                <field name="broker"/>
+                <separator/>
 
-                    <filter name="new" string="New"
-                            domain="[('state','=','new')]"/>
-                    <filter name="assigned" string="Assigned"
-                            domain="[('state','=','assigned')]"/>
-                    <filter name="done" string="Done"
-                            domain="[('state','=','done')]"/>
-                    <filter string="Today" name="today" domain="[('create_date','&gt;=',time.strftime('%%Y-%%m-%%d'))]"/>
-                    <filter string="This Week" name="this_week" domain="[
+                <filter name="new" string="New"
+                        domain="[('state','=','new')]"/>
+                <filter name="assigned" string="Assigned"
+                        domain="[('state','=','assigned')]"/>
+                <filter name="done" string="Done"
+                        domain="[('state','=','done')]"/>
+                <filter string="Today" name="today" domain="[('create_date','&gt;=',time.strftime('%%Y-%%m-%%d'))]"/>
+                <filter string="This Week" name="this_week" domain="[
                                 '&amp;',
                                 ('create_date', '>=', (context_today() + relativedelta(weeks=-1,days=1,weekday=0)).strftime('%Y-%m-%d')),
                                 ('create_date', '&lt;=', (context_today() + relativedelta(weekday=6)).strftime('%Y-%m-%d')),]"/>
-                    <filter string="This Month" name="this_month" domain="[('create_date','&gt;=',time.strftime('%%Y-%%m-01'))]"/>
-                    <filter string="This Year" name="this_year" domain="[('create_date','&gt;=',time.strftime('%%Y-01-01'))]"/>
+                <filter string="This Month" name="this_month"
+                        domain="[('create_date','&gt;=',time.strftime('%%Y-%%m-01'))]"/>
+                <filter string="This Year" name="this_year"
+                        domain="[('create_date','&gt;=',time.strftime('%%Y-01-01'))]"/>
 
 
-                </search>
-            </field>
-        </record>
+            </search>
+        </field>
+    </record>
 
 
-    <menuitem id="menu_passport_broker"  sequence="4" name="Passport Broker" parent="main_menu_passport"
-              action="passport_broker_action" />
-
+    <menuitem id="menu_passport_broker" sequence="4" name="Passport Broker" parent="main_menu_passport"
+              action="passport_broker_action"/>
 
 
 </odoo>

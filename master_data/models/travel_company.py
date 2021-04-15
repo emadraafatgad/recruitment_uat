@@ -16,7 +16,7 @@ class TravelCompany(models.Model):
     labor_name = fields.Char()
     invoice = fields.Char()
     passport_no = fields.Char()
-    destination_city = fields.Many2one('res.currency.state')
+    destination_city = fields.Many2one('res.country.state')
     reservation_no = fields.Char()
     agency_code = fields.Char()
     visa_no = fields.Char()

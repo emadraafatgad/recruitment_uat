@@ -43,7 +43,8 @@
                     </group>
                     <notebook>
                         <page string="Stamping List">
-                            <field name="stamping_list" attrs="{'readonly':[('state','=','done')]}">
+                            <field name="stamping_list" >
+<!--                                attrs="{'readonly':[('state','=','done')]}"-->
                                 <tree editable="top">
                                     <field name="labor_id" string="Labourer" readonly="1"/>
                                     <field name="passport_no" readonly="1"/>
@@ -54,10 +55,10 @@
                                     <field name="visa_date"/>
                                     <field name="visa_expiry_date"/>
                                     <field name="state" readonly="1"/>
-                                    <button name="action_done" states="in_progress"
+                                    <button name="action_done"
                                             string="Done" type="object"
                                             class="oe_highlight"/>
-                                    <button name="action_reject" states="in_progress"
+                                    <button name="action_reject"
                                             string="Reject" type="object"
                                             class="oe_highlight"/>
                                     <button name="action_release" states="rejected"

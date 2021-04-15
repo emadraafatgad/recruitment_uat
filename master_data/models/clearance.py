@@ -3,6 +3,7 @@ from odoo import fields, models , api,_
 from datetime import date
 from dateutil.relativedelta import relativedelta
 
+
 class LaborClearance(models.Model):
     _name = 'labor.clearance'
     _order = 'id desc'
@@ -21,7 +22,8 @@ class LaborClearance(models.Model):
     contact = fields.Char(required=True)
     passport_no = fields.Char(required=True)
     agency_code = fields.Char(required=True)
-    destination_city = fields.Many2one('res.country.state',required=True)
+    destination_city = fields.Many2one('res.country.state',)
+    destination_country = fields.Many2one('res.country',related='agency.country_id', required=True)
 
     @api.multi
     def action_confirm(self):

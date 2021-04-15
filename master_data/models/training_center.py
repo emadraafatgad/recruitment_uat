@@ -229,7 +229,7 @@ class TrainingList(models.Model):
                     'district': rec.slave_id.district.id,
                     'agency': agency.agency.id,
                     'agency_code': agency.name,
-                    'destination_city': agency.destination_city.id,
+                    'destination_city': agency.agency.country_id.id if agency.agency.country_id else False ,
                 })
         self.state = 'finished'
 
