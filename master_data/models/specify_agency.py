@@ -249,7 +249,7 @@ class SpecifyAgent(models.Model):
                         'district': rec.labor_id.district.id,
                         'agency': rec.agency.id,
                         'agency_code': rec.name,
-                        'destination_city': rec.destination_city,})
+                        'destination_city': rec.destination_city.id,})
 
     @api.multi
     def select(self):
