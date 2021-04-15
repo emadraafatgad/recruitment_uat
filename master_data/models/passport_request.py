@@ -44,6 +44,12 @@ class PassportNumber(models.Model):
         self.broker = False
         self.state = 'invoiced'
 
+    @api.multi
+    def set_to_release(self):
+        self.broker = self.broker_list_id.broker
+        self.state = 'releasing'
+
+
     @api.onchange('state')
     def onchange_state(self):
         labor = self.env['labor.process'].search([('labor', '=', self.labor_id.id),('type', '=', 'passport')])

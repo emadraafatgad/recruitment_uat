@@ -62,6 +62,9 @@
                  <button name="request_passport_done" states="releasing"
                                 string="Confirm" type="object"
                                 class="oe_highlight"/>
+                 <button name="set_to_release" states="invoiced"
+                                string="Set to Releasing" type="object"
+                                class="oe_highlight"/>
                  <button name="action_reject" states="releasing"
                                 string="Reject" type="object"
                                 class="oe_highlight"/>
