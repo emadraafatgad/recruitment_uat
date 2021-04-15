@@ -112,6 +112,7 @@ class TrainingList(models.Model):
     total_lines = fields.Integer(compute='compute_len_lines')
     list_now_len = fields.Integer()
     bill_state = fields.Char(compute='compute_bill_state')
+    show_set_draft = fields.Char(compute='compute_show_set_draft')
 
     @api.depends('bill_id')
     def compute_bill_state(self):
@@ -148,6 +149,12 @@ class TrainingList(models.Model):
         self.total_lines = len(self.training_requests)
 
 
+    @api.depends('state','show')
+    def compute_show_set_draft(self):
+        if self.state == 'in_progress' and not self.show:
+            self.show_set_draft = True
+        else:
+            self.show_set_draft = False
     # @api.multi
     # def unlink(self):
     #     for rec in self:

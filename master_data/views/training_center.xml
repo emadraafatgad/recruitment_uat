@@ -162,7 +162,7 @@
                     <button name="action_start" states="new"
                                 string="Start" type="object"
                                 class="oe_highlight"/>
-                    <button name="set_to_draft" states="in_progress,finished"
+                    <button name="set_to_draft" attrs="{'invisible':[('show_set_draft', '=',False)]}"
                                 string="Set To Draft" type="object"
                                 class="oe_highlight"/>
                     <button name="action_finish" states="in_progress"
@@ -195,6 +195,7 @@
                            <field name="total_lines"/>
                            <field name="list_now_len" invisible="1"/>
                            <field name="bill" invisible="1"/>
+                           <field name="show_set_draft" invisible="1"/>
 
                        </group>
                        <group>
