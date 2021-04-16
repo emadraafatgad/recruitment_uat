@@ -1,5 +1,5 @@
 <odoo>
-     <record id="clearance_list_code" model="ir.sequence">
+    <record id="clearance_list_code" model="ir.sequence">
         <field name="name">Clearance List Code</field>
         <field name="code">clearance.list</field>
         <field name="prefix">C-list/%(year)s/</field>
@@ -19,47 +19,47 @@
         <field name="name">Clearance List</field>
         <field name="model">clearance.list</field>
         <field name="arch" type="xml">
-            <form >
+            <form>
                 <header>
-                   <button name="action_confirm" states="new"
-                                string="Confirm" type="object"
-                                class="oe_highlight"/>
-                    <!--<button name="print_report_excel"
+                    <button name="action_confirm" states="new"
+                            string="Confirm" type="object"
+                            class="oe_highlight"/>
+                    <button name="print_report_excel"
                                 string="Print Excel" type="object"
-                                class="oe_highlight"/>-->
+                                class="oe_highlight"/>
                     <field name="state" widget="statusbar"
-                               statusbar_visible="new,confirmed"/>
+                           statusbar_visible="new,confirmed"/>
                 </header>
                 <sheet>
                     <h1>
                         <field name="name"/>
                     </h1>
-                  <group>
-                      <group>
-                          <field name="assign_date" readonly="1"/>
-                          <field name="list_total_count" invisible="1"/>
-                          <field name="list_now_len" invisible="1"/>
-                          <field name="reference_no" attrs="{'readonly':[('state','=','confirmed')]}"/>
-                      </group>
-                      <group>
-                          <field name="receive_date" readonly="1"/>
-                      </group>
-                  </group>
-                   <notebook>
-                     <page string="List">
-                       <field name="clearance_list"  attrs="{'readonly':[('state','=','confirmed')]}">
-                           <tree editable="top">
-                 <field name="labor_name" string="Labourer Name" readonly="1"/>
-                 <field name="agency_code" string="Code/Agency" readonly="1"/>
-                 <field name="passport_no" readonly="1"/>
-                 <field name="gender" readonly="1"/>
-                 <field name="job_title" readonly="1"/>
-                 <field name="agency" readonly="1"/>
-                 <field name="state" readonly="1"/>
-                           </tree>
-                               </field>
-                     </page>
-                   </notebook>
+                    <group>
+                        <group>
+                            <field name="assign_date" readonly="1"/>
+                            <field name="list_total_count" invisible="1"/>
+                            <field name="list_now_len" invisible="1"/>
+                            <field name="reference_no" attrs="{'readonly':[('state','=','confirmed')]}"/>
+                        </group>
+                        <group>
+                            <field name="receive_date" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="List">
+                            <field name="clearance_list" attrs="{'readonly':[('state','=','confirmed')]}">
+                                <tree editable="top">
+                                    <field name="labor_name" string="Labourer Name" readonly="1"/>
+                                    <field name="agency_code" string="Code/Agency" readonly="1"/>
+                                    <field name="passport_no" readonly="1"/>
+                                    <field name="gender" readonly="1"/>
+                                    <field name="job_title" readonly="1"/>
+                                    <field name="agency" readonly="1"/>
+                                    <field name="state" readonly="1"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
                 </sheet>
                 <div class="oe_chatter">
                     <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
@@ -79,7 +79,7 @@
                 <field name="assign_date"/>
                 <field name="receive_date"/>
                 <field name="state"/>
-             </tree>
+            </tree>
         </field>
     </record>
 
@@ -97,13 +97,15 @@
                             '&amp;',
                             ('create_date', '>=', (context_today() + relativedelta(weeks=-1,days=1,weekday=0)).strftime('%Y-%m-%d')),
                             ('create_date', '&lt;=', (context_today() + relativedelta(weekday=6)).strftime('%Y-%m-%d')),]"/>
-                <filter string="This Month" name="this_month" domain="[('create_date','&gt;=',time.strftime('%%Y-%%m-01'))]"/>
-                <filter string="This Year" name="this_year" domain="[('create_date','&gt;=',time.strftime('%%Y-01-01'))]"/>
+                <filter string="This Month" name="this_month"
+                        domain="[('create_date','&gt;=',time.strftime('%%Y-%%m-01'))]"/>
+                <filter string="This Year" name="this_year"
+                        domain="[('create_date','&gt;=',time.strftime('%%Y-01-01'))]"/>
             </search>
         </field>
     </record>
 
-     <menuitem id="menu_clearance_List" sequence="2" name="Processing" parent="menu_clearance_main"
+    <menuitem id="menu_clearance_List" sequence="2" name="Processing" parent="menu_clearance_main"
               action="clearance_list_action"/>
 
 

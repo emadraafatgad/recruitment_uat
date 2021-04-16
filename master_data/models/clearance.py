@@ -8,6 +8,7 @@ class LaborClearance(models.Model):
     _name = 'labor.clearance'
     _order = 'id desc'
     _inherit = ['portal.mixin', 'mail.thread', 'mail.activity.mixin']
+
     state = fields.Selection([('new','New'),('rejected','Rejected'),('confirmed','Confirmed')],default='new',track_visibility="onchange")
     name = fields.Char(string="Number",readonly=True,default='New')
     labor_id = fields.Many2one('labor.profile',required=True)
@@ -23,7 +24,7 @@ class LaborClearance(models.Model):
     passport_no = fields.Char(required=True)
     agency_code = fields.Char(required=True)
     destination_city = fields.Many2one('res.country.state',)
-    destination_country = fields.Many2one('res.country',related='agency.country_id', required=True)
+    destination_country = fields.Many2one('res.country',related='agency.country_id',store=True, required=True)
 
     @api.multi
     def action_confirm(self):
@@ -40,7 +41,6 @@ class LaborClearance(models.Model):
                 'employer': stamping.employer,
                 'visa_no': stamping.visa_no,
             })
-
         self.state = 'confirmed'
 
     @api.multi

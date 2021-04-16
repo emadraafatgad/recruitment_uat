@@ -33,6 +33,7 @@ class SlaveTraining(models.Model):
     slave_id = fields.Many2one('labor.profile',string="Labor", domain="[('pre_medical_check','=','Fit')]")
     start_date = fields.Date(readonly=True)
     end_date = fields.Date(readonly=True)
+    passport_no = fields.Char(related='slave_id.passport_no',store=True)
     state = fields.Selection([('new', 'New'), ('in_progress', 'Inprogress'), ('rejected', 'Rejected'),('finished', 'Finished')], default='new')
     training_center_id = fields.Many2one('res.partner',domain="[('vendor_type','=','training')]")
     note = fields.Text()
