@@ -38,23 +38,23 @@ class LaborProfile(models.Model):
          ('rejected', 'Rejected')], default="new", track_visibility="onchange")
     partner_id = fields.Many2one('res.partner', string='Related Partner', required=True, ondelete='cascade',
                                  help='Partner-related data of the patient')
-    age = fields.Integer(compute='_compute_slave_age', store=True)
-    gender = fields.Selection(SEX, string='Gender', index=True)
+    age = fields.Integer(compute='_compute_slave_age',track_visibility="onchange", store=True)
+    gender = fields.Selection(SEX, string='Gender', track_visibility="onchange",index=True)
     # country_id = fields.Many2one('res.country', string='Nationality')
-    identification_code = fields.Char(string='Labor Code', copy=True, index=True, default=lambda self: _('New'),
+    identification_code = fields.Char(string='Labor Code', copy=True, index=True,track_visibility="onchange", default=lambda self: _('New'),
                                       help='Labor Identifier provided by the Health Center', readonly=True)
-    national_id = fields.Char(size=14, string='National ID')
+    national_id = fields.Char(size=14, string='National ID',track_visibility="onchange")
     card_no = fields.Char()
-    start_date = fields.Date('Date Of Issue')
-    end_date = fields.Date('Date of Expiry')
+    start_date = fields.Date('Date Of Issue',track_visibility="onchange")
+    end_date = fields.Date('Date of Expiry',track_visibility="onchange")
 
-    general_info = fields.Text(string='General Information', help="General information about the patient")
-    have_skills = fields.Boolean()
-    skills_ids = fields.Many2one('labor.skills')
+    general_info = fields.Text(string='General Information', track_visibility="onchange",help="General information about the patient")
+    have_skills = fields.Boolean(track_visibility="onchange")
+    skills_ids = fields.Many2one('labor.skills',track_visibility="onchange")
     occupation = fields.Selection(
         [('house_maid', 'House Maid'), ('pro_maid', 'Pro Maid'), ('pro_worker', 'Pro Worker')],
-        default="house_maid", string='Occupation')
-    salary = fields.Float(default=900)
+        default="house_maid", track_visibility="onchange",string='Occupation')
+    salary = fields.Float(default=900,track_visibility="onchange")
 
     def get_default_currency(self):
         currency = self.env['res.currency'].search([('currency_subunit_label', '=', 'Halala')])
@@ -63,57 +63,57 @@ class LaborProfile(models.Model):
     currency = fields.Many2one('res.currency', default=get_default_currency)
     agent = fields.Many2one('res.partner', domain=[('vendor_type', '=', 'agent')], required=True)
     experience = fields.Selection([('first_time', 'First Time'), ('has_experience', 'Has Experience')],
-                                  default="first_time", required=True)
-    experience_ids = fields.One2many('prior.experience', 'laborer_id')
-    language = fields.Many2many('res.lang')
-    specifications = fields.Many2many('labor.specifications')
-    height = fields.Float()
-    weight = fields.Float()
-    general_remarks = fields.Text()
-    children = fields.Char()
-    other_mob = fields.Char('Other Mob')
+                                  default="first_time", track_visibility="onchange",required=True)
+    experience_ids = fields.One2many('prior.experience', 'laborer_id',track_visibility="onchange")
+    language = fields.Many2many('res.lang',track_visibility="onchange")
+    specifications = fields.Many2many('labor.specifications',track_visibility="onchange")
+    height = fields.Float(track_visibility="onchange")
+    weight = fields.Float(track_visibility="onchange")
+    general_remarks = fields.Text(track_visibility="onchange")
+    children = fields.Char(track_visibility="onchange")
+    other_mob = fields.Char('Other Mob',track_visibility="onchange")
     marital_status = fields.Selection(
         [('single', 'Single'), ('married', 'Married'), ('windowed', 'Windowed'), ('divorced', 'Divorced')],
         'Marital Status')
     religion = fields.Selection([('muslim', 'Muslim'), ('christian', 'Christian'), ('jew', 'Jew'), ('other', 'Other')],
-                                'Religion')
+                                'Religion',track_visibility="onchange")
     children_ids = fields.One2many('children.number', 'laborer_id')
     education_certificate = fields.Selection(
         [('primary', 'Primary Education'), ('preparatory', 'Preparatory Education'),
          ('secondary', 'Secondary Education'), ('university', 'University'), ('diploma', 'Diploma'),
-         ('no_education', 'No Education')], 'Educational Certificate')
-    end_education = fields.Char('Education Remarks')
-    no_education = fields.Char('Remarks')
-    agent_invoice = fields.Many2one('account.invoice')
+         ('no_education', 'No Education')], 'Educational Certificate',track_visibility="onchange")
+    end_education = fields.Char('Education Remarks',track_visibility="onchange")
+    no_education = fields.Char('Remarks',track_visibility="onchange")
+    agent_invoice = fields.Many2one('account.invoice',track_visibility="onchange")
     register_with = fields.Selection([('national_id', 'National ID'), ('nira', 'Nira'), ('passport', 'Passport')],
-                                     'Document')
-    allow_passport_request = fields.Boolean('Allow Passport Request')
-    lc1 = fields.Many2one('labor.village', string='Village /LC1')
-    lc2 = fields.Many2one('labor.parish', string='Parish /LC2')
-    lc3 = fields.Many2one('labor.subcounty', string='Sub County /LC3')
-    lc4 = fields.Many2one('labor.county', string='County /LC4')
-    district = fields.Many2one('labor.district', string='District')
-    origin_lc1 = fields.Many2one('labor.village', string='Village /LC1')
-    origin_lc2 = fields.Many2one('labor.parish', string='Parish /LC2')
-    origin_lc3 = fields.Many2one('labor.subcounty', string='Sub County /LC3')
-    origin_lc4 = fields.Many2one('labor.county', string='County /LC4')
-    origin_district = fields.Many2one('labor.district', string='District')
-    origin_tribe = fields.Many2one('labor.tribe', string='Tribe')
-    origin_clan = fields.Many2one('labor.clan', string='Clan')
-    origin_descendants = fields.Char(string='Descendants')
-    interpol_no = fields.Char('Interpol No')
-    interpol_start_date = fields.Date('Interpol Start Date')
-    interpol_end_date = fields.Date('Interpol End Date')
-    allow_passport = fields.Boolean('Expenses of passport', compute='passport_expense', store=True)
-    large_image = fields.Binary()
+                                     'Document',track_visibility="onchange")
+    allow_passport_request = fields.Boolean('Allow Passport Request',track_visibility="onchange")
+    lc1 = fields.Many2one('labor.village', string='Village /LC1',track_visibility="onchange")
+    lc2 = fields.Many2one('labor.parish', string='Parish /LC2',track_visibility="onchange")
+    lc3 = fields.Many2one('labor.subcounty', string='Sub County /LC3',track_visibility="onchange")
+    lc4 = fields.Many2one('labor.county', string='County /LC4',track_visibility="onchange")
+    district = fields.Many2one('labor.district', string='District',track_visibility="onchange")
+    origin_lc1 = fields.Many2one('labor.village', string='Village /LC1',track_visibility="onchange")
+    origin_lc2 = fields.Many2one('labor.parish', string='Parish /LC2',track_visibility="onchange")
+    origin_lc3 = fields.Many2one('labor.subcounty', string='Sub County /LC3',track_visibility="onchange")
+    origin_lc4 = fields.Many2one('labor.county', string='County /LC4',track_visibility="onchange")
+    origin_district = fields.Many2one('labor.district', string='District',track_visibility="onchange")
+    origin_tribe = fields.Many2one('labor.tribe', string='Tribe',track_visibility="onchange")
+    origin_clan = fields.Many2one('labor.clan', string='Clan',track_visibility="onchange")
+    origin_descendants = fields.Char(string='Descendants',track_visibility="onchange")
+    interpol_no = fields.Char('Interpol No',track_visibility="onchange")
+    interpol_start_date = fields.Date('Interpol Start Date',track_visibility="onchange")
+    interpol_end_date = fields.Date('Interpol End Date',track_visibility="onchange")
+    allow_passport = fields.Boolean('Expenses of passport', compute='passport_expense',track_visibility="onchange", store=True)
+    large_image = fields.Binary(track_visibility="onchange")
     after_medical_check = fields.Selection([('fit', 'Fit'), ('unfit', 'Unfit'), ('pending', 'Pending')])
-    medical_unfit_reason = fields.Char()
-    cv_sent = fields.Boolean()
-    agency = fields.Many2one('res.partner', domain=[('agency', '=', True)])
-    agency_code = fields.Many2one('specify.agent')
+    medical_unfit_reason = fields.Char(track_visibility="onchange")
+    cv_sent = fields.Boolean(track_visibility="onchange")
+    agency = fields.Many2one('res.partner', track_visibility="onchange",domain=[('agency', '=', True)])
+    agency_code = fields.Many2one('specify.agent',track_visibility="onchange")
     specify_agency = fields.Selection(
         [('draft', 'CV Available'), ('available', 'Specified'), ('sent', 'CV Sent'), ('selected', 'Selected')],
-        track_visibility="onchange", string='Specify Agency State')
+        track_visibility="onchange", string='Specify Agency State',)
 
     @api.multi
     def default_cv_values(self):
@@ -277,7 +277,7 @@ class LaborProfile(models.Model):
                         }
         }
 
-    allow_over_age = fields.Boolean()
+    allow_over_age = fields.Boolean(track_visibility="onchange")
     # allow_over_age = fields.Boolean()
 
     @api.onchange('date_of_birth')

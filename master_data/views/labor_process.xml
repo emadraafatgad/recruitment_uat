@@ -17,11 +17,13 @@
                 <sheet>
                     <group>
                         <group>
-                            <field name="name" string="Labourer"/>
+                            <field name="labor" invisible="1"/>
+                            <field name="type"/>
+                            <field name="cost"/>
+                            <field name="total_cost"/>
+                            <field name="state"/>
                         </group>
-
                     </group>
-
                 </sheet>
                 <div class="oe_chatter">
                     <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
@@ -37,12 +39,15 @@
         <field name="model">labor.process</field>
         <field name="arch" type="xml">
             <tree>
-                 <field name="name" string="Labourer"/>
-
-             </tree>
+                <field name="labor" invisible="1"/>
+                <field name="type"/>
+                <field name="cost"/>
+                <field name="total_cost"/>
+                <field name="state"/>
+            </tree>
         </field>
     </record>
-      <menuitem id="menu_labor_process_main" sequence="90" name="Labor Process" parent="menu_recruitment_root" />
+<!--      <menuitem id="menu_labor_process_main" sequence="90" name="Labor Process" parent="menu_recruitment_root" />-->
 <!--    <menuitem name="Labors Process" id="labor_process_menu_ids" parent="menu_recruitment_root" action="labor_process_action" sequence="1" groups="master_data.group_registeration_manager"/>-->
 
 </odoo>

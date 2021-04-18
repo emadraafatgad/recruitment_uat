@@ -9,9 +9,9 @@ class LaborStamping(models.Model):
     _inherit = ['portal.mixin', 'mail.thread', 'mail.activity.mixin']
     _order = 'id desc'
 
-    name = fields.Char(string="Number",readonly=True,default='New')
+    name = fields.Char(string="Number",track_visibility="onchange",readonly=True,default='New')
     labor_id = fields.Many2one('labor.profile')
-    agency = fields.Many2one('res.partner',domain=[('customer','=',True)])
+    agency = fields.Many2one('res.partner',track_visibility="onchange",domain=[('customer','=',True)])
     employer = fields.Char()
     visa_no = fields.Char('Visa #')
     state = fields.Selection([('new','New'),('confirmed','Confirmed')],default='new',track_visibility="onchange")

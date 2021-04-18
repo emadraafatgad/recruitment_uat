@@ -25,7 +25,7 @@
                                 string="Confirm" type="object"
                                 class="oe_highlight"/>
                     <field name="state" widget="statusbar"
-                               statusbar_visible="new,confirmed"/>
+                               statusbar_visible="new,in_progress,confirmed"/>
                 </header>
                 <sheet>
                     <h1>

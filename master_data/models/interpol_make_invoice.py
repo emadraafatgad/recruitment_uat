@@ -8,12 +8,12 @@ class InterpolMakeInvoice(models.Model):
     _inherit = ['portal.mixin', 'mail.thread', 'mail.activity.mixin']
     _order = 'id desc'
 
-    name = fields.Char(string="Number",readonly=True,default='New')
-    placing_issue = fields.Many2one('res.partner',string='Internal affairs',domain=[('supplier','=',True)])
+    name = fields.Char(string="Number",track_visibility="onchange",readonly=True,default='New')
+    placing_issue = fields.Many2one('res.partner',track_visibility="onchange",string='Internal affairs',domain=[('supplier','=',True)])
     state = fields.Selection([('new', 'new'),('to_invoice', 'to Invoice'),('invoiced', 'Invoiced')], default='new',track_visibility='onchange')
-    issued_date = fields.Date(default=date.today(),readonly=True)
-    invoice_date = fields.Date(readonly=True)
-    interpol_request = fields.Many2many('interpol.request', string='Interpol Requests')
+    issued_date = fields.Date(default=date.today(),track_visibility="onchange",readonly=True)
+    invoice_date = fields.Date(readonly=True,track_visibility="onchange")
+    interpol_request = fields.Many2many('interpol.request',track_visibility="onchange", string='Interpol Requests')
 
     def _get_product_default(self):
 

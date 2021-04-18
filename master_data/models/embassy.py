@@ -10,8 +10,8 @@ class LaborEmbassy(models.Model):
 
     state = fields.Selection([('new','New'),('enjaz','Enjaz'),('stamping','Stamping'),('confirmed','Confirmed')],default='new',track_visibility="onchange")
 
-    name = fields.Char(string="Number",readonly=True,default='New')
-    labor_id = fields.Many2one('labor.profile')
+    name = fields.Char(string="Number",readonly=True,track_visibility="onchange",default='New')
+    labor_id = fields.Many2one('labor.profile',track_visibility="onchange")
     passport_no = fields.Char()
     interpol_no = fields.Char()
     enjaz_no = fields.Char()

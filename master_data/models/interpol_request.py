@@ -12,24 +12,24 @@ class InterpolRequest(models.Model):
     _inherit = ['portal.mixin', 'mail.thread', 'mail.activity.mixin']
     _sql_constraints = [('interpol_uniq', 'unique(interpol_no)', 'Interpol no must be unique!')]
 
-    name = fields.Char(string="Number",readonly=True,default='New')
-    labor_id = fields.Many2one('labor.profile',readonly=True)
-    labor = fields.Char('Labor Name',readonly=True)
-    request_date = fields.Datetime(readonly=True, index=True, default=fields.Datetime.now)
-    end_date = fields.Datetime('Delivery Date',readonly=True)
+    name = fields.Char(string="Number",track_visibility="onchange",readonly=True,default='New')
+    labor_id = fields.Many2one('labor.profile',track_visibility="onchange",readonly=True)
+    labor = fields.Char('Labor Name',track_visibility="onchange",readonly=True)
+    request_date = fields.Datetime(readonly=True,track_visibility="onchange", index=True, default=fields.Datetime.now)
+    end_date = fields.Datetime('Delivery Date',track_visibility="onchange",readonly=True)
     broker = fields.Many2one('res.partner')
-    national_id = fields.Char('National ID',size=14,required=True,readonly=True)
+    national_id = fields.Char('National ID',track_visibility="onchange",size=14,required=True,readonly=True)
     state = fields.Selection([('new','New'),('assigned','Assigned'),('rejected','rejected'),
                              ('done','Done')],default='new',track_visibility="onchange")
-    gcc_updated = fields.Boolean()
-    passport_no = fields.Char(readonly=True)
-    interpol_no = fields.Char('Interpol No',readonly=True)
+    gcc_updated = fields.Boolean(track_visibility="onchange")
+    passport_no = fields.Char(readonly=True,track_visibility="onchange")
+    interpol_no = fields.Char('Interpol No',track_visibility="onchange",readonly=True)
     attachment = fields.Binary(readonly=True)
     filename = fields.Char()
-    interpol_start_date = fields.Date('Interpol Start Date',readonly=True)
-    interpol_end_date = fields.Date('Interpol End Date',readonly=True)
-    note = fields.Text(readonly=True)
-    broker_list_id = fields.Many2one('interpol.broker')
+    interpol_start_date = fields.Date('Interpol Start Date',track_visibility="onchange",readonly=True)
+    interpol_end_date = fields.Date('Interpol End Date',track_visibility="onchange",readonly=True)
+    note = fields.Text(readonly=True,track_visibility="onchange")
+    broker_list_id = fields.Many2one('interpol.broker',track_visibility="onchange")
 
     @api.onchange('interpol_start_date')
     def onchange_interpol_date(self):
