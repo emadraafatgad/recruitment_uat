@@ -41,8 +41,8 @@ class StampingList(models.Model):
     @api.onchange('stamping_list')
     def onchange_nira_list(self):
         if not self.state == 'new':
-            if self.list_total_count > self.list_now_len:
-                raise ValidationError(_('You cannot add lines in this state'))
+            # if self.list_total_count > self.list_now_len:
+            #     raise ValidationError(_('You cannot add lines in this state'))
             if self.list_total_count < self.list_now_len:
                 raise ValidationError(_('You cannot remove lines in this state'))
 

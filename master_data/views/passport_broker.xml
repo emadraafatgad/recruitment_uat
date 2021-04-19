@@ -129,7 +129,7 @@
 
 
     <menuitem id="menu_passport_broker"  sequence="4" name="Passport Broker" parent="main_menu_passport"
-              action="passport_broker_action"/>
+              action="passport_broker_action" />
 
 
 

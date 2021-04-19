@@ -20,7 +20,7 @@ class InterpolRequest(models.Model):
     broker = fields.Many2one('res.partner')
     national_id = fields.Char('National ID',size=14,required=True,readonly=True)
     state = fields.Selection([('new','New'),('assigned','Assigned'),('rejected','rejected'),
-                             ('done','Done'),('blocked','Blocked')],default='new',track_visibility="onchange")
+                             ('done','Done')],default='new',track_visibility="onchange")
     gcc_updated = fields.Boolean()
     passport_no = fields.Char(readonly=True)
     interpol_no = fields.Char('Interpol No',readonly=True)
@@ -69,11 +69,10 @@ class InterpolRequest(models.Model):
         append_labor = []
         append_labor.append(self.labor_id.id)
         invoice_line = []
+        purchase_journal = self.env['account.journal'].search([('type', '=', 'purchase')])[0]
         interpol_type = self.env['product.recruitment.config'].search([('type', '=', 'interpol')])
         if interpol_type:
             product = self.env['product.recruitment.config'].search([('type', '=', 'interpol')])[0]
-            if not product.journal_id:
-                raise ValidationError(_('Please, you must select journal in interpol from configration'))
         elif not interpol_type:
             raise ValidationError('Please go to configuration and add product type interpol')
         accounts = product.product.product_tmpl_id.get_product_accounts()
@@ -100,7 +99,7 @@ class InterpolRequest(models.Model):
                 'type': 'in_invoice',
                 'partner_type':self.broker_list_id.broker.vendor_type,
                 'origin': self.broker_list_id.name,
-                'journal_id': product.journal_id.id,
+                'journal_id': purchase_journal.id,
                 'account_id': self.broker_list_id.broker.property_account_payable_id.id,
                 'invoice_line_ids': invoice_line,
 

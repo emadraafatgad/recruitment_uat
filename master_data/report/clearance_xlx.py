@@ -1,5 +1,6 @@
 from odoo import models
 
+
 class ClearanceXlsx(models.AbstractModel):
     _name = 'report.master_data.report_clearance_xlx'
     _inherit = 'report.report_xlsx.abstract'
@@ -32,7 +33,7 @@ class ClearanceXlsx(models.AbstractModel):
         sheet.write(row, 6, 'LC2', format1)
         sheet.write(row, 7, 'LC3', format1)
         sheet.write(row, 8, 'District', format1)
-        sheet.write(row, 9, 'Company', format1)
+        sheet.write(row, 9, 'Agency', format1)
         sheet.write(row, 10, 'Destination', format1)
 
         for obj in lines.clearance_list:
@@ -47,4 +48,4 @@ class ClearanceXlsx(models.AbstractModel):
             sheet.write(row, 7, obj.lc3.name, format2)
             sheet.write(row, 8, obj.district.name, format2)
             sheet.write(row, 9, obj.agency.name, format2)
-            sheet.write(row, 10, obj.destination_city.name, format2)
+            sheet.write(row, 10, obj.destination_country.name, format2)

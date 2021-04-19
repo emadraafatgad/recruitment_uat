@@ -8,11 +8,11 @@ class PassportBroker(models.Model):
     _description = 'Broker Assign'
     _inherit = ['portal.mixin', 'mail.thread', 'mail.activity.mixin']
 
-
-    broker = fields.Many2one('res.partner')
-    assign_date = fields.Date(default=date.today())
-    passport_request = fields.Many2many('passport.request', string='Passport Requests',required=True)
+    broker = fields.Many2one('res.partner',track_visibility="onchange")
+    assign_date = fields.Date(default=date.today(),track_visibility="onchange")
+    passport_request = fields.Many2many('passport.request', track_visibility="onchange",string='Passport Requests',required=True)
     state = fields.Selection([('new', 'new'), ('assigned', 'Assigned'),], default='new', track_visibility="onchange")
+
     @api.multi
     def action_assign(self):
         for list in self.passport_request:

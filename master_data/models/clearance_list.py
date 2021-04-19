@@ -10,6 +10,7 @@ class ClearanceList(models.Model):
     _name = 'clearance.list'
     _order = 'id desc'
     _inherit = ['portal.mixin', 'mail.thread', 'mail.activity.mixin']
+
     state = fields.Selection([('new','New'),('confirmed','Confirmed')],default='new',track_visibility="onchange")
     name = fields.Char(string="Number",readonly=True,default='New')
     reference_no = fields.Char(string="Reference #")
@@ -45,9 +46,9 @@ class ClearanceList(models.Model):
         domain = {'clearance_list': [('id', 'not in', line),('state', '=', 'new')]}
         return {'domain': domain}
 
-    """@api.multi
+    @api.multi
     def print_report_excel(self):
-        return self.env.ref('clearance_xlx_report_id').report_action(self)"""
+        return self.env.ref('clearance_xlx_report_id').report_action(self)
 
     @api.onchange('clearance_list')
     def onchange_len_list(self):
@@ -57,12 +58,13 @@ class ClearanceList(models.Model):
             if self.list_total_count < self.list_now_len:
                 raise ValidationError(_('You cannot remove lines in this state'))
 
-    # @api.multi
-    # def unlink(self):
-    #     for rec in self:
-    #         if rec.state != 'new':
-    #             raise ValidationError(_('You cannot delete %s as it is not in new state') % rec.name)
-    #     return super(ClearanceList, self).unlink()
+    @api.multi
+    def unlink(self):
+        for rec in self:
+            if rec.state != 'new':
+                raise ValidationError(_('You cannot delete %s as it is not in new state') % rec.name)
+        return super(ClearanceList, self).unlink()
+
     @api.model
     def create(self, vals):
         vals['name'] = self.env['ir.sequence'].next_by_code('clearance.list')

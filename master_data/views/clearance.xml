@@ -49,11 +49,12 @@
                             <field name="lc2"/>
                             <field name="lc3"/>
                             <field name="district"/>
-                            <field name="destination_city" string="Destination"/>
                         </group>
-
+                        <group>
+                            <field name="destination_city" string="Destination"/>
+                            <field name="destination_country" string="Country"/>
+                        </group>
                     </group>
-
                 </sheet>
                 <div class="oe_chatter">
                     <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
