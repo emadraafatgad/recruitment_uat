@@ -110,7 +110,7 @@
         </record>
 
     <menuitem id="menu_travel_list" sequence="2" name="Bookings" parent="menu_travel_company"
-              action="travel_list_action"/>
+              action="travel_list_action" />
 
 
 </odoo>

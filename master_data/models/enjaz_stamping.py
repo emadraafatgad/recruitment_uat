@@ -12,7 +12,7 @@ class LaborEnjaz(models.Model):
     _inherit = ['portal.mixin', 'mail.thread', 'mail.activity.mixin']
 
     state = fields.Selection(
-        [('new', 'New'), ('in_progress', 'InProgress'), ('rejected', 'Rejected'), ('done', 'Done')], default='new',
+        [('new', 'New'), ('in_progress', 'InProgress'), ('rejected', 'Rejected'), ('done', 'Done'),('blocked','Blocked')], default='new',
         track_visibility="onchange")
     name = fields.Char(string="Number", readonly=True, default='New')
     labor_id = fields.Many2one('labor.profile')
@@ -68,8 +68,9 @@ class LaborEnjaz(models.Model):
                 raise ValidationError(_('Please, enter enjaz#'))
 
             invoice_line = []
-            purchase_journal = self.env['account.journal'].search([('type', '=', 'purchase')])[0]
             product = self.env['product.recruitment.config'].search([('type', '=', 'enjaz')])[0]
+            if not product.journal_id:
+                raise ValidationError(_('Please, you must select journal in enjaz from configration'))
             accounts = product.product.product_tmpl_id.get_product_accounts()
             invoice_line.append((0, 0, {
                 'product_id': product.product.id,
@@ -89,7 +90,7 @@ class LaborEnjaz(models.Model):
                 'type': 'in_invoice',
                 'partner_type': self.enjaz_partner.vendor_type,
                 'origin': self.name,
-                'journal_id': purchase_journal.id,
+                'journal_id': product.journal_id.id,
                 'account_id': self.enjaz_partner.property_account_payable_id.id,
                 'invoice_line_ids': invoice_line,
             })

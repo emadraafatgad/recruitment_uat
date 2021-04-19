@@ -58,7 +58,7 @@ class PassportInvoice(models.Model):
         for record in request:
             for rec in record.passport_request:
                 line.append(rec.id)
-        domain = {'passport_request': [('id', 'not in', line)]}
+        domain = {'passport_request': [('id', 'not in', line),('state', '=', 'new')]}
         return {'domain': domain}
 
     @api.multi
@@ -73,8 +73,9 @@ class PassportInvoice(models.Model):
             desc += description.prn + ','
             append_labor.append(description.labor_id.id)
         invoice_line = []
-        purchase_journal = self.env['account.journal'].search([('type', '=', 'purchase')])[0]
         product = self.env['product.recruitment.config'].search([('type', '=', 'passport_placing_issue')])[0]
+        if not product.journal_id:
+            raise ValidationError(_('Please, you must select journal in internal affairs from configration'))
         accounts = product.product.product_tmpl_id.get_product_accounts()
         invoice_line.append((0, 0, {
             'product_id': product.product.id,
@@ -93,7 +94,7 @@ class PassportInvoice(models.Model):
             'type': 'in_invoice',
             'partner_type': self.placing_issue.vendor_type,
             'origin': self.name,
-            'journal_id': purchase_journal.id,
+            'journal_id': product.journal_id.id,
             'account_id': self.placing_issue.property_account_payable_id.id,
             'invoice_line_ids': invoice_line,
 

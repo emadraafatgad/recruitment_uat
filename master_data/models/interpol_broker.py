@@ -52,7 +52,7 @@ class InterpolBroker(models.Model):
         for record in request:
             for rec in record.interpol_request:
                 line.append(rec.id)
-        domain = {'interpol_request': [('id', 'not in', line)]}
+        domain = {'interpol_request': [('id', 'not in', line),('state', '=', 'new')]}
         return {'domain': domain}
 
     @api.constrains('broker','interpol_request')

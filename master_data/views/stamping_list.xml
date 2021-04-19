@@ -51,8 +51,8 @@
                                     <field name="agency" readonly="1"/>
                                     <field name="visa_no" readonly="1"/>
                                     <field name="city" readonly="1"/>
-                                    <field name="visa_date"/>
-                                    <field name="visa_expiry_date"/>
+                                    <field name="visa_date" attrs="{'readonly':[('state','=','done')]}"/>
+                                    <field name="visa_expiry_date" attrs="{'readonly':[('state','=','done')]}"/>
                                     <field name="state" readonly="1"/>
                                     <button name="action_done" states="in_progress"
                                             string="Done" type="object"

@@ -34,7 +34,7 @@ class LaborProfile(models.Model):
     ]
 
     state = fields.Selection(
-        [('new', 'New'), ('editing', 'Editing'), ('confirmed', 'Confirmed'), ('travelled', 'Travelled'),
+        [('new', 'New'), ('editing', 'Editing'), ('confirmed', 'Confirmed'), ('block', 'Blocked'),('travelled', 'Travelled'),
          ('rejected', 'Rejected')], default="new", track_visibility="onchange")
     partner_id = fields.Many2one('res.partner', string='Related Partner', required=True, ondelete='cascade',
                                  help='Partner-related data of the patient')
@@ -347,9 +347,9 @@ class LaborProfile(models.Model):
             price = 0.0
             name = ''
             invoice_line = []
-            purchase_journal = self.env['account.journal'].search([('type', '=', 'purchase')])[0]
             product = self.env['product.recruitment.config'].search([('type', '=', 'agent')])[0]
-            bank_journal = self.env['account.journal'].search([('type', '=', 'bank')])[0]
+            if not product.journal_id:
+                raise ValidationError(_('Please, you must select journal in agent from configration'))
             method = self.env['account.payment.method'].search([('payment_type', '=', 'outbound')])[0]
             accounts = product.product.product_tmpl_id.get_product_accounts()
 
@@ -385,7 +385,7 @@ class LaborProfile(models.Model):
                 'type': 'in_invoice',
                 'partner_type': self.agent.vendor_type,
                 'origin': self.identification_code,
-                'journal_id': purchase_journal.id,
+                'journal_id': product.journal_id.id,
                 'account_id': self.agent.property_account_payable_id.id,
                 'invoice_line_ids': invoice_line,
 
@@ -398,7 +398,7 @@ class LaborProfile(models.Model):
                 'partner_id': self.agent.id,
                 'partner_type': 'supplier',
                 'payment_type': 'outbound',
-                'journal_id': bank_journal.id,
+                'journal_id': product.journal_id.id,
                 'currency_id': product.currency_id.id,
                 'payment_method_id': method.id,
                 'payment': 'first',
@@ -417,6 +417,77 @@ class LaborProfile(models.Model):
             self.show = True
         accommodation = self.env['labour.accommodation'].create({'labour_id':self.id})
         self.state = 'confirmed'
+
+    @api.multi
+    def action_block(self):
+        self.ensure_one()
+        training = self.env['slave.training'].search([('slave_id', '=', self.id),('invoiced', '=', False)])
+        for rec in training:
+            rec.state='blocked'
+        nira = self.env['nira.letter.request'].search([('labourer_id', '=', self.id),('state', '!=', 'done')])
+        for rec in nira:
+            rec.state = 'blocked'
+        passport = self.env['passport.request'].search([('labor_id', '=', self.id),('state', 'in', ('new','to_invoice'))])
+        for rec in passport:
+            rec.state = 'blocked'
+        interpol = self.env['interpol.request'].search([('labor_id', '=', self.id),('state', 'in', ('new','assigned'))])
+        for rec in interpol:
+            rec.state = 'blocked'
+        big_medical = self.env['big.medical'].search([('labor_id', '=', self.id),('state', '=', 'new')])
+        for rec in big_medical:
+            rec.state = 'blocked'
+        enjaz = self.env['labor.enjaz.stamping'].search([('labor_id', '=', self.id),('type', '=', 'enjaz'),('state', '!=', 'done')])
+        for rec in enjaz:
+            rec.state = 'blocked'
+        stamping = self.env['labor.enjaz.stamping'].search(
+            [('labor_id', '=', self.id), ('type', '=', 'stamping'), ('state', '!=', 'done')])
+        for rec in stamping:
+            rec.state = 'blocked'
+        clearance = self.env['labor.clearance'].search([('labor_id', '=', self.id)])
+        for rec in clearance:
+            rec.state = 'blocked'
+        travel = self.env['travel.company'].search([('labor_id', '=', self.id),('state', '!=', 'done')])
+        for rec in travel:
+            rec.state = 'blocked'
+        pcr = self.env['pcr.exam'].search([('labour_id', '=', self.id)])
+        for rec in pcr:
+            rec.state = 'blocked'
+        accommodation = self.env['labour.accommodation'].search([('labour_id', '=', self.id),('state', '!=', 'invoiced')])
+        for rec in accommodation:
+            rec.state = 'blocked'
+        price = 0.0
+        for record in self.labor_process_ids:
+            price += record.total_cost
+        append_labor = []
+        append_labor.append(self.id)
+        invoice_line = []
+        product = self.env['product.recruitment.config'].search([('type', '=', 'agent')])[0]
+        if not product.journal_id:
+            raise ValidationError(_('Please, you must select journal in agent from configration'))
+        accounts = product.product.product_tmpl_id.get_product_accounts()
+        invoice_line.append((0, 0, {
+            'product_id': product.product.id,
+            'labors_id': [(6, 0, append_labor)],
+            'name': 'Block Laborer',
+            'uom_id': product.product.uom_id.id,
+            'price_unit': price,
+            'discount': 0.0,
+            'quantity': 1,
+            'account_id': accounts.get('stock_input') and accounts['stock_input'].id or \
+                          accounts['expense'].id,
+        }))
+        self.env['account.invoice'].create({
+            'partner_id': self.agent.id,
+            'currency_id': product.currency_id.id,
+            'type': 'in_refund',
+            'partner_type': self.agent.vendor_type,
+            'origin': self.identification_code,
+            'journal_id': product.journal_id.id,
+            'account_id': self.agent.property_account_payable_id.id,
+            'invoice_line_ids': invoice_line,
+
+        })
+        self.state = 'block'
 
     @api.multi
     def action_reject(self):
@@ -1089,6 +1160,12 @@ class AgentPayment(models.Model):
          ('passport_placing_issue', 'Passport Placing Issue'), ('interpol_broker', 'Interpol Broker'), ('gcc', 'Gcc'),
          ('hospital', 'Hospital'), ('embassy', 'Embassy'), ('travel_company', 'Travel Company'),
          ('training', 'Training Center')], related='partner_id.vendor_type')
+
+    @api.depends('invoice_ids')
+    @api.onchange('invoice_ids')
+    def _default_journal_id(self):
+        if self.invoice_ids:
+           self.journal_id = self.invoice_ids.journal_id
 
     @api.multi
     def post(self):

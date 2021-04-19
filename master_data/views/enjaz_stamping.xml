@@ -226,9 +226,9 @@
 
     <menuitem id="menu_embassy_main" sequence="63" name="Embassy"  parent="menu_recruitment_root"/>
     <menuitem id="menu_labor_enjaz" sequence="1" name="Enjaz" parent="menu_embassy_main"
-              action="labor_enjaz_action"/>
+              action="labor_enjaz_action" groups="group_enjaz_user"/>
     <menuitem id="menu_labor_stamping" sequence="2" name="Stamping Requests" parent="menu_embassy_main"
-              action="labor_stamping_action"/>
+              action="labor_stamping_action" groups="group_stamping_user"/>
 
 
 

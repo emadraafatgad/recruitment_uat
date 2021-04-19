@@ -15,7 +15,7 @@ class LabourAccommodation(models.Model):
     extra_days = fields.Integer()
     national_id = fields.Char(related='labour_id.national_id')
     passport_no = fields.Char(related='labour_id.passport_no')
-    state = fields.Selection([('new','New'),('confirm','Confirm'),('invoiced','Invoiced')],)
+    state = fields.Selection([('new','New'),('confirm','Confirm'),('invoiced','Invoiced'),('blocked','Blocked')],)
 
     @api.depends('start_date','end_date','extra_days')
     def calculate_accommodation_period(self):

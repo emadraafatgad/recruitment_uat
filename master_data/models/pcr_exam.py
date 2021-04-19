@@ -14,7 +14,7 @@ class PCRExam(models.Model):
     passport_no = fields.Char(related='labour_id.passport_no')
     national_id = fields.Char(related='labour_id.national_id')
     state = fields.Selection(
-        [('new', 'new'), ('in_progress', 'InProgress'), ('positive', 'Positive'), ('negative', 'Negative')],
+        [('new', 'new'), ('in_progress', 'InProgress'), ('positive', 'Positive'), ('negative', 'Negative'),('blocked','Blocked')],
         default='new', track_visibility='onchange')
     note = fields.Char()
     # result = fields.Selection([('positive','positive'),('negative','negative')])

@@ -33,10 +33,11 @@ class SlaveTraining(models.Model):
     slave_id = fields.Many2one('labor.profile',string="Labor", domain="[('pre_medical_check','=','Fit')]")
     start_date = fields.Date(readonly=True)
     end_date = fields.Date(readonly=True)
-    state = fields.Selection([('new', 'New'), ('in_progress', 'Inprogress'), ('rejected', 'Rejected'),('finished', 'Finished')], default='new')
+    state = fields.Selection([('new', 'New'), ('in_progress', 'Inprogress'), ('rejected', 'Rejected'),('finished', 'Finished'),('blocked','Blocked')], default='new')
     training_center_id = fields.Many2one('res.partner',domain="[('vendor_type','=','training')]")
     note = fields.Text()
     phone = fields.Char()
+    invoiced = fields.Boolean()
 
     @api.multi
     def action_reject(self):
@@ -51,8 +52,9 @@ class SlaveTraining(models.Model):
         append_labor = []
         append_labor.append(self.slave_id.id)
         invoice_line = []
-        purchase_journal = self.env['account.journal'].search([('type', '=', 'purchase')])[0]
         product = self.env['product.recruitment.config'].search([('type', '=', 'labor_reject')])[0]
+        if not product.journal_id:
+            raise ValidationError(_('Please, you must select journal in laborer reject from configration'))
         accounts = product.product.product_tmpl_id.get_product_accounts()
         invoice_line.append((0, 0, {
             'product_id': product.product.id,
@@ -72,7 +74,7 @@ class SlaveTraining(models.Model):
                 'type': 'in_refund',
                 'partner_type': labor.agent.vendor_type,
                 'origin': self.name,
-                'journal_id': purchase_journal.id,
+                'journal_id': product.journal_id.id,
                 'account_id': labor.agent.property_account_payable_id.id,
                 'invoice_line_ids': invoice_line,
 
@@ -132,7 +134,7 @@ class TrainingList(models.Model):
         for record in request:
             for rec in record.training_requests:
                 line.append(rec.id)
-        domain = {'training_requests': [('id', 'not in', line)]}
+        domain = {'training_requests': [('id', 'not in', line),('state', '=', 'new')]}
         return {'domain': domain}
 
     @api.onchange('training_requests')
@@ -237,8 +239,9 @@ class TrainingList(models.Model):
     @api.multi
     def create_bill(self):
         invoice_line = []
-        purchase_journal = self.env['account.journal'].search([('type', '=', 'purchase')])[0]
         product = self.env['product.recruitment.config'].search([('type', '=', 'training')])[0]
+        if not product.journal_id:
+            raise ValidationError(_('Please, you must select journal in training from configration'))
         accounts = product.product.product_tmpl_id.get_product_accounts()
         description = ''
         append_labor = []
@@ -263,13 +266,16 @@ class TrainingList(models.Model):
             'type': 'in_invoice',
             'partner_type':self.training_center.vendor_type,
             'origin': self.name,
-            'journal_id': purchase_journal.id,
+            'journal_id': product.journal_id.id,
             'account_id': self.training_center.property_account_payable_id.id,
             'invoice_line_ids': invoice_line,
 
         })
+        for rec in self.training_requests:
+            rec.invoiced = True
         self.show = True
         self.bill = cr.id
+
 
     @api.model
     def create(self, vals):

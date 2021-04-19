@@ -126,10 +126,10 @@
                 </search>
             </field>
         </record>
-    <menuitem id="main_menu_passport" sequence="12" name="Passport " parent="menu_recruitment_root" groups="master_data.group_registeration_user,account.group_account_invoice"
+    <menuitem id="main_menu_passport" sequence="12" name="Passport" parent="menu_recruitment_root"
               />
     <menuitem id="menu_passport_request" sequence="1" name="Candidates" parent="main_menu_passport"
-              action="passport_request_action"/>
+              action="passport_request_action" groups="master_data.group_passport_user,account.group_account_invoice"/>
 
 
 

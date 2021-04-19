@@ -25,7 +25,7 @@ class PassportNumber(models.Model):
     end_date = fields.Datetime('Delivery Date')
     deadline = fields.Date('Deadline')
     state = fields.Selection([('new','New'),('to_invoice','To Invoice'),('invoiced','Invoiced'),
-                              ('releasing','Releasing'),('rejected','Rejected'),('done','Done')],default='new',track_visibility="onchange")
+                              ('releasing','Releasing'),('rejected','Rejected'),('done','Done'),('blocked','Blocked')],default='new',track_visibility="onchange")
     passport_no = fields.Char()
     pass_start_date = fields.Date()
     pass_end_date = fields.Date()
@@ -75,8 +75,9 @@ class PassportNumber(models.Model):
         append_labor = []
         append_labor.append(self.labor_id.id)
         invoice_line = []
-        purchase_journal = self.env['account.journal'].search([('type', '=', 'purchase')])[0]
         product = self.env['product.recruitment.config'].search([('type', '=', 'passport')])[0]
+        if not product.journal_id:
+            raise ValidationError(_('Please, you must select journal in passport broker from configration'))
         accounts = product.product.product_tmpl_id.get_product_accounts()
         invoice_line.append((0, 0, {
             'product_id': product.product.id,
@@ -101,7 +102,7 @@ class PassportNumber(models.Model):
                 'type': 'in_invoice',
                 'partner_type': self.broker_list_id.broker.vendor_type,
                 'origin': self.broker_list_id.name,
-                'journal_id': purchase_journal.id,
+                'journal_id': product.journal_id.id,
                 'account_id': self.broker_list_id.broker.property_account_payable_id.id,
                 'invoice_line_ids': invoice_line,
 

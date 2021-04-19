@@ -21,7 +21,7 @@ class NiraLetter(models.Model):
     delivery_date = fields.Datetime("Delivery Date")
     start_date = fields.Date('Issued Date')
     end_date = fields.Date("Expired Date")
-    state = fields.Selection([('new', 'New'), ('releasing', 'Releasing'),('done', 'Done'),('rejected', 'Rejected')], default='new',track_visibility="onchange")
+    state = fields.Selection([('new', 'New'), ('releasing', 'Releasing'),('done', 'Done'),('rejected', 'Rejected'),('blocked','Blocked')], default='new',track_visibility="onchange")
     national_id = fields.Char('National ID',size=14)
     broker_list_id = fields.Many2one('nira.broker')
     broker = fields.Many2one('res.partner')
@@ -47,6 +47,8 @@ class NiraLetter(models.Model):
     def nira_request_done(self):
         self.ensure_one()
         product = self.env['product.recruitment.config'].search([('type', '=', 'nira')])[0]
+        if not product.journal_id:
+            raise ValidationError(_('Please, you must select journal in nira from configration'))
         if not self.national_id or not self.start_date:
             raise ValidationError(_('Enter nira info'))
         self.labourer_id.national_id = self.national_id
@@ -56,8 +58,6 @@ class NiraLetter(models.Model):
         invoice_line = []
         append_labor = []
         append_labor.append(self.labourer_id.id)
-
-        purchase_journal = self.env['account.journal'].search([('type', '=', 'purchase')])[0]
         accounts = product.product.product_tmpl_id.get_product_accounts()
         invoice_line.append((0, 0, {
             'product_id': product.product.id,
@@ -82,7 +82,7 @@ class NiraLetter(models.Model):
                 'type': 'in_invoice',
                 'partner_type': self.broker.vendor_type,
                 'origin': self.broker_list_id.name,
-                'journal_id': purchase_journal.id,
+                'journal_id': product.journal_id.id,
                 'account_id': self.broker.property_account_payable_id.id,
                 'invoice_line_ids': invoice_line,
 

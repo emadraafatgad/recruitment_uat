@@ -17,7 +17,7 @@ class SpecifyAgent(models.Model):
     passport_no = fields.Char(required=True)
     religion = fields.Selection([('muslim', 'Muslim'), ('christian', 'Christian'), ('jew', 'Jew'), ('other', 'Other')],'Religion')
     age = fields.Integer()
-    state = fields.Selection([('draft', 'CV Available'),('available', 'Specified'), ('sent', 'CV Sent'),('selected', 'Selected'),('edit_after_selected', 'Edit After Selected')], default='draft', track_visibility="onchange")
+    state = fields.Selection([('draft', 'CV Available'),('available', 'Specified'), ('sent', 'CV Sent'),('selected', 'Selected'),('edit_after_selected', 'Edit After Selected'),('blocked','Blocked')], default='draft', track_visibility="onchange")
     request_date = fields.Date(default=date.today())
     available_date = fields.Date()
     select_date = fields.Date('Selection Date')

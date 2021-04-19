@@ -26,6 +26,9 @@
                     <button name="action_confirm" attrs="{'invisible':[('appear_confirm', '=',False)]}"
                             string="Confirm" type="object"
                             class="oe_highlight"/>
+                    <button name="action_block" states="confirmed"
+                            string="Block" type="object"
+                            class="oe_highlight" groups="master_data.group_registeration_manager"/>
                     <button name="action_reject" attrs="{'invisible':[('appear_reject', '=',False)]}"
                             string="Reject" type="object"
                             class="oe_highlight"/>

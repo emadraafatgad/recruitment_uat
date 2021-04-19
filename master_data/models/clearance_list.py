@@ -42,7 +42,7 @@ class ClearanceList(models.Model):
         for record in request:
             for rec in record.clearance_list:
                 line.append(rec.id)
-        domain = {'clearance_list': [('id', 'not in', line)]}
+        domain = {'clearance_list': [('id', 'not in', line),('state', '=', 'new')]}
         return {'domain': domain}
 
     """@api.multi

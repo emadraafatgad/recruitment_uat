@@ -53,7 +53,7 @@ class StampingList(models.Model):
         for record in request:
             for rec in record.stamping_list:
                 line.append(rec.id)
-        domain = {'stamping_list': [('id', 'not in', line),('type', '=', 'stamping'),('state', 'not in', ('done','rejected'))]}
+        domain = {'stamping_list': [('id', 'not in', line),('type', '=', 'stamping'),('state', 'not in', ('done','rejected','blocked'))]}
         return {'domain': domain}
 
     @api.multi
@@ -67,8 +67,9 @@ class StampingList(models.Model):
             append_labor.append(rec.labor_id.id)
             name += rec.labor_name
         invoice_line = []
-        purchase_journal = self.env['account.journal'].search([('type', '=', 'purchase')])[0]
         product = self.env['product.recruitment.config'].search([('type', '=', 'embassy')])[0]
+        if not product.journal_id:
+            raise ValidationError(_('Please, you must select journal in stamping from configration'))
         accounts = product.product.product_tmpl_id.get_product_accounts()
         invoice_line.append((0, 0, {
             'product_id': product.product.id,
@@ -88,7 +89,7 @@ class StampingList(models.Model):
             'state': 'draft',
             'partner_type': self.embassy.vendor_type,
             'origin': self.name,
-            'journal_id': purchase_journal.id,
+            'journal_id': product.journal_id.id,
             'account_id': self.embassy.property_account_payable_id.id,
             'invoice_line_ids': invoice_line,
         })

@@ -48,7 +48,7 @@ class NiraBroker(models.Model):
         for record in request:
             for rec in record.nira_request:
                 line.append(rec.id)
-        domain = {'nira_request': [('id', 'not in', line)]}
+        domain = {'nira_request': [('id', 'not in', line),('state', '=', 'new')]}
         return {'domain': domain}
 
     @api.one

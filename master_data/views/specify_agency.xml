@@ -225,9 +225,9 @@
     <menuitem id="menu_specify_agent_root" sequence="61" name="Specify Agency"
                parent="menu_recruitment_root"/>
     <menuitem id="menu_specify_agent" sequence="1" name="Specify Agency" parent="menu_specify_agent_root"
-              action="specify_agent_action"/>
+              action="specify_agent_action" groups="group_specify_agency"/>
     <menuitem id="menu_specify_agent_draft_cv" sequence="2" name="CV Available" parent="menu_specify_agent_root"
-              action="specify_agent_action_draft_cv"/>
+              action="specify_agent_action_draft_cv" groups="group_specify_agency"/>
 
     <!-- <menuitem id="menu_specify_agent_done" sequence="2" name="Done" parent="menu_specify_agent_root"
                action="specify_agent_action_done" />-->

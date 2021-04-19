@@ -25,7 +25,7 @@ class BigMedical(models.Model):
     gcc = fields.Many2one('res.partner',readonly=True,domain=[('vendor_type', '=', 'gcc')],default=_get_gcc_default)
     labor = fields.Char('Labor Name')
     gcc_no =fields.Char('GCC#')
-    state = fields.Selection([('new', 'New'),('pending', 'On Examination'),('fit','Finished'),('rejected','Rejected'),('unfit','Unfit')], default='new', track_visibility="onchange")
+    state = fields.Selection([('new', 'New'),('pending', 'On Examination'),('fit','Finished'),('rejected','Rejected'),('unfit','Unfit'),('blocked','Blocked')], default='new', track_visibility="onchange")
     national_id = fields.Char(size=14,string='National ID')
     passport_no = fields.Char()
     hospital = fields.Many2one('res.partner', domain=[('vendor_type','=','hospital')],track_visibility="onchange")
@@ -98,8 +98,9 @@ class BigMedical(models.Model):
         append_labor = []
         append_labor.append(self.labor_id.id)
         invoice_line = []
-        purchase_journal = self.env['account.journal'].search([('type', '=', 'purchase')])[0]
         product = self.env['product.recruitment.config'].search([('type', '=', 'gcc')])[0]
+        if not product.journal_id:
+            raise ValidationError(_('Please, you must select journal in gcc from configration'))
         accounts = product.product.product_tmpl_id.get_product_accounts()
         invoice_line.append((0, 0, {
             'product_id': product.product.id,
@@ -120,7 +121,7 @@ class BigMedical(models.Model):
             'type': 'in_invoice',
             'partner_type': self.gcc.vendor_type,
             'origin': self.name,
-            'journal_id': purchase_journal.id,
+            'journal_id': product.journal_id.id,
             'account_id': self.gcc.property_account_payable_id.id,
             'invoice_line_ids': invoice_line,
 

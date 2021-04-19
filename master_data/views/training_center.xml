@@ -293,7 +293,7 @@
                 </tree>
             </field>
         </record>
-    <menuitem id="menu_training_main" sequence="11" name="Training" parent="menu_recruitment_root"  action="slave_training_action" />
-    <menuitem id="menu_training_salve" sequence="1" name="Candidates" parent="menu_training_main" action="slave_training_action" />
-    <menuitem id="menu_training_list" sequence="2" name="Training Center" parent="menu_training_main" action="action_training_list" />
+    <menuitem id="menu_training_main" sequence="11" name="Training" parent="menu_recruitment_root"/>
+    <menuitem id="menu_training_salve" sequence="1" name="Candidates" parent="menu_training_main" action="slave_training_action" groups="group_training_user"/>
+    <menuitem id="menu_training_list" sequence="2" name="Training Center" parent="menu_training_main" action="action_training_list" groups="group_training_user"/>
 </odoo>
