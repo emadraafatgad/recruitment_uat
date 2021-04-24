@@ -9,7 +9,7 @@ class NiraLetter(models.Model):
     _order = 'id desc'
     _description = 'Nira Letter Request'
     _inherit = ['portal.mixin', 'mail.thread', 'mail.activity.mixin']
-
+    _sql_constraints = [('laborer_unique', 'unique(labourer_id)', 'Created with this Laborer before!')]
     sequence = fields.Char('Sequence',default="New",size=256,readonly=True)
     labourer_id = fields.Many2one('labor.profile',readonly=True)
     name = fields.Char(string="Name",readonly=True)

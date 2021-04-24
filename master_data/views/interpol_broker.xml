@@ -188,6 +188,16 @@
             </xpath>
         </field>
     </record>
+    <record id="account_invoice_search_laborer" model="ir.ui.view">
+    <field name="name">Search Laborer</field>
+    <field name="model">account.invoice</field>
+    <field name="inherit_id" ref="account.view_account_invoice_filter"/>
+    <field name="arch" type="xml">
+          <field name="partner_id" position="after">
+              <field name="laborer"/>
+          </field>
+    </field>
+</record>
     <menuitem id="menu_interpol_broker" sequence="3" name="Interpol Broker" parent="main_menu_interpol"
               action="interpol_broker_action"/>
 

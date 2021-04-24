@@ -9,7 +9,7 @@ class PassportNumber(models.Model):
     _rec_name = 'labor_id'
     _inherit = ['portal.mixin', 'mail.thread', 'mail.activity.mixin']
     _sql_constraints = [('prn_uniq', 'unique(prn)', 'PRN must be unique!'),('invoice_uniq', 'unique(invoice_no)', 'Invoice# must be unique!')
-        ,('passport_no_unique', 'unique(passport_no)', 'Passport No must be unique!')]
+        ,('passport_no_unique', 'unique(passport_no)', 'Passport No must be unique!'),('laborer_unique', 'unique(labor_id)', 'Created with this Laborer before!')]
     _order = 'id desc'
 
     sequence = fields.Char(string="Sequence", readonly=True,default='New')

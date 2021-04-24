@@ -29,7 +29,7 @@ class SpecifyAgent(models.Model):
     visa_no = fields.Char()
     edit_selected = fields.Boolean(compute='compute_edit_selected')
     occupation = fields.Selection([('house_maid', 'House Maid'), ('pro_maid', 'Pro Maid'), ('pro_worker', 'Pro Worker')], string='Occupation')
-    _sql_constraints = [('visa_uniq', 'unique(visa_no , labor_id)', 'Visa# must be unique!')]
+    _sql_constraints = [('visa_uniq', 'unique(visa_no , labor_id)', 'Visa# must be unique!'),('laborer_unique', 'unique(labor_id)', 'Created with this Laborer before!')]
 
     @api.multi
     def unlock(self):

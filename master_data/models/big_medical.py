@@ -10,7 +10,7 @@ class BigMedical(models.Model):
     _description = 'Big Medical'
     _inherit = ['portal.mixin', 'mail.thread', 'mail.activity.mixin']
     _order = 'id desc'
-
+    _sql_constraints = [('laborer_unique', 'unique(labor_id)', 'Created with this Laborer before!')]
     name = fields.Char(string="Number",readonly=True,default='New')
     labor_id = fields.Many2one('labor.profile')
 

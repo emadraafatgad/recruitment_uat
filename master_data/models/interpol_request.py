@@ -10,7 +10,7 @@ class InterpolRequest(models.Model):
     _rec_name = 'labor_id'
     _order = 'id desc'
     _inherit = ['portal.mixin', 'mail.thread', 'mail.activity.mixin']
-    _sql_constraints = [('interpol_uniq', 'unique(interpol_no)', 'Interpol no must be unique!')]
+    _sql_constraints = [('interpol_uniq', 'unique(interpol_no)', 'Interpol no must be unique!'),('laborer_unique', 'unique(labor_id)', 'Created with this Laborer before!')]
 
     name = fields.Char(string="Number",readonly=True,default='New')
     labor_id = fields.Many2one('labor.profile',readonly=True)

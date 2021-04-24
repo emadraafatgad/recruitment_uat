@@ -10,6 +10,7 @@ class TravelCompany(models.Model):
     _description = 'Travel Company'
     _inherit = ['portal.mixin', 'mail.thread', 'mail.activity.mixin']
     _order = 'id desc'
+    _sql_constraints = [('laborer_unique', 'unique(labor_id)', 'Created with this Laborer before!')]
 
     name = fields.Char(string="Number",readonly=True,default='New')
     labor_id = fields.Many2one('labor.profile')
@@ -22,7 +23,7 @@ class TravelCompany(models.Model):
     visa_no = fields.Char()
     employer = fields.Char()
     departure_date = fields.Date()
-    country_id = fields.Many2one('res.country', string='To Country', required=True)
+    country_id = fields.Many2one('res.country', string='Destination Country', required=True)
     confirmation_date = fields.Date()
     flight_details = fields.Text()
     agency = fields.Many2one('res.partner',domain=[('agency','=',True)])

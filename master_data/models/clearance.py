@@ -7,6 +7,7 @@ class LaborClearance(models.Model):
     _name = 'labor.clearance'
     _order = 'id desc'
     _inherit = ['portal.mixin', 'mail.thread', 'mail.activity.mixin']
+    _sql_constraints = [('laborer_unique', 'unique(labor_id)', 'Created with this Laborer before!')]
     state = fields.Selection([('new','New'),('rejected','Rejected'),('confirmed','Confirmed')],default='new',track_visibility="onchange")
     name = fields.Char(string="Number",readonly=True,default='New')
     labor_id = fields.Many2one('labor.profile',required=True)
@@ -37,6 +38,7 @@ class LaborClearance(models.Model):
                 'destination_city': stamping.city.id,
                 'employer': stamping.employer,
                 'visa_no': stamping.visa_no,
+                'country_id': stamping.agency.country_id.id,
             })
 
         self.state = 'confirmed'

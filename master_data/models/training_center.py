@@ -28,6 +28,7 @@ class SlaveTraining(models.Model):
     _name = 'slave.training'
     _description = 'Training'
     _inherit = ['portal.mixin', 'mail.thread', 'mail.activity.mixin']
+    _sql_constraints = [('laborer_unique', 'unique(slave_id)', 'Created with this Laborer before!')]
 
     name = fields.Char(readonly=True)
     slave_id = fields.Many2one('labor.profile',string="Labor", domain="[('pre_medical_check','=','Fit')]")

@@ -81,6 +81,7 @@ class InterpolAccountInvoice(models.Model):
                                     ('interpol_broker', 'Interpol Broker'), ('gcc', 'Gcc'), ('hospital', 'Hospital'),('enjaz','Enjaz'),
                                     ('embassy', 'Embassy'), ('travel_company', 'Travel Company'),
                                     ('training', 'Training Center'),('agency', 'Agency')])
+    laborer = fields.Many2many('labor.profile', related='invoice_line_ids.labors_id')
     @api.multi
     def action_invoice_open(self):
         if self.partner_id.vendor_type == 'travel_company':
