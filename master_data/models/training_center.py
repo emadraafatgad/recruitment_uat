@@ -38,6 +38,7 @@ class SlaveTraining(models.Model):
     training_center_id = fields.Many2one('res.partner',domain="[('vendor_type','=','training')]")
     note = fields.Text()
     phone = fields.Char()
+    invoiced = fields.Boolean()
     passport_no = fields.Char(related='slave_id.passport_no',store=True)
 
     @api.multi
@@ -272,6 +273,8 @@ class TrainingList(models.Model):
 
         })
         self.show = True
+        for rec in self.training_requests:
+            rec.invoiced=True
         self.bill = cr.id
 
     @api.model
