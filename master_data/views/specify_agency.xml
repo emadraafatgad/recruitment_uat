@@ -12,7 +12,8 @@
         <field name="model">specify.agent</field>
         <field name="arch" type="xml">
             <search>
-                <field name="labor_id" string="Labourer"/>
+                <field name="labor_id" string="Laborer"/>
+                <field name="passport_no"/>
                 <field name="occupation"/>
                 <field name="religion"/>
                 <field name="agency"/>
@@ -165,7 +166,7 @@
                 <field name="name" string="Code/Agency"/>
                 <field name="labor_id" string="Labourer"/>
                 <field name="occupation"/>
-                <field name="age"/>
+                <field name="passport_no"/>
                 <field name="religion"/>
                 <field name="agency"/>
                 <field name="employer"/>
