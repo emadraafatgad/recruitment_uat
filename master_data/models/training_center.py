@@ -38,6 +38,7 @@ class SlaveTraining(models.Model):
     training_center_id = fields.Many2one('res.partner',domain="[('vendor_type','=','training')]")
     note = fields.Text()
     phone = fields.Char()
+    passport_no = fields.Char(related='slave_id.passport_no',store=True)
 
     @api.multi
     def action_reject(self):
@@ -107,6 +108,7 @@ class TrainingList(models.Model):
     state = fields.Selection([('new', 'New'), ('in_progress', 'Inprogress'), ('finished', 'Finished')],default='new',track_visibility="onchange")
     start_date = fields.Date(track_visibility="onchange")
     end_date = fields.Date(track_visibility="onchange")
+
     training_center = fields.Many2one('res.partner', domain="[('vendor_type','=','training')]", track_visibility="onchange",required=True)
     training_requests = fields.Many2many('slave.training')
     bill = fields.Many2one('account.invoice')
