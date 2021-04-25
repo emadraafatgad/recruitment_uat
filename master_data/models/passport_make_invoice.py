@@ -139,12 +139,12 @@ class PassportInvoice(models.Model):
 
         }
 
-    # @api.multi
-    # def unlink(self):
-    #     for rec in self:
-    #         if rec.state != 'new':
-    #             raise ValidationError(_('You cannot delete %s as it is not in new state') % rec.name)
-    #     return super(PassportInvoice, self).unlink()
+    @api.multi
+    def unlink(self):
+        for rec in self:
+            if rec.state != 'new':
+                 raise ValidationError(_('You cannot delete %s as it is not in new state') % rec.name)
+        return super(PassportInvoice, self).unlink()
     @api.model
     def create(self, vals):
         vals['name'] = self.env['ir.sequence'].next_by_code('passport.request.invoice')
