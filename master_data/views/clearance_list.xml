@@ -37,12 +37,12 @@
                     <group>
                         <group>
                             <field name="assign_date" readonly="1"/>
-                            <field name="list_total_count" invisible="1"/>
                             <field name="list_now_len" invisible="1"/>
                             <field name="reference_no" attrs="{'readonly':[('state','=','confirmed')]}"/>
                         </group>
                         <group>
                             <field name="receive_date" readonly="1"/>
+                            <field name="list_total_count"/>
                         </group>
                     </group>
                     <notebook>
