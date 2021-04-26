@@ -132,6 +132,21 @@ class LaborProfile(models.Model):
             self.update_pass = False
 
     @api.multi
+    def action_update_id_wizard(self):
+        view_id = self.env.ref('master_data.labor_profile_national_id_wizard')
+        return {
+            'name': _('National ID Info'),
+            'type': 'ir.actions.act_window',
+            'res_model': 'labor.profile',
+            'view_type': 'form',
+            'view_mode': 'form',
+            'view_id': view_id.id,
+            'views': [(view_id.id, 'form')],
+            'target': 'new',
+            'res_id': self.id,
+        }
+
+    @api.multi
     def action_update_national_id(self):
         self.ensure_one()
         passport_request = self.env['nira.letter.request'].search([('labourer_id', '=', self.id)])
@@ -140,8 +155,22 @@ class LaborProfile(models.Model):
             rec.end_date = self.end_date
 
     @api.multi
+    def action_update_passport_wizard(self):
+        view_id = self.env.ref('master_data.labor_profile_passport_wizard')
+        return {
+            'name': _('Passport Info'),
+            'type': 'ir.actions.act_window',
+            'res_model': 'labor.profile',
+            'view_type': 'form',
+            'view_mode': 'form',
+            'view_id': view_id.id,
+            'views': [(view_id.id, 'form')],
+            'target': 'new',
+            'res_id': self.id,
+        }
+
+    @api.multi
     def action_update_passport(self):
-        self.ensure_one()
         passport_request = self.env['passport.request'].search([('labor_id','=',self.id)])
         for rec in passport_request:
             rec.passport_no = self.passport_no

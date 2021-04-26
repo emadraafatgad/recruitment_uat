@@ -38,12 +38,12 @@
                     <button name="action_lock" states="editing"
                             string="lock" type="object"
                             class="oe_highlight" groups="master_data.group_registeration_manager"/>
-                    <button name="action_update_national_id" attrs="{'invisible':[('update_id', '=',False)]}"
+                    <button name="action_update_id_wizard" attrs="{'invisible':[('update_id', '=',False)]}"
                             string="Update National ID" type="object"
-                            class="oe_highlight" groups="master_data.group_registeration_manager" confirm="Are you sure you want to update national id?"/>
-                    <button name="action_update_passport" attrs="{'invisible':[('update_pass', '=',False)]}"
+                            class="oe_highlight" groups="master_data.group_registeration_manager"/>
+                    <button name="action_update_passport_wizard" attrs="{'invisible':[('update_pass', '=',False)]}"
                             string="Update Passport" type="object"
-                            class="oe_highlight" groups="master_data.group_registeration_manager" confirm="Are you sure you want to update passport info?"/>
+                            class="oe_highlight" groups="master_data.group_registeration_manager"/>
                     <field name="state" widget="statusbar"
                            statusbar_visible="new,confirmed,travelled"/>
                 </header>
@@ -151,13 +151,13 @@
                                     <field name="passport_available" invisible="1"/>
                                     <field name="hide_request_passport" invisible="1"/>
                                     <field name="passport_no"
-                                           attrs="{'required':[('register_with','=','passport')],'readonly':['|',('state', 'in',('confirmed','travelled','rejected'))]}"/>
+                                           attrs="{'required':[('register_with','=','passport')],'invisible':[('register_with','!=','passport')],'readonly':['|',('state', 'in',('confirmed','travelled','rejected')),('register_with','!=','passport')]}"/>
                                     <field name="pass_start_date"
-                                           attrs="{'required':[('register_with','=','passport')],'readonly':['|',('state', 'in',('confirmed','travelled','rejected'))]}"/>
+                                           attrs="{'required':[('register_with','=','passport')],'invisible':[('register_with','!=','passport')],'readonly':['|',('state', 'in',('confirmed','travelled','rejected')),('register_with','!=','passport')]}"/>
                                     <field name="pass_end_date"
-                                           attrs="{'required':[('register_with','=','passport')],'readonly':['|',('state', 'in',('confirmed','travelled','rejected'))]}"/>
+                                           attrs="{'required':[('register_with','=','passport')],'invisible':[('register_with','!=','passport')],'readonly':['|',('state', 'in',('confirmed','travelled','rejected')),('register_with','!=','passport')]}"/>
                                     <field name="pass_from"
-                                           attrs="{'required':[('register_with','=','passport')],'readonly':['|',('state', 'in',('confirmed','travelled','rejected'))]}"/>
+                                           attrs="{'required':[('register_with','=','passport')],'invisible':[('register_with','!=','passport')],'readonly':['|',('state', 'in',('confirmed','travelled','rejected')),('register_with','!=','passport')]}"/>
                                     <button name="request_interpol" invisible="1"
                                             string="Request Interpol" type="object"
                                             class="btn btn-warning"
@@ -478,17 +478,50 @@
 
         </field>
     </record>
-    <!--<record id="send_cv_action_server" model="ir.actions.server">
-        <field name="name">Send CV</field>
-        <field name="type">ir.actions.server</field>
-        <field name="model_id" ref="mail.model_mail_compose_message"/>
-        <field name="binding_model_id" ref="model_labor_profile"/>
-        <field name="state">code</field>
-        <field name="code">
-
-            action = env['labor.profile'].default_cv_values()
+    <record id="labor_profile_national_id_wizard" model="ir.ui.view">
+        <field name="name">labor.profile.wizard</field>
+        <field name="model">labor.profile</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <group>
+                       <field name="national_id"/>
+                       <field name="end_date"/>
+                    </group>
+                </group>
+             <footer>
+                    <button string="Update" name="action_update_national_id" type="object" default_focus="1" class="btn-primary" confirm="Are you sure you want to update national id info?"/>
+                    <button special="cancel" string="Cancel" class="btn btn-default"/>
+                </footer>
+            </form>
         </field>
-    </record>-->
+    </record>
+    <record id="labor_profile_passport_wizard" model="ir.ui.view">
+        <field name="name">labor.profile.wizard</field>
+        <field name="model">labor.profile</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <group>
+                       <field name="passport_no"/>
+                       <field name="pass_start_date"/>
+                       <field name="pass_end_date"/>
+                    </group>
+                </group>
+             <footer>
+                    <button string="Update" name="action_update_passport" type="object" default_focus="1" class="btn-primary" confirm="Are you sure you want to update passport info?"/>
+                    <button special="cancel" string="Cancel" class="btn btn-default"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="update_password_action_server" model="ir.actions.server">
+        <field name="name">Update Passport</field>
+        <field name="type">ir.actions.server</field>
+        <field name="model_id" ref="model_labor_profile"/>
+        <field name="state">object_write</field>
+
+    </record>
     <record id="account_payment_inherit_agent" model="ir.ui.view">
         <field name="model">account.payment</field>
         <field name="inherit_id" ref="account.view_account_payment_form"/>
