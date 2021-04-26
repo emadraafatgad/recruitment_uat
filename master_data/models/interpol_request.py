@@ -20,7 +20,7 @@ class InterpolRequest(models.Model):
     broker = fields.Many2one('res.partner')
     national_id = fields.Char('National ID',size=14,required=True,readonly=True)
     state = fields.Selection([('new','New'),('assigned','Assigned'),('rejected','rejected'),
-                             ('done','Done')],default='new',track_visibility="onchange")
+                             ('done','Done'),('blocked','Blocked')],default='new',track_visibility="onchange")
     gcc_updated = fields.Boolean()
     passport_no = fields.Char(readonly=True)
     interpol_no = fields.Char('Interpol No',readonly=True)
