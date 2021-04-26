@@ -23,7 +23,7 @@
                 <header>
                     <button name="action_confirm" states="new"
                             string="Confirm" type="object"
-                            class="oe_highlight"/>
+                            class="oe_highlight" confirm="Are you sure you want to confirm this list?"/>
                     <button name="print_report_excel"
                                 string="Print Excel" type="object"
                                 class="oe_highlight"/>

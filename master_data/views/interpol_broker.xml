@@ -64,10 +64,10 @@
                                     <field name="broker" invisible="1"/>
                                     <button name="interpol_request_done" states="assigned"
                                             string="Confirm" type="object"
-                                            class="oe_highlight"/>
+                                            class="oe_highlight" confirm="Are you sure you want to confirm that?"/>
                                     <button name="action_reject" states="assigned"
                                             string="Reject" type="object"
-                                            class="oe_highlight"/>
+                                            class="oe_highlight" confirm="Are you sure you want to reject that?"/>
                                     <field name="state" readonly="1"/>
                                 </tree>
                             </field>

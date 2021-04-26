@@ -16,7 +16,7 @@ class TravelCompany(models.Model):
     labor_id = fields.Many2one('labor.profile')
     labor_name = fields.Char()
     invoice = fields.Char()
-    passport_no = fields.Char()
+    passport_no = fields.Char(related='labor_id.passport_no',store=True)
     destination_city = fields.Many2one('res.country.state')
     reservation_no = fields.Char()
     agency_code = fields.Char()

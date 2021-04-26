@@ -18,11 +18,11 @@ class InterpolRequest(models.Model):
     request_date = fields.Datetime(readonly=True, index=True, default=fields.Datetime.now)
     end_date = fields.Datetime('Delivery Date',readonly=True)
     broker = fields.Many2one('res.partner')
-    national_id = fields.Char('National ID',size=14,required=True,readonly=True)
+    national_id = fields.Char('National ID',size=14,required=True,readonly=True,related='labor_id.national_id')
     state = fields.Selection([('new','New'),('assigned','Assigned'),('rejected','rejected'),
                              ('done','Done'),('blocked','Blocked')],default='new',track_visibility="onchange")
     gcc_updated = fields.Boolean()
-    passport_no = fields.Char(readonly=True)
+    passport_no = fields.Char(related='labor_id.passport_no',store=True)
     interpol_no = fields.Char('Interpol No',readonly=True)
     attachment = fields.Binary(readonly=True)
     filename = fields.Char()

@@ -11,8 +11,8 @@ class PCRExam(models.Model):
     booking_date = fields.Date()
     labour_id = fields.Many2one('labor.profile')
     exam_date = fields.Date(string="Test Date")
-    passport_no = fields.Char(related='labour_id.passport_no')
-    national_id = fields.Char(related='labour_id.national_id')
+    passport_no = fields.Char(related='labour_id.passport_no',store=True)
+    national_id = fields.Char(related='labour_id.national_id',store=True)
     state = fields.Selection(
         [('new', 'new'), ('in_progress', 'InProgress'), ('positive', 'Positive'), ('negative', 'Negative'),('blocked','Blocked')],
         default='new', track_visibility='onchange')

@@ -25,19 +25,25 @@
 
                     <button name="action_confirm" attrs="{'invisible':[('appear_confirm', '=',False)]}"
                             string="Confirm" type="object"
-                            class="oe_highlight"/>
+                            class="oe_highlight" confirm="Are you sure you want to confirm that?"/>
                     <button name="action_block" states="confirmed"
                             string="Block" type="object"
                             class="oe_highlight" groups="master_data.group_registeration_manager" confirm="Are you sure you want to block this laborer?"/>
                     <button name="action_reject" attrs="{'invisible':[('appear_reject', '=',False)]}"
                             string="Reject" type="object"
-                            class="oe_highlight"/>
+                            class="oe_highlight" confirm="Are you sure you want to reject that?"/>
                     <button name="action_unlock" states="confirmed"
                             string="unlock" type="object"
                             class="oe_highlight" groups="master_data.group_registeration_manager"/>
                     <button name="action_lock" states="editing"
                             string="lock" type="object"
                             class="oe_highlight" groups="master_data.group_registeration_manager"/>
+                    <button name="action_update_national_id" attrs="{'invisible':[('update_id', '=',False)]}"
+                            string="Update National ID" type="object"
+                            class="oe_highlight" groups="master_data.group_registeration_manager" confirm="Are you sure you want to update national id?"/>
+                    <button name="action_update_passport" attrs="{'invisible':[('update_pass', '=',False)]}"
+                            string="Update Passport" type="object"
+                            class="oe_highlight" groups="master_data.group_registeration_manager" confirm="Are you sure you want to update passport info?"/>
                     <field name="state" widget="statusbar"
                            statusbar_visible="new,confirmed,travelled"/>
                 </header>
@@ -117,13 +123,15 @@
                                 <group string="Document">
 
                                     <field name="register_with"
-                                           attrs="{'readonly':[('state', 'in',('confirmed','travelled','rejected'))],'required':[('pre_medical_check', '=','Fit')]}"/>
+                                           attrs="{'readonly':[('state', '!=','new')],'required':[('pre_medical_check', '=','Fit')]}"/>
                                     <button name="request_nira" invisible="1"
                                             attrs="{'invisible':['|','|',('pre_medical_check','=','Unfit'),('register_with','!=','nira'),('hide_request_nira','=',True)]}"
                                             string="Nira Request" type="object" class="btn btn-warning"/>
                                     <field name="id_available" invisible="1"/>
                                     <field name="appear_confirm" invisible="1"/>
                                     <field name="appear_reject" invisible="1"/>
+                                    <field name="update_id" invisible="1"/>
+                                    <field name="update_pass" invisible="1"/>
                                     <field name="hide_request_nira" invisible="1"/>
                                     <field name="national_id"
                                            attrs="{'readonly':['|',('register_with','in','nira'),('state', 'in',('confirmed','travelled','rejected'))],'required':[('register_with','in',('national_id','passport'))],'invisible':[('register_with','not in',('national_id','passport'))]}"/>
@@ -143,13 +151,13 @@
                                     <field name="passport_available" invisible="1"/>
                                     <field name="hide_request_passport" invisible="1"/>
                                     <field name="passport_no"
-                                           attrs="{'required':[('register_with','=','passport')],'invisible':[('register_with','!=','passport')],'readonly':['|',('state', 'in',('confirmed','travelled','rejected')),('register_with','!=','passport')]}"/>
+                                           attrs="{'required':[('register_with','=','passport')],'readonly':['|',('state', 'in',('confirmed','travelled','rejected'))]}"/>
                                     <field name="pass_start_date"
-                                           attrs="{'required':[('register_with','=','passport')],'invisible':[('register_with','!=','passport')],'readonly':['|',('state', 'in',('confirmed','travelled','rejected')),('register_with','!=','passport')]}"/>
+                                           attrs="{'required':[('register_with','=','passport')],'readonly':['|',('state', 'in',('confirmed','travelled','rejected'))]}"/>
                                     <field name="pass_end_date"
-                                           attrs="{'required':[('register_with','=','passport')],'invisible':[('register_with','!=','passport')],'readonly':['|',('state', 'in',('confirmed','travelled','rejected')),('register_with','!=','passport')]}"/>
+                                           attrs="{'required':[('register_with','=','passport')],'readonly':['|',('state', 'in',('confirmed','travelled','rejected'))]}"/>
                                     <field name="pass_from"
-                                           attrs="{'required':[('register_with','=','passport')],'invisible':[('register_with','!=','passport')],'readonly':['|',('state', 'in',('confirmed','travelled','rejected')),('register_with','!=','passport')]}"/>
+                                           attrs="{'required':[('register_with','=','passport')],'readonly':['|',('state', 'in',('confirmed','travelled','rejected'))]}"/>
                                     <button name="request_interpol" invisible="1"
                                             string="Request Interpol" type="object"
                                             class="btn btn-warning"

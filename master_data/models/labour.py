@@ -113,7 +113,40 @@ class LaborProfile(models.Model):
     agency_code = fields.Many2one('specify.agent',track_visibility="onchange")
     specify_agency = fields.Selection(
         [('draft', 'CV Available'), ('available', 'Specified'), ('sent', 'CV Sent'), ('selected', 'Selected')],
-        track_visibility="onchange", string='Specify Agency State',)
+        track_visibility="onchange", string='Specify Agency State')
+    update_id = fields.Boolean(compute='_compute_update_id')
+    update_pass = fields.Boolean(compute='_compute_update_pass')
+
+    @api.depends('state','register_with')
+    def _compute_update_id(self):
+        if self.state == 'editing' and self.register_with == 'nira':
+            self.update_id = True
+        else:
+            self.update_id = False
+
+    @api.depends('state', 'register_with')
+    def _compute_update_pass(self):
+        if self.state == 'editing' and self.register_with != 'passport':
+            self.update_pass = True
+        else:
+            self.update_pass = False
+
+    @api.multi
+    def action_update_national_id(self):
+        self.ensure_one()
+        passport_request = self.env['nira.letter.request'].search([('labourer_id', '=', self.id)])
+        for rec in passport_request:
+            rec.national_id = self.national_id
+            rec.end_date = self.end_date
+
+    @api.multi
+    def action_update_passport(self):
+        self.ensure_one()
+        passport_request = self.env['passport.request'].search([('labor_id','=',self.id)])
+        for rec in passport_request:
+            rec.passport_no = self.passport_no
+            rec.pass_start_date = self.pass_start_date
+            rec.pass_end_date = self.pass_end_date
 
     @api.multi
     def default_cv_values(self):
@@ -727,10 +760,10 @@ class LaborProfile(models.Model):
                     rec.age = age_calc
 
     passport_available = fields.Boolean()
-    passport_no = fields.Char()
-    pass_start_date = fields.Date("Issued Date")
-    pass_end_date = fields.Date("Expire Date")
-    pass_from = fields.Char('Place of Issue')
+    passport_no = fields.Char(track_visibility="onchange")
+    pass_start_date = fields.Date("Issued Date",track_visibility="onchange")
+    pass_end_date = fields.Date("Expire Date",track_visibility="onchange")
+    pass_from = fields.Char('Place of Issue',track_visibility="onchange")
 
     id_available = fields.Boolean("ID")
 

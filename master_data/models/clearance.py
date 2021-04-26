@@ -20,7 +20,7 @@ class LaborClearance(models.Model):
     job_title = fields.Selection([('house_maid', 'House Maid'), ('pro_maid', 'Pro Maid'),('pro_worker','Pro Worker')],required=True)
     gender = fields.Selection([('Male', 'Male'), ('Female', 'Female')],required=True)
     contact = fields.Char(required=True)
-    passport_no = fields.Char(required=True)
+    passport_no = fields.Char(related='labor_id.passport_no',store=True)
     agency_code = fields.Char(required=True)
     destination_city = fields.Many2one('res.country.state',required=True)
     destination_country = fields.Many2one('res.country',related='labor_id.country_id',store=True)

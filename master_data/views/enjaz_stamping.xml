@@ -106,7 +106,7 @@
                 <field name="state" readonly="1"/>
                 <button name="action_done" states="new"
                                 string="Done" type="object"
-                                class="oe_highlight"/>
+                                class="oe_highlight" confirm="Are you sure you want to confirm that?"/>
 
              </tree>
         </field>

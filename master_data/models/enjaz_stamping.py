@@ -21,7 +21,7 @@ class LaborEnjaz(models.Model):
     agency_code = fields.Char()
     type = fields.Selection([('enjaz', 'Enjaz'), ('stamping', 'Stamping')],track_visibility="onchange", required=True)
     enjaz_no = fields.Char(track_visibility="onchange")
-    passport_no = fields.Char(track_visibility="onchange")
+    passport_no = fields.Char(track_visibility="onchange",related='labor_id.passport_no',store=True)
     employer = fields.Char(track_visibility="onchange")
     city = fields.Many2one('res.country.state',track_visibility="onchange")
     bill = fields.Many2one('account.invoice',track_visibility="onchange")

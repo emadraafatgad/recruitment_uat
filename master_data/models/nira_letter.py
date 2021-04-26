@@ -11,7 +11,7 @@ class NiraLetter(models.Model):
     _inherit = ['portal.mixin', 'mail.thread', 'mail.activity.mixin']
     _sql_constraints = [('laborer_unique', 'unique(labourer_id)', 'Created with this Laborer before!')]
     sequence = fields.Char('Sequence',default="New",size=256,readonly=True)
-    labourer_id = fields.Many2one('labor.profile',readonly=True)
+    labourer_id = fields.Many2one('labor.profile',readonly=True,string='Laborer')
     name = fields.Char(string="Name",readonly=True)
     code = fields.Char(string="Code")
     reject_reason = fields.Char()
@@ -22,10 +22,9 @@ class NiraLetter(models.Model):
     start_date = fields.Date('Issued Date')
     end_date = fields.Date("Expired Date")
     state = fields.Selection([('new', 'New'), ('releasing', 'Releasing'),('done', 'Done'),('rejected', 'Rejected'),('blocked','Blocked')], default='new',track_visibility="onchange")
-    national_id = fields.Char('National ID',size=14)
+    national_id = fields.Char('National ID',size=14,track_visibility="onchange")
     broker_list_id = fields.Many2one('nira.broker')
     broker = fields.Many2one('res.partner')
-
     @api.onchange('national_id')
     def onchange_national_id(self):
         if self.national_id:

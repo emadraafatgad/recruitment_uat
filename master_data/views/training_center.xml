@@ -163,17 +163,17 @@
                 <header>
                     <button name="action_start" states="new"
                                 string="Start" type="object"
-                                class="oe_highlight"/>
+                                class="oe_highlight" confirm="Are you sure you want to start?"/>
                     <button name="set_to_draft" attrs="{'invisible':[('show_set_draft', '=',False)]}"
                                 string="Set To Draft" type="object"
-                                class="oe_highlight"/>
+                                class="oe_highlight" confirm="Are you sure you want to set this list to draft"/>
                     <button name="action_finish" states="in_progress"
                                 string="Finish" type="object"
-                                class="oe_highlight"/>
+                                class="oe_highlight" confirm="Are you sure you want to finish this list?"/>
 
                     <button name="create_bill"
                                 string="Create Bill" type="object"
-                                class="oe_highlight"  attrs="{'invisible':['|',('show', '=',True),('state', '=','new')]}"/>
+                                class="oe_highlight"  attrs="{'invisible':['|',('show', '=',True),('state', '=','new')]}" confirm="Are you sure you want to create bill to this list?"/>
 
                     <field name="state" widget="statusbar"
                                statusbar_visible="new,in_progress,finished"/>

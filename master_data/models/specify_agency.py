@@ -14,7 +14,7 @@ class SpecifyAgent(models.Model):
     labor_id = fields.Many2one('labor.profile',required=True)
     user_id = fields.Many2one('res.users')
     labor_name = fields.Char()
-    passport_no = fields.Char(required=True)
+    passport_no = fields.Char(required=True,related='labor_id.passport_no')
     religion = fields.Selection([('muslim', 'Muslim'), ('christian', 'Christian'), ('jew', 'Jew'), ('other', 'Other')],'Religion')
     age = fields.Integer()
     state = fields.Selection([('draft', 'CV Available'),('available', 'Specified'), ('sent', 'CV Sent'),('selected', 'Selected'),('edit_after_selected', 'Edit After Selected'),('blocked','Blocked')], default='draft', track_visibility="onchange")
