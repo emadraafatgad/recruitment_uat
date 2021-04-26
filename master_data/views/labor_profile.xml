@@ -28,7 +28,7 @@
                             class="oe_highlight"/>
                     <button name="action_block" states="confirmed"
                             string="Block" type="object"
-                            class="oe_highlight" groups="master_data.group_registeration_manager"/>
+                            class="oe_highlight" groups="master_data.group_registeration_manager" confirm="Are you sure you want to block this laborer?"/>/>
                     <button name="action_reject" attrs="{'invisible':[('appear_reject', '=',False)]}"
                             string="Reject" type="object"
                             class="oe_highlight"/>
