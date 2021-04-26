@@ -119,14 +119,14 @@ class LaborProfile(models.Model):
 
     @api.depends('state','register_with')
     def _compute_update_id(self):
-        if self.state == 'editing' and self.register_with == 'nira':
+        if self.state == 'confirmed' and self.register_with == 'nira':
             self.update_id = True
         else:
             self.update_id = False
 
     @api.depends('state', 'register_with')
     def _compute_update_pass(self):
-        if self.state == 'editing' and self.register_with != 'passport':
+        if self.state == 'confirmed' and self.register_with != 'passport':
             self.update_pass = True
         else:
             self.update_pass = False
