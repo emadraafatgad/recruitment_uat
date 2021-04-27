@@ -134,17 +134,22 @@ class LaborProfile(models.Model):
     @api.multi
     def action_update_id_wizard(self):
         view_id = self.env.ref('master_data.labor_profile_national_id_wizard')
-        return {
-            'name': _('National ID Info'),
-            'type': 'ir.actions.act_window',
-            'res_model': 'labor.profile',
-            'view_type': 'form',
-            'view_mode': 'form',
-            'view_id': view_id.id,
-            'views': [(view_id.id, 'form')],
-            'target': 'new',
-            'res_id': self.id,
-        }
+        context = dict(self._context or {})
+        active_ids = context.get('active_ids', []) or []
+        for record in self.env['labor.profile'].browse(active_ids):
+            if len(active_ids) > 1:
+                raise ValidationError(_('You cannot update national id more than one record'))
+            return {
+                'name': _('Passport Info'),
+                'type': 'ir.actions.act_window',
+                'res_model': 'labor.profile',
+                'view_type': 'form',
+                'view_mode': 'form',
+                'view_id': view_id.id,
+                'views': [(view_id.id, 'form')],
+                'target': 'new',
+                'res_id': record.id,
+            }
 
     @api.multi
     def action_update_national_id(self):
@@ -157,17 +162,22 @@ class LaborProfile(models.Model):
     @api.multi
     def action_update_passport_wizard(self):
         view_id = self.env.ref('master_data.labor_profile_passport_wizard')
-        return {
-            'name': _('Passport Info'),
-            'type': 'ir.actions.act_window',
-            'res_model': 'labor.profile',
-            'view_type': 'form',
-            'view_mode': 'form',
-            'view_id': view_id.id,
-            'views': [(view_id.id, 'form')],
-            'target': 'new',
-            'res_id': self.id,
-        }
+        context = dict(self._context or {})
+        active_ids = context.get('active_ids', []) or []
+        for record in self.env['labor.profile'].browse(active_ids):
+            if len(active_ids) > 1:
+                raise ValidationError(_('You cannot update passport more than one record'))
+            return {
+                'name': _('Passport Info'),
+                'type': 'ir.actions.act_window',
+                'res_model': 'labor.profile',
+                'view_type': 'form',
+                'view_mode': 'form',
+                'view_id': view_id.id,
+                'views': [(view_id.id, 'form')],
+                'target': 'new',
+                'res_id': record.id,
+            }
 
     @api.multi
     def action_update_passport(self):
