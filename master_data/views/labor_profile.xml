@@ -515,16 +515,6 @@
             </form>
         </field>
     </record>
-    <record id="update_password_action_server" model="ir.actions.server">
-        <field name="name">Update Passport</field>
-        <field name="type">ir.actions.server</field>
-        <field name="model_id" ref="model_labor_profile"/>
-        <field name="binding_model_id" ref="model_labor_profile"/>
-        <field name="state">code</field>
-        <field name="code">
-            action = env['labor.profile'].action_update_passport_wizard()
-        </field>
-    </record>
     <record id="update_national_id_action_server" model="ir.actions.server">
         <field name="name">Update National ID</field>
         <field name="type">ir.actions.server</field>
@@ -535,6 +525,17 @@
             action = env['labor.profile'].action_update_id_wizard()
         </field>
     </record>
+    <record id="update_password_action_server" model="ir.actions.server">
+        <field name="name">Update Passport</field>
+        <field name="type">ir.actions.server</field>
+        <field name="model_id" ref="model_labor_profile"/>
+        <field name="binding_model_id" ref="model_labor_profile"/>
+        <field name="state">code</field>
+        <field name="code">
+            action = env['labor.profile'].action_update_passport_wizard()
+        </field>
+    </record>
+
     <record id="account_payment_inherit_agent" model="ir.ui.view">
         <field name="model">account.payment</field>
         <field name="inherit_id" ref="account.view_account_payment_form"/>
