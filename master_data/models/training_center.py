@@ -159,12 +159,12 @@ class TrainingList(models.Model):
             self.show_set_draft = True
         else:
             self.show_set_draft = False
-    # @api.multi
-    # def unlink(self):
-    #     for rec in self:
-    #         if rec.state != 'new':
-    #             raise ValidationError(_('You cannot delete %s as it is not in new state') % rec.name)
-    #     return super(TrainingList, self).unlink()
+    @api.multi
+    def unlink(self):
+        for rec in self:
+            if rec.state != 'new':
+                raise ValidationError(_('You cannot delete %s as it is not in new state') % rec.name)
+        return super(TrainingList, self).unlink()
 
     @api.constrains('training_center','training_requests')
     def constrain_training_requests(self):

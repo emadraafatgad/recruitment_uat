@@ -138,6 +138,10 @@ class PartnerPayments(models.Model):
                             labor = self.env['labor.process'].search(
                                 [('labor', 'in', lab.ids), ('type', '=', 'training')])
                             labor.cost += rec.price_unit
+                        #if self.partner_id.vendor_type == 'training' and self.accommodation:
+                          #  labor = self.env['labor.process'].search(
+                             #   [('labor', 'in', lab.ids), ('type', '=', 'accommodation')])
+                            #labor.cost += rec.price_unit
 
 
         return super(PartnerPayments, self).action_validate_invoice_payment()

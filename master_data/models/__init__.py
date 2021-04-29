@@ -27,3 +27,4 @@ from . import travel_list
 from . import labour_accommodation
 from . import pcr_exam
 from . import pcr_exam_list
+from . import accommodation_list

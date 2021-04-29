@@ -65,4 +65,6 @@ access_account_asset_depreciation_line_registration,account.asset.depreciation.l
 access_account_payment_method_registration,account.payment.method,account.model_account_payment_method,master_data.group_registeration_user,1,1,1,1
 access_account_payment_registration,account.payment,account.model_account_payment,master_data.group_registeration_user,1,1,1,1
 access_interpol_medical_registration,interpol medical registration,model_interpol_gcc_update,master_data.group_registeration_user,1,1,1,1
+access_accommodation_list_general,accommodation_list_general,model_accommodation_list,,1,1,1,0
+access_accommodation_list,accommodation_list,model_accommodation_list,master_data.group_registeration_user,1,1,1,1
 
