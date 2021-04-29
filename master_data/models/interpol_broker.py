@@ -61,12 +61,12 @@ class InterpolBroker(models.Model):
             rec.broker_list_id = self.id
             rec.broker = self.broker
 
-    # @api.multi
-    # def unlink(self):
-    #     for rec in self:
-    #         if rec.state != 'new':
-    #             raise ValidationError(_('You cannot delete %s as it is not in new state') % rec.name)
-    #     return super(InterpolBroker, self).unlink()
+    @api.multi
+    def unlink(self):
+        for rec in self:
+            if rec.state != 'new':
+                raise ValidationError(_('You cannot delete %s as it is not in new state') % rec.name)
+        return super(InterpolBroker, self).unlink()
     @api.model
     def create(self, vals):
         vals['name'] = self.env['ir.sequence'].next_by_code('interpol.broker')
