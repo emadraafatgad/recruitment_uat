@@ -487,7 +487,7 @@ class LaborProfile(models.Model):
             }))
             self.labor_process_ids = line
             self.show = True
-        accommodation = self.env['labour.accommodation'].create({'labour_id':self.id})
+
         self.state = 'confirmed'
 
     @api.multi
