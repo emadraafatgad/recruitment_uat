@@ -485,9 +485,12 @@ class LaborProfile(models.Model):
                 'payment': 'first'
 
             }))
+            line.append((0, 0, {
+                'type': 'agent_commission',
+            }))
             self.labor_process_ids = line
             self.show = True
-
+        accommodation = self.env['labour.accommodation'].create({'labour_id':self.id})
         self.state = 'confirmed'
 
     @api.multi
@@ -1092,7 +1095,7 @@ class LaborProcessline(models.Model):
     _inherit = ['portal.mixin', 'mail.thread', 'mail.activity.mixin']
 
     labor = fields.Many2one('labor.profile')
-    type = fields.Selection([('agent_payment', 'Agent Payment'), ('nira', 'Nira'), ('passport', 'Passport'),
+    type = fields.Selection([('agent_commission', 'Agent Commision'),('agent_payment', 'Agent Payment'), ('nira', 'Nira'), ('passport', 'Passport'),
                              ('interpol', 'Interpol'), ('big_medical', 'Big Medical'), ('agency', 'Agency'),
                              ('enjaz', 'Enjaz'), ('stamping', 'Stamping'), ('clearance', 'Clearance'),
                              ('travel_company', 'Travel'),
@@ -1117,6 +1120,9 @@ class LaborProcessline(models.Model):
                 for rec in bill:
                     record.total_cost += rec.amount
                 # record.total_cost = bill.amount
+            if record.type == 'agent_commission':
+                record.total_cost = record.labor.agent_invoice.amount_total
+
             if record.type == 'training':
                 bill = self.env['account.invoice.line'].search(
                     [('partner_id.vendor_type', '=', 'training'), ('invoice_type', '=', 'in_invoice')])
@@ -1190,6 +1196,8 @@ class LaborProcessline(models.Model):
             last_payment = self.env['account.payment'].search(
                 [('labor_id', '=', self.labor.id), ('payment', '=', 'last')])
             self.state = dict(last_payment._fields['state'].selection).get(last_payment.state)
+        if self.type == 'agent_commission':
+            self.state = dict(self.labor.agent_invoice._fields['state'].selection).get(self.labor.agent_invoice.state)
         if self.type == 'training':
             training = self.env['slave.training'].search([('slave_id', '=', self.labor.id)])
             self.state = dict(training._fields['state'].selection).get(training.state)
