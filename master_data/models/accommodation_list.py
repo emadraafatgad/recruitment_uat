@@ -16,6 +16,7 @@ class AccommodationList(models.Model):
     accommodation_list = fields.One2many('labour.accommodation','accommodation_list_id')
     total_lines = fields.Integer(compute='compute_len_lines')
     list_now_len = fields.Integer()
+    reasons = fields.Char()
     state = fields.Selection([('new','New'),('confirm','Confirmed'),('invoiced','Invoiced')], default='new', track_visibility="onchange")
 
     @api.depends('start_date','end_date','extra_days')
@@ -49,7 +50,10 @@ class AccommodationList(models.Model):
             raise ValidationError(_('You must enter start date'))
         if not self.end_date:
             raise ValidationError(_('You must enter end date'))
+        if not self.reasons:
+            raise ValidationError(_('You must enter reasons'))
         for record in self.accommodation_list:
+            record.reasons = self.reasons
             record.start_date = self.start_date
             record.end_date = self.end_date
             record.training_center = self.training_center

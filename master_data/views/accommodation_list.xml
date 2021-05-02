@@ -41,6 +41,7 @@
                             <field name="training_center" attrs="{'readonly':[('state','!=','new')]}"/>
                         </group>
                         <group col="2" >
+                            <field name="reasons" attrs="{'readonly':[('state','!=','new')]}"/>
                             <field name="start_date" attrs="{'readonly':[('state','!=','new')]}"/>
                             <field name="end_date" attrs="{'readonly':[('state','!=','new')]}"/>
                             <field name="extra_days" attrs="{'readonly':[('state','!=','new')]}"/>
@@ -104,6 +105,8 @@
                 <field name="start_date"/>
                 <field name="end_date"/>
                 <field name="accommodation_period"/>
+                <field name="reasons"/>
+                <field name="state"/>
             </tree>
         </field>
     </record>

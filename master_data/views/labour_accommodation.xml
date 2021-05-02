@@ -37,6 +37,7 @@
                             <field name="end_date"/>
                             <field name="extra_days"/>
                             <field name="accommodation_period"/>
+                            <field name="reasons"/>
                         </group>
                         <group>
                         </group>
@@ -63,6 +64,8 @@
                 <field name="start_date"/>
                 <field name="end_date"/>
                 <field name="accommodation_period"/>
+                <field name="reasons"/>
+                <field name="state"/>
             </tree>
         </field>
     </record>

@@ -18,6 +18,7 @@ class LabourAccommodation(models.Model):
     passport_no = fields.Char(related='labour_id.passport_no')
     state = fields.Selection([('new','New'),('confirm','Confirm'),('invoiced','Invoiced'),('blocked','Blocked')],default='new',track_visibility="onchange")
     accommodation_list_id = fields.Many2one('accommodation.list')
+    reasons = fields.Char()
 
     @api.onchange('labour_id')
     def labour_not_done_accommodation(self):
