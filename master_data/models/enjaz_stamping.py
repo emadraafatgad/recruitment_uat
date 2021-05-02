@@ -143,19 +143,22 @@ class LaborEnjaz(models.Model):
                 'account_id': accounts.get('stock_input') and accounts['stock_input'].id or \
                               accounts['income'].id,
             }))
+            invoice = self.env['account.invoice'].search([('origin', '=', self.name)])
+            if invoice:
+                raise ValidationError(_('Created before, refresh page'))
+            else:
+                cr = self.env['account.invoice'].create({
+                    'partner_id': self.agency.id,
+                    'currency_id': product_agency.currency_id.id,
+                    'state': 'draft',
+                    'type': 'out_invoice',
+                    'origin': self.name,
+                    'journal_id': sale_journal.id,
+                    'account_id': self.agency.property_account_receivable_id.id,
+                    'invoice_line_ids': invoice_line,
 
-            cr = self.env['account.invoice'].create({
-                'partner_id': self.agency.id,
-                'currency_id': product_agency.currency_id.id,
-                'state': 'draft',
-                'type': 'out_invoice',
-                'origin': self.name,
-                'journal_id': sale_journal.id,
-                'account_id': self.agency.property_account_receivable_id.id,
-                'invoice_line_ids': invoice_line,
-
-            })
-            cr.action_invoice_open()
+                })
+                cr.action_invoice_open()
 
         self.state = 'done'
 
