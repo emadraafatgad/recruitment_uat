@@ -56,6 +56,7 @@ class PassportNumber(models.Model):
 
     @api.onchange('state')
     def onchange_state(self):
+        self.ensure_one()
         labor = self.env['labor.process'].search([('labor', '=', self.labor_id.id),('type', '=', 'passport')])
         labor.state = self.state
 
