@@ -43,7 +43,7 @@ class PassportInvoice(models.Model):
     @api.onchange('passport_request')
     def onchange_len_list(self):
         self.total_lines = len(self.passport_request)
-        if not self.state == 'new':
+        if self.state not in ('new','to_invoice'):
             if self.total_lines > self.list_now_len:
                 raise ValidationError(_('You cannot add lines in this state'))
             if self.total_lines < self.list_now_len:

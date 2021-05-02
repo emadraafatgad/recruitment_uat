@@ -21,6 +21,9 @@
         <field name="arch" type="xml">
             <form string="Passport request">
                 <header>
+                    <button name="set_to_draft" states="releasing"
+                                string="Set Draft" type="object"
+                                class="oe_highlight"/>
                      <button name="action_reject" states="releasing"
                                 string="Reject" type="object"
                                 class="oe_highlight" groups="master_data.group_registeration_user"/>

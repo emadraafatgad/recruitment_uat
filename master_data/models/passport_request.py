@@ -45,6 +45,10 @@ class PassportNumber(models.Model):
         self.state = 'invoiced'
 
     @api.multi
+    def set_to_draft(self):
+        self.state = 'new'
+
+    @api.multi
     def set_to_release(self):
         self.broker = self.broker_list_id.broker
         self.state = 'releasing'
