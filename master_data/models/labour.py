@@ -405,6 +405,9 @@ class LaborProfile(models.Model):
     def action_confirm(self):
         self.ensure_one()
         # if self.pre_medical_check == 'unfit'
+        labor_confirmed = self.env['labor.profile'].search([('state', '=', 'confirmed'),('id', '=', self.id)])
+        if labor_confirmed:
+            raise ValidationError(_('Confirmed before'))
         if self.occupation == 'house_maid':
             self.identification_code = self.env['ir.sequence'].next_by_code('house.maid')
             training_req = self.env['slave.training']
@@ -506,7 +509,6 @@ class LaborProfile(models.Model):
             }))
             self.labor_process_ids = line
             self.show = True
-        accommodation = self.env['labour.accommodation'].create({'labour_id':self.id})
         self.state = 'confirmed'
 
     @api.multi
