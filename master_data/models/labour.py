@@ -831,13 +831,17 @@ class LaborProfile(models.Model):
     hide_request_passport = fields.Boolean('Hide Passport Request')
 
     def passport_request(self):
-        request_obj = self.env['passport.request']
-        request_obj.create({
-            'labor_id': self.id,
-            'labor_id_no_edit': self.id,
-            'national_id': self.national_id,
-            'religion': self.religion,
-        })
+        passport_request = self.env['passport.request'].search([('labor_id', '=', self.id)])
+        if passport_request:
+            raise ValidationError(_('there is a passport request for this laborer!'))
+        else:
+            request_obj = self.env['passport.request']
+            request_obj.create({
+                'labor_id': self.id,
+                'labor_id_no_edit': self.id,
+                'national_id': self.national_id,
+                'religion': self.religion,
+            })
 
     hide_request_interpol = fields.Boolean('Hide Interpol Request')
 
