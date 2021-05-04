@@ -154,8 +154,8 @@ class LaborProfile(models.Model):
     @api.multi
     def action_update_national_id(self):
         self.ensure_one()
-        passport_request = self.env['nira.letter.request'].search([('labourer_id', '=', self.id)])
-        for rec in passport_request:
+        request = self.env['nira.letter.request'].search([('labourer_id', '=', self.id)])
+        for rec in request:
             rec.national_id = self.national_id
             rec.end_date = self.end_date
 
