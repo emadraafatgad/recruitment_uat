@@ -154,8 +154,8 @@ class LaborProfile(models.Model):
     @api.multi
     def action_update_national_id(self):
         self.ensure_one()
-        request = self.env['nira.letter.request'].search([('labourer_id', '=', self.id)])
-        for rec in request:
+        passport_request = self.env['nira.letter.request'].search([('labourer_id', '=', self.id)])
+        for rec in passport_request:
             rec.national_id = self.national_id
             rec.end_date = self.end_date
 
@@ -186,6 +186,22 @@ class LaborProfile(models.Model):
             rec.passport_no = self.passport_no
             rec.pass_start_date = self.pass_start_date
             rec.pass_end_date = self.pass_end_date
+
+    @api.multi
+    def create_passport_request(self):
+        context = dict(self._context or {})
+        active_ids = context.get('active_ids', []) or []
+        request_obj = self.env['passport.request']
+        for record in self.env['labor.profile'].browse(active_ids):
+            request = self.env['passport.request'].search([('labor_id', '=', record.id)])
+            if request:
+                raise ValidationError(_('there is a passport request for laborer %s')% record.name)
+            request_obj.create({
+                'labor_id': record.id,
+                'labor_id_no_edit': record.id,
+                'national_id': record.national_id,
+                'religion': record.religion,
+            })
 
     @api.multi
     def default_cv_values(self):
@@ -831,17 +847,13 @@ class LaborProfile(models.Model):
     hide_request_passport = fields.Boolean('Hide Passport Request')
 
     def passport_request(self):
-        passport_request = self.env['passport.request'].search([('labor_id', '=', self.id)])
-        if passport_request:
-            raise ValidationError(_('there is a passport request for this laborer!'))
-        else:
-            request_obj = self.env['passport.request']
-            request_obj.create({
-                'labor_id': self.id,
-                'labor_id_no_edit': self.id,
-                'national_id': self.national_id,
-                'religion': self.religion,
-            })
+        request_obj = self.env['passport.request']
+        request_obj.create({
+            'labor_id': self.id,
+            'labor_id_no_edit': self.id,
+            'national_id': self.national_id,
+            'religion': self.religion,
+        })
 
     hide_request_interpol = fields.Boolean('Hide Interpol Request')
 
