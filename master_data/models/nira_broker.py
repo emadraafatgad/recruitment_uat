@@ -68,6 +68,10 @@ class NiraBroker(models.Model):
                 raise ValidationError(_('You cannot remove lines in this state'))
     @api.multi
     def nira_assign(self):
+        list = self.env['nira.broker'].search(
+            [('id', '=', self.id), ('state', '=', 'assigned')])
+        if list:
+            raise ValidationError(_('Assigned before'))
         if not self.broker:
             raise ValidationError(_('You must enter broker'))
         if len(self.nira_request) < 1:
@@ -86,12 +90,12 @@ class NiraBroker(models.Model):
             rec.broker = self.broker.id
 
 
-    # @api.multi
-    # def unlink(self):
-    #     for rec in self:
-    #         if rec.state != 'new':
-    #             raise ValidationError(_('You cannot delete %s as it is not in new state') % rec.name)
-    #     return super(NiraBroker, self).unlink()
+    @api.multi
+    def unlink(self):
+        for rec in self:
+            if rec.state != 'new':
+                raise ValidationError(_('You cannot delete %s as it is not in new state') % rec.name)
+        return super(NiraBroker, self).unlink()
     @api.model
     def create(self, vals):
         vals['name'] = self.env['ir.sequence'].next_by_code('nira.broker')

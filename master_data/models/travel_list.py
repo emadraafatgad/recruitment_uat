@@ -28,6 +28,9 @@ class TravelList(models.Model):
 
     @api.multi
     def action_inprogress(self):
+        list = self.env['travel.list'].search([('id', '=', self.id), ('state', '=', 'in_progress')])
+        if list:
+            raise ValidationError(_('Done before '))
         if not self.travel_company:
             raise ValidationError(_('Enter Tavel Company Partner'))
         for rec in self.travel_list:

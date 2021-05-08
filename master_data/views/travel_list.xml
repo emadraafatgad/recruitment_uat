@@ -56,7 +56,7 @@
                  <field name="departure_date"/>
                  <field name="confirmation_date"/>
                  <field name="flight_details"/>
-                 <field name="state"/>
+                 <field name="state" readonly="1"/>
                                <button name="action_done" states="in_progress"
                                 string="Done" type="object"
                                 class="oe_highlight" confirm="Are you sure you want to confirm that?"/>

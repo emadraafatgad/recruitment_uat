@@ -29,6 +29,10 @@ class PassportInvoice(models.Model):
 
     @api.multi
     def action_to_invoice(self):
+        list = self.env['passport.request.invoice'].search(
+            [('id', '=', self.id), ('state', '=', 'to_invoice')])
+        if list:
+            raise ValidationError(_('Done before'))
         if self.total_lines < 1:
             raise ValidationError(_('You must enter at least one line'))
 
@@ -63,6 +67,9 @@ class PassportInvoice(models.Model):
 
     @api.multi
     def action_invoice(self):
+        bill = self.env['account.invoice'].search([('origin', '=', self.name), ('type', '=', 'in_invoice')])
+        if bill:
+            raise ValidationError(_('Done before'))
         for l in self.passport_request:
             if not l.invoice_no :
                 raise ValidationError(_('You must enter invoice No to all list'))

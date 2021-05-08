@@ -56,6 +56,10 @@ class PassportBroker(models.Model):
 
     @api.multi
     def action_assign(self):
+        list = self.env['passport.broker'].search(
+            [('id', '=', self.id), ('state', '=', 'assigned')])
+        if list:
+            raise ValidationError(_('Assigned before'))
         if self.list_total_count < 1:
             raise ValidationError(_('You must enter at least one line'))
         if not self.deadline:

@@ -1,6 +1,8 @@
 from odoo import fields, models , api,_
 from datetime import date
 
+from odoo.exceptions import ValidationError
+
 
 class InterpolMakeInvoice(models.Model):
     _name = 'interpol.make.invoice'
@@ -26,6 +28,9 @@ class InterpolMakeInvoice(models.Model):
 
     @api.multi
     def action_invoice(self):
+        inv = self.env['account.invoice'].search([('origin', '=', self.name), ('type', '=', 'in_invoice')])
+        if inv:
+            raise ValidationError(_('Done before'))
         invoice_line = []
         purchase_journal = self.env['account.journal'].search([('type', '=', 'purchase')])[0]
         accounts = self.product.product_tmpl_id.get_product_accounts()

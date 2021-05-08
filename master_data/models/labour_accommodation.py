@@ -36,3 +36,18 @@ class LabourAccommodation(models.Model):
                 accommodation.accommodation_period = period.days + accommodation.extra_days + 1
             else:
                 accommodation.accommodation_period = accommodation.extra_days
+
+    @api.model
+    def create(self, vals):
+        type = []
+        line = []
+        labor = self.env['labor.profile'].search([('id', '=', vals['labour_id'])])
+        for rec in labor:
+            for process in rec.labor_process_ids:
+                    type.append(process.type)
+            if 'accommodation' not in type:
+                line.append((0, 0, {
+                    'type': 'accommodation',
+                }))
+                rec.labor_process_ids = line
+        return super(LabourAccommodation, self).create(vals)

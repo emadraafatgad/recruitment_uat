@@ -305,8 +305,8 @@
                                         <tree>
                                             <field name="labor" invisible="1"/>
                                             <field name="type"/>
-                                            <field name="cost"/>
                                             <field name="total_cost"/>
+                                            <field name="cost"/>
                                             <field name="state"/>
                                         </tree>
                                     </field>

@@ -44,6 +44,9 @@ class InterpolRequest(models.Model):
     @api.multi
     def interpol_request_done(self):
         self.ensure_one()
+        list = self.env['interpol.request'].search([('id', '=', self.id), ('state', '=', 'done')])
+        if list:
+            raise ValidationError(_('Done before '))
         if not self.interpol_no :
             raise ValidationError(_('You must enter interpol Number #'))
         elif not self.attachment:
@@ -88,8 +91,13 @@ class InterpolRequest(models.Model):
                           accounts['expense'].id,
         }))
         invoice = self.env['account.invoice'].search(
-            [('origin', '=', self.broker_list_id.name), ('state', '=', 'draft')])
+            [('origin', '=', self.broker_list_id.name), ('state', '=', 'draft'), ('type', '=', 'in_invoice')])
+
         if invoice:
+            for rec in invoice.invoice_line_ids:
+                for labor in rec.labors_id:
+                    if labor.id == self.labor_id.id:
+                        raise ValidationError(_('Done before'))
             invoice.write({'invoice_line_ids': invoice_line})
         else:
             self.env['account.invoice'].create({
@@ -151,7 +159,9 @@ class InterpolRequest(models.Model):
 
     @api.multi
     def action_reject(self):
-
+        request = self.env['interpol.request'].search([('id', '=', self.id), ('state', '=', 'rejected')])
+        if request:
+            raise ValidationError(_('Done before'))
         labor = self.env['labor.profile'].search([('id', '=', self.labor_id.id)])
         type = ''
         price = 0.0
