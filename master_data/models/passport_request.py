@@ -8,7 +8,7 @@ class PassportNumber(models.Model):
     _name = 'passport.request'
     _rec_name = 'labor_id'
     _inherit = ['portal.mixin', 'mail.thread', 'mail.activity.mixin']
-    _sql_constraints = [('prn_uniq', 'unique(prn)', 'PRN must be unique!'),('invoice_uniq', 'unique(invoice_no)', 'Invoice# must be unique!')
+    _sql_constraints = [('prn_uniq', 'unique(prn)', 'PRN must be unique!'), ('invoice_uniq', 'unique(invoice_no)', 'Invoice# must be unique!')
         ,('passport_no_unique', 'unique(passport_no)', 'Passport No must be unique!')]
     _order = 'id desc'
 
@@ -38,6 +38,10 @@ class PassportNumber(models.Model):
     seq = fields.Integer()
     row_num = fields.Char()
     broker_list_id = fields.Many2one('passport.broker')
+
+    @api.multi
+    def set_to_draft(self):
+        self.state = 'new'
 
     @api.onchange('state')
     def onchange_state(self):
@@ -127,7 +131,6 @@ class PassportNumber(models.Model):
 
     @api.multi
     def action_view_labor(self):
-
         return {
             'name': _('View Labourer Profile'),
             'type': 'ir.actions.act_window',
@@ -137,7 +140,6 @@ class PassportNumber(models.Model):
             'target': 'new',
             'res_id': self.labor_id.id,
             #'flags': {'form': {'action_buttons': False}}
-
         }
 
     @api.multi
@@ -185,8 +187,6 @@ class PassportNumber(models.Model):
     def onchange_pass_date(self):
         if self.pass_start_date:
             self.pass_end_date = (self.pass_start_date + relativedelta(years=10)).strftime('%Y-%m-%d')
-
-
 
     @api.model
     def create(self, vals):

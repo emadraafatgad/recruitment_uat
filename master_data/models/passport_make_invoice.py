@@ -46,10 +46,8 @@ class PassportInvoice(models.Model):
         if not self.state == 'new':
             if self.total_lines > self.list_now_len:
                 raise ValidationError(_('You cannot add lines in this state'))
-            if self.total_lines < self.list_now_len:
-                raise ValidationError(_('You cannot remove lines in this state'))
-
-
+            # if self.total_lines < self.list_now_len:
+            #     raise ValidationError(_('You cannot remove lines in this state'))
 
     @api.onchange('passport_request')
     def domain_list(self):
