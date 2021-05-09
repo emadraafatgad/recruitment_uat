@@ -8,16 +8,17 @@ class PassportNumber(models.Model):
     _name = 'passport.request'
     _rec_name = 'labor_id'
     _inherit = ['portal.mixin', 'mail.thread', 'mail.activity.mixin']
-    _sql_constraints = [('prn_uniq', 'unique(prn)', 'PRN must be unique!'), ('invoice_uniq', 'unique(invoice_no)', 'Invoice# must be unique!')
-        ,('passport_no_unique', 'unique(passport_no)', 'Passport No must be unique!')]
     _order = 'id desc'
+
+    _sql_constraints = [('prn_uniq', 'unique(prn)', 'PRN must be unique!'),('invoice_uniq', 'unique(invoice_no)', 'Invoice# must be unique!')
+        ,('passport_no_unique', 'unique(passport_no)', 'Passport No must be unique!'),('laborer_unique', 'unique(labor_id)', 'Created with this Laborer before!')]
 
     sequence = fields.Char(string="Sequence", readonly=True,default='New')
     name = fields.Char(string="Labor Name",readonly=True)
     national_id = fields.Char(required=True,size=14,string='National ID')
     labor_id = fields.Many2one('labor.profile',required=True)
     labor_id_no_edit = fields.Many2one('labor.profile',required=True)
-    broker = fields.Many2one('res.partner')
+    broker = fields.Many2one('res.partner',domain=[('vendor_type','=','passport_broker')])
     religion = fields.Selection([('muslim', 'Muslim'), ('christian', 'Christian'), ('jew', 'Jew'), ('other', 'Other')],'Religion')
     request_date = fields.Datetime(readonly=True, index=True, default=fields.Datetime.now)
     invoice_date = fields.Date('Invoice Date')
@@ -25,11 +26,11 @@ class PassportNumber(models.Model):
     end_date = fields.Datetime('Delivery Date')
     deadline = fields.Date('Deadline')
     state = fields.Selection([('new','New'),('to_invoice','To Invoice'),('invoiced','Invoiced'),
-                              ('releasing','Releasing'),('rejected','Rejected'),('done','Done')],default='new',track_visibility="onchange")
-    passport_no = fields.Char()
-    pass_start_date = fields.Date()
-    pass_end_date = fields.Date()
-    pass_from = fields.Char()
+                              ('releasing','Releasing'),('rejected','Rejected'),('done','Done'),('blocked','Blocked')],default='new',track_visibility="onchange")
+    passport_no = fields.Char(track_visibility="onchange")
+    pass_start_date = fields.Date(track_visibility="onchange")
+    pass_end_date = fields.Date(track_visibility="onchange")
+    pass_from = fields.Char(track_visibility="onchange")
     prn = fields.Char('PRN NO')
     invoice_no = fields.Char('Invoice Number')
     note = fields.Text()
@@ -40,13 +41,24 @@ class PassportNumber(models.Model):
     broker_list_id = fields.Many2one('passport.broker')
 
     @api.multi
+    def set_to_invoiced(self):
+        self.broker = False
+        self.state = 'invoiced'
+
+    @api.multi
     def set_to_draft(self):
         self.state = 'new'
+
+    @api.multi
+    def set_to_release(self):
+        self.broker = self.broker_list_id.broker
+        self.state = 'releasing'
 
     @api.onchange('state')
     def onchange_state(self):
         labor = self.env['labor.process'].search([('labor', '=', self.labor_id.id),('type', '=', 'passport')])
-        labor.state = self.state
+        for rec in labor:
+            rec.state = self.state
 
     @api.multi
     def request_passport_approve(self):
@@ -68,8 +80,9 @@ class PassportNumber(models.Model):
         append_labor = []
         append_labor.append(self.labor_id.id)
         invoice_line = []
-        purchase_journal = self.env['account.journal'].search([('type', '=', 'purchase')])[0]
         product = self.env['product.recruitment.config'].search([('type', '=', 'passport')])[0]
+        if not product.journal_id:
+            raise ValidationError(_('Please, you must select journal in passport broker from configration'))
         accounts = product.product.product_tmpl_id.get_product_accounts()
         invoice_line.append((0, 0, {
             'product_id': product.product.id,
@@ -94,7 +107,7 @@ class PassportNumber(models.Model):
                 'type': 'in_invoice',
                 'partner_type': self.broker_list_id.broker.vendor_type,
                 'origin': self.broker_list_id.name,
-                'journal_id': purchase_journal.id,
+                'journal_id': product.journal_id.id,
                 'account_id': self.broker_list_id.broker.property_account_payable_id.id,
                 'invoice_line_ids': invoice_line,
 

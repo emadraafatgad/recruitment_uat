@@ -9,7 +9,7 @@
                 this operation will update all GCC .
                 </p>
                 <footer>
-                    <button name="update_gcc_from_interpol" string="Update GCC" type="object" class="btn-primary"/>
+                    <button name="update_gcc_from_interpol" string="Update GCC" type="object" class="btn-primary" confirm="Are you sure you want to update all GCC?"/>
                     <button string="Cancel" class="btn-secondary" special="cancel" />
                 </footer>
             </form>

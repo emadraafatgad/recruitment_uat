@@ -7,11 +7,12 @@ class EmbassyList(models.Model):
     _name = 'embassy.list'
     _order = 'id desc'
     _inherit = ['portal.mixin', 'mail.thread', 'mail.activity.mixin']
+
     state = fields.Selection([('new','New'),('confirmed','Confirmed')],default='new',track_visibility="onchange")
-    name = fields.Char(string="Number",readonly=True,default='New')
-    assign_date = fields.Date()
-    receive_date = fields.Date()
-    embassy_list = fields.Many2many('labor.embassy')
+    name = fields.Char(string="Number",readonly=True,default='New',track_visibility="onchange")
+    assign_date = fields.Date(track_visibility="onchange")
+    receive_date = fields.Date(track_visibility="onchange")
+    embassy_list = fields.Many2many('labor.embassy',track_visibility="onchange")
 
     @api.multi
     def action_confirm(self):

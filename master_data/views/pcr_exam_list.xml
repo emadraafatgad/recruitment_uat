@@ -22,7 +22,7 @@
         <field name="arch" type="xml">
             <form string="PCR Exam">
                 <header>
-                    <button name="confirm_exam_list_lines" type="object" string="Confirm List" class="oe_highlight" state="new"/>
+                    <button name="confirm_exam_list_lines" type="object" string="Confirm List" class="oe_highlight" state="new" confirm="Are you sure you want confirm this list?"/>
                     <field name="state" widget="statusbar" statusbar_visible="new,in_progress,finished"/>
                 </header>
                 <sheet>
@@ -57,10 +57,10 @@
 <!--                                    <field name="invoiced" invisible="1"/>-->
                                     <button name="action_positive"
                                             string="Positive" type="object"
-                                            class="btn btn-danger"/>
+                                            class="btn btn-danger" confirm="Are you sure you want to choose positive?"/>
                                     <button name="action_negative"
                                             string="Negative" type="object"
-                                            class="btn btn-success"/>
+                                            class="btn btn-success" confirm="Are you sure you want to choose negative?"/>
                                 </tree>
                             </field>
                         </page>

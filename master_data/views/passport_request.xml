@@ -21,14 +21,20 @@
         <field name="arch" type="xml">
             <form string="Passport request">
                 <header>
+                    <button name="set_to_draft" states="to_invoice"
+                                string="Set Draft" type="object"
+                                class="oe_highlight"/>
                      <button name="action_reject" states="releasing"
                                 string="Reject" type="object"
                                 class="oe_highlight" groups="master_data.group_registeration_user"/>
+                     <button name="set_to_invoiced" states="releasing"
+                                string="Set to Invoiced" type="object"
+                                class="oe_highlight"/>
                     <field name="state" widget="statusbar"
                                statusbar_visible="new,invoiced,releasing,done"
                                statusbar_colors='{"invoiced":"green"}'/>
                 </header>
-                s
+
                 <sheet>
                     <h1>
                         <field name="sequence"/>
@@ -123,10 +129,10 @@
                 </search>
             </field>
         </record>
-    <menuitem id="main_menu_passport" sequence="12" name="Passport " parent="menu_recruitment_root" groups="master_data.group_registeration_user,account.group_account_invoice"
+    <menuitem id="main_menu_passport" sequence="12" name="Passport" parent="menu_recruitment_root"
               />
     <menuitem id="menu_passport_request" sequence="1" name="Candidates" parent="main_menu_passport"
-              action="passport_request_action"/>
+              action="passport_request_action" groups="master_data.group_passport_user,account.group_account_invoice"/>
 
 
 

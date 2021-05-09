@@ -10,15 +10,15 @@ class InterpolBroker(models.Model):
     _inherit = ['portal.mixin', 'mail.thread', 'mail.activity.mixin']
     _order = 'id desc'
 
-    name = fields.Char(string="Number",readonly=True,default='New')
-    broker = fields.Many2one('res.partner',required=True,domain=[('vendor_type','=','interpol_broker')])
-    assign_date = fields.Datetime(default=datetime.now())
-    interpol_request = fields.Many2many('interpol.request', string='Interpol Requests',required=True)
+    name = fields.Char(string="Number",track_visibility="onchange",readonly=True,default='New')
+    broker = fields.Many2one('res.partner',track_visibility="onchange",required=True,domain=[('vendor_type','=','interpol_broker')])
+    assign_date = fields.Datetime(default=datetime.now(),track_visibility="onchange")
+    interpol_request = fields.Many2many('interpol.request',track_visibility="onchange", string='Interpol Requests',required=True)
     state = fields.Selection([('new', 'new'), ('assigned', 'Assigned'), ('partially_done', 'Partially Done'), ('done', 'Done')], default='new', track_visibility="onchange")
-    list_total_count = fields.Integer(compute='_compute_value')
+    list_total_count = fields.Integer(compute='_compute_value',)
     done_count = fields.Integer(compute='_compute_value')
     remaining_count = fields.Integer(compute='_compute_value')
-    list_now_len = fields.Integer()
+    list_now_len = fields.Integer(track_visibility="onchange")
 
     @api.onchange('passport_request')
     def onchange_len_list(self):
@@ -52,7 +52,7 @@ class InterpolBroker(models.Model):
         for record in request:
             for rec in record.interpol_request:
                 line.append(rec.id)
-        domain = {'interpol_request': [('id', 'not in', line)]}
+        domain = {'interpol_request': [('id', 'not in', line),('state', '=', 'new')]}
         return {'domain': domain}
 
     @api.constrains('broker','interpol_request')
@@ -61,12 +61,12 @@ class InterpolBroker(models.Model):
             rec.broker_list_id = self.id
             rec.broker = self.broker
 
-    # @api.multi
-    # def unlink(self):
-    #     for rec in self:
-    #         if rec.state != 'new':
-    #             raise ValidationError(_('You cannot delete %s as it is not in new state') % rec.name)
-    #     return super(InterpolBroker, self).unlink()
+    @api.multi
+    def unlink(self):
+        for rec in self:
+            if rec.state != 'new':
+                raise ValidationError(_('You cannot delete %s as it is not in new state') % rec.name)
+        return super(InterpolBroker, self).unlink()
     @api.model
     def create(self, vals):
         vals['name'] = self.env['ir.sequence'].next_by_code('interpol.broker')
@@ -81,6 +81,7 @@ class InterpolAccountInvoice(models.Model):
                                     ('interpol_broker', 'Interpol Broker'), ('gcc', 'Gcc'), ('hospital', 'Hospital'),('enjaz','Enjaz'),
                                     ('embassy', 'Embassy'), ('travel_company', 'Travel Company'),
                                     ('training', 'Training Center'),('agency', 'Agency')])
+    laborer = fields.Many2many('labor.profile', related='invoice_line_ids.labors_id')
     @api.multi
     def action_invoice_open(self):
         if self.partner_id.vendor_type == 'travel_company':
@@ -137,6 +138,10 @@ class PartnerPayments(models.Model):
                             labor = self.env['labor.process'].search(
                                 [('labor', 'in', lab.ids), ('type', '=', 'training')])
                             labor.cost += rec.price_unit
+                        #if self.partner_id.vendor_type == 'training' and self.accommodation:
+                          #  labor = self.env['labor.process'].search(
+                             #   [('labor', 'in', lab.ids), ('type', '=', 'accommodation')])
+                            #labor.cost += rec.price_unit
 
 
         return super(PartnerPayments, self).action_validate_invoice_payment()

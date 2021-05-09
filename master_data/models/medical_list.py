@@ -61,8 +61,9 @@ class MedicalList(models.Model):
         self.state = 'invoiced'
         self.list_now_len = len(self.medical_request)
         invoice_line = []
-        purchase_journal = self.env['account.journal'].search([('type', '=', 'purchase')])[0]
         product = self.env['product.recruitment.config'].search([('type', '=', 'hospital')])[0]
+        if not product.journal_id:
+            raise ValidationError(_('Please, you must select journal in big medical from configration'))
         accounts = product.product.product_tmpl_id.get_product_accounts()
         name = ''
         append_labor = []
@@ -91,7 +92,7 @@ class MedicalList(models.Model):
             'type': 'in_invoice',
             'partner_type': self.hospital.vendor_type,
             'origin': self.name,
-            'journal_id': purchase_journal.id,
+            'journal_id': product.journal_id.id,
             'account_id': self.hospital.property_account_payable_id.id,
             'invoice_line_ids': invoice_line,
 

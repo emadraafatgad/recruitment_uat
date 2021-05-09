@@ -24,7 +24,7 @@
                <header>
                     <button name="action_inprogress" states="new"
                                 string="InProgress" type="object"
-                                class="oe_highlight"/>
+                                class="oe_highlight" confirm="Are you sure you want to change this state to Inprogress state?"/>
                     <field name="state" widget="statusbar"
                                statusbar_visible="new,in_progress,done"/>
                 </header>
@@ -59,7 +59,7 @@
                  <field name="state"/>
                                <button name="action_done" states="in_progress"
                                 string="Done" type="object"
-                                class="oe_highlight"/>
+                                class="oe_highlight" confirm="Are you sure you want to confirm that?"/>
                            </tree>
                                </field>
                      </page>
@@ -110,7 +110,7 @@
         </record>
 
     <menuitem id="menu_travel_list" sequence="2" name="Bookings" parent="menu_travel_company"
-              action="travel_list_action"/>
+              action="travel_list_action" />
 
 
 </odoo>

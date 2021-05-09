@@ -114,7 +114,7 @@
 
     <menuitem id="main_menu_interpol" sequence="14" name="Interpol" parent="menu_recruitment_root" />
     <menuitem id="menu_interpol_request" sequence="1" name="Candidates" parent="main_menu_interpol"
-              action="interpol_request_action" />
+              action="interpol_request_action" groups="group_interpol_user"/>
 
 
 </odoo>

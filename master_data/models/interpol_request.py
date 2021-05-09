@@ -10,7 +10,7 @@ class InterpolRequest(models.Model):
     _rec_name = 'labor_id'
     _order = 'id desc'
     _inherit = ['portal.mixin', 'mail.thread', 'mail.activity.mixin']
-    _sql_constraints = [('interpol_uniq', 'unique(interpol_no)', 'Interpol no must be unique!')]
+    _sql_constraints = [('interpol_uniq', 'unique(interpol_no)', 'Interpol no must be unique!'),('laborer_unique', 'unique(labor_id)', 'Created with this Laborer before!')]
 
     name = fields.Char(string="Number",readonly=True,default='New')
     labor_id = fields.Many2one('labor.profile',readonly=True)
@@ -18,11 +18,11 @@ class InterpolRequest(models.Model):
     request_date = fields.Datetime(readonly=True, index=True, default=fields.Datetime.now)
     end_date = fields.Datetime('Delivery Date',readonly=True)
     broker = fields.Many2one('res.partner')
-    national_id = fields.Char('National ID',size=14,required=True,readonly=True)
+    national_id = fields.Char('National ID',size=14,required=True,readonly=True,related='labor_id.national_id')
     state = fields.Selection([('new','New'),('assigned','Assigned'),('rejected','rejected'),
-                             ('done','Done')],default='new',track_visibility="onchange")
+                             ('done','Done'),('blocked','Blocked')],default='new',track_visibility="onchange")
     gcc_updated = fields.Boolean()
-    passport_no = fields.Char(readonly=True)
+    passport_no = fields.Char(related='labor_id.passport_no',store=True)
     interpol_no = fields.Char('Interpol No',readonly=True)
     attachment = fields.Binary(readonly=True)
     filename = fields.Char()

@@ -28,15 +28,18 @@ class SlaveTraining(models.Model):
     _name = 'slave.training'
     _description = 'Training'
     _inherit = ['portal.mixin', 'mail.thread', 'mail.activity.mixin']
+    _sql_constraints = [('laborer_unique', 'unique(slave_id)', 'Created with this Laborer before!')]
 
     name = fields.Char(readonly=True)
     slave_id = fields.Many2one('labor.profile',string="Labor", domain="[('pre_medical_check','=','Fit')]")
     start_date = fields.Date(readonly=True)
     end_date = fields.Date(readonly=True)
-    state = fields.Selection([('new', 'New'), ('in_progress', 'Inprogress'), ('rejected', 'Rejected'),('finished', 'Finished')], default='new')
+    state = fields.Selection([('new', 'New'), ('in_progress', 'Inprogress'), ('rejected', 'Rejected'),('finished', 'Finished'),('blocked', 'Blocked')], default='new')
     training_center_id = fields.Many2one('res.partner',domain="[('vendor_type','=','training')]")
     note = fields.Text()
     phone = fields.Char()
+    invoiced = fields.Boolean()
+    passport_no = fields.Char(related='slave_id.passport_no',store=True)
 
     @api.multi
     def action_reject(self):
@@ -106,17 +109,25 @@ class TrainingList(models.Model):
     state = fields.Selection([('new', 'New'), ('in_progress', 'Inprogress'), ('finished', 'Finished')],default='new',track_visibility="onchange")
     start_date = fields.Date(track_visibility="onchange")
     end_date = fields.Date(track_visibility="onchange")
+
     training_center = fields.Many2one('res.partner', domain="[('vendor_type','=','training')]", track_visibility="onchange",required=True)
     training_requests = fields.Many2many('slave.training')
     bill = fields.Many2one('account.invoice')
     total_lines = fields.Integer(compute='compute_len_lines')
     list_now_len = fields.Integer()
     bill_state = fields.Char(compute='compute_bill_state')
+    show_set_draft = fields.Char(compute='compute_show_set_draft')
 
     @api.depends('bill_id')
     def compute_bill_state(self):
         if self.bill_id:
             self.bill_state = self.bill_id.state.capitalize()
+
+
+    @api.multi
+    def set_to_draft(self):
+        self.ensure_one()
+        self.state = 'new'
 
     @api.onchange('training_requests')
     def domain_list(self):
@@ -142,12 +153,18 @@ class TrainingList(models.Model):
         self.total_lines = len(self.training_requests)
 
 
-    # @api.multi
-    # def unlink(self):
-    #     for rec in self:
-    #         if rec.state != 'new':
-    #             raise ValidationError(_('You cannot delete %s as it is not in new state') % rec.name)
-    #     return super(TrainingList, self).unlink()
+    @api.depends('state','show')
+    def compute_show_set_draft(self):
+        if self.state == 'in_progress' and not self.show:
+            self.show_set_draft = True
+        else:
+            self.show_set_draft = False
+    @api.multi
+    def unlink(self):
+        for rec in self:
+            if rec.state != 'new':
+                raise ValidationError(_('You cannot delete %s as it is not in new state') % rec.name)
+        return super(TrainingList, self).unlink()
 
     @api.constrains('training_center','training_requests')
     def constrain_training_requests(self):
@@ -216,7 +233,7 @@ class TrainingList(models.Model):
                     'district': rec.slave_id.district.id,
                     'agency': agency.agency.id,
                     'agency_code': agency.name,
-                    'destination_city': agency.destination_city,
+                    #'destination_city': agency.destination_city.id,
                 })
         self.state = 'finished'
 
@@ -256,6 +273,8 @@ class TrainingList(models.Model):
 
         })
         self.show = True
+        for rec in self.training_requests:
+            rec.invoiced=True
         self.bill = cr.id
 
     @api.model

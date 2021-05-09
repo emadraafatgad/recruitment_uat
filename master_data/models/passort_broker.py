@@ -92,12 +92,13 @@ class PassportBroker(models.Model):
             list.row_num = str(list.seq) + "/" + str(len(self.passport_request))
             next_sequence += 1
 
-    # @api.multi
-    # def unlink(self):
-    #     for rec in self:
-    #         if rec.state != 'new':
-    #             raise ValidationError(_('You cannot delete %s as it is not in new state') % rec.name)
-    #     return super(PassportBroker, self).unlink()
+    @api.multi
+    def unlink(self):
+        for rec in self:
+            if rec.state != 'new':
+                raise ValidationError(_('You cannot delete %s as it is not in new state') % rec.name)
+        return super(PassportBroker, self).unlink()
+
     @api.model
     def create(self, vals):
         vals['name'] = self.env['ir.sequence'].next_by_code('passport.broker')

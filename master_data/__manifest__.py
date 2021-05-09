@@ -5,7 +5,7 @@
     'summary': """
         Create Labor -
         Create Broker - 
-        Crate Agent -
+        Create Agent -
         """,
     'description': """
         Long description of module's purpose
@@ -45,6 +45,7 @@
         'views/clearance_list.xml',
         'views/travel_company.xml',
         'views/travel_list.xml',
+        'views/labor_process.xml',
         #'views/embassy.xml',
         #'views/embassy_list.xml',
         'report/cv_report.xml',
@@ -54,6 +55,7 @@
         'views/labour_accommodation.xml',
         'views/pcr_exam.xml',
         'views/pcr_exam_list.xml',
+        'views/accommodation_list.xml',
     ],
 
 }

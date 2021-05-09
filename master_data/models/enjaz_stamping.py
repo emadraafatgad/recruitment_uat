@@ -12,23 +12,23 @@ class LaborEnjaz(models.Model):
     _inherit = ['portal.mixin', 'mail.thread', 'mail.activity.mixin']
 
     state = fields.Selection(
-        [('new', 'New'), ('in_progress', 'InProgress'), ('rejected', 'Rejected'), ('done', 'Done')], default='new',
+        [('new', 'New'), ('in_progress', 'InProgress'), ('rejected', 'Rejected'), ('done', 'Done'),('blocked','Blocked')], default='new',
         track_visibility="onchange")
-    name = fields.Char(string="Number", readonly=True, default='New')
-    labor_id = fields.Many2one('labor.profile')
+    name = fields.Char(string="Number",track_visibility="onchange", readonly=True, default='New')
+    labor_id = fields.Many2one('labor.profile',track_visibility="onchange")
     labor_name = fields.Char()
-    agency = fields.Many2one('res.partner', domain=[('agency', '=', True)])
+    agency = fields.Many2one('res.partner',track_visibility="onchange", domain=[('agency', '=', True)])
     agency_code = fields.Char()
-    type = fields.Selection([('enjaz', 'Enjaz'), ('stamping', 'Stamping')], required=True)
-    enjaz_no = fields.Char()
-    passport_no = fields.Char()
-    employer = fields.Char()
-    city = fields.Many2one('res.country.state')
-    bill = fields.Many2one('account.invoice')
-    bill_date = fields.Date(related='bill.date_invoice')
+    type = fields.Selection([('enjaz', 'Enjaz'), ('stamping', 'Stamping')],track_visibility="onchange", required=True)
+    enjaz_no = fields.Char(track_visibility="onchange")
+    passport_no = fields.Char(track_visibility="onchange",related='labor_id.passport_no',store=True)
+    employer = fields.Char(track_visibility="onchange")
+    city = fields.Many2one('res.country.state',track_visibility="onchange")
+    bill = fields.Many2one('account.invoice',track_visibility="onchange")
+    bill_date = fields.Date(related='bill.date_invoice',track_visibility="onchange")
     visa_no = fields.Char()
-    visa_date = fields.Date(string="Issue date")
-    visa_expiry_date = fields.Date(string="Expiry date")
+    visa_date = fields.Date(string="Issue date",track_visibility="onchange")
+    visa_expiry_date = fields.Date(string="Expiry date",track_visibility="onchange")
 
     def _get_enjaz_default(self):
         enjaz = self.env['res.partner'].search([('vendor_type', '=', 'enjaz')])
@@ -68,8 +68,9 @@ class LaborEnjaz(models.Model):
                 raise ValidationError(_('Please, enter enjaz#'))
 
             invoice_line = []
-            purchase_journal = self.env['account.journal'].search([('type', '=', 'purchase')])[0]
             product = self.env['product.recruitment.config'].search([('type', '=', 'enjaz')])[0]
+            if not product.journal_id:
+                raise ValidationError(_('Please, you must select journal in enjaz from configration'))
             accounts = product.product.product_tmpl_id.get_product_accounts()
             invoice_line.append((0, 0, {
                 'product_id': product.product.id,
@@ -89,7 +90,7 @@ class LaborEnjaz(models.Model):
                 'type': 'in_invoice',
                 'partner_type': self.enjaz_partner.vendor_type,
                 'origin': self.name,
-                'journal_id': purchase_journal.id,
+                'journal_id': product.journal_id.id,
                 'account_id': self.enjaz_partner.property_account_payable_id.id,
                 'invoice_line_ids': invoice_line,
             })
@@ -114,33 +115,6 @@ class LaborEnjaz(models.Model):
                 raise ValidationError(_('Please, enter visa date'))
             if not self.visa_expiry_date:
                 raise ValidationError(_('Please, enter visa expiry date'))
-            invoice_line = []
-            purchase_journal = self.env['account.journal'].search([('type', '=', 'purchase')])[0]
-            product = self.env['product.recruitment.config'].search([('type', '=', 'embassy')])[0]
-            accounts = product.product.product_tmpl_id.get_product_accounts()
-            invoice_line.append((0, 0, {
-                'product_id': product.product.id,
-                'labors_id': [(6, 0, append_labor)],
-                'name': self.labor_name,
-                'product_uom_id': product.product.uom_id.id,
-                'price_unit': product.price,
-                'discount': 0.0,
-                'quantity': 1,
-                'account_id': accounts.get('stock_input') and accounts['stock_input'].id or \
-                              accounts['expense'].id,
-            }))
-            self.env['account.invoice'].create({
-                'partner_id': self.embassy.id,
-                'currency_id': product.currency_id.id,
-                'state': 'draft',
-                'type': 'in_invoice',
-                'partner_type': self.embassy.vendor_type,
-                'origin': self.name,
-                'journal_id': purchase_journal.id,
-                'account_id': self.embassy.property_account_payable_id.id,
-                'invoice_line_ids': invoice_line,
-
-            })
             clearance = self.env['labor.clearance'].search([('labor_id', '=', self.labor_id.id)])
 
             if clearance.state == 'confirmed':
@@ -169,17 +143,22 @@ class LaborEnjaz(models.Model):
                 'account_id': accounts.get('stock_input') and accounts['stock_input'].id or \
                               accounts['income'].id,
             }))
-            self.env['account.invoice'].create({
-                'partner_id': self.agency.id,
-                'currency_id': product_agency.currency_id.id,
-                'state': 'draft',
-                'type': 'out_invoice',
-                'origin': self.name,
-                'journal_id': sale_journal.id,
-                'account_id': self.agency.property_account_receivable_id.id,
-                'invoice_line_ids': invoice_line,
+            invoice = self.env['account.invoice'].search([('origin', '=', self.name)])
+            if invoice:
+                raise ValidationError(_('Created before, refresh page'))
+            else:
+                cr = self.env['account.invoice'].create({
+                    'partner_id': self.agency.id,
+                    'currency_id': product_agency.currency_id.id,
+                    'state': 'draft',
+                    'type': 'out_invoice',
+                    'origin': self.name,
+                    'journal_id': sale_journal.id,
+                    'account_id': self.agency.property_account_receivable_id.id,
+                    'invoice_line_ids': invoice_line,
 
-            })
+                })
+                cr.action_invoice_open()
 
         self.state = 'done'
 

@@ -14,10 +14,10 @@ class SpecifyAgent(models.Model):
     labor_id = fields.Many2one('labor.profile',required=True)
     user_id = fields.Many2one('res.users')
     labor_name = fields.Char()
-    passport_no = fields.Char(required=True)
+    passport_no = fields.Char(required=True,related='labor_id.passport_no')
     religion = fields.Selection([('muslim', 'Muslim'), ('christian', 'Christian'), ('jew', 'Jew'), ('other', 'Other')],'Religion')
     age = fields.Integer()
-    state = fields.Selection([('draft', 'CV Available'),('available', 'Specified'), ('sent', 'CV Sent'),('selected', 'Selected')], default='draft', track_visibility="onchange")
+    state = fields.Selection([('draft', 'CV Available'),('available', 'Specified'), ('sent', 'CV Sent'),('selected', 'Selected'),('edit_after_selected', 'Edit After Selected'),('blocked','Blocked')], default='draft', track_visibility="onchange")
     request_date = fields.Date(default=date.today())
     available_date = fields.Date()
     select_date = fields.Date('Selection Date')
@@ -27,9 +27,24 @@ class SpecifyAgent(models.Model):
     agency_short_code = fields.Char(related='agency.short_code')
     destination_city = fields.Many2one('res.country.state')
     visa_no = fields.Char()
+    edit_selected = fields.Boolean(compute='compute_edit_selected')
     occupation = fields.Selection([('house_maid', 'House Maid'), ('pro_maid', 'Pro Maid'), ('pro_worker', 'Pro Worker')], string='Occupation')
-    _sql_constraints = [('visa_uniq', 'unique(visa_no , labor_id)', 'Visa# must be unique!')]
+    _sql_constraints = [('visa_uniq', 'unique(visa_no , labor_id)', 'Visa# must be unique!'),('laborer_unique', 'unique(labor_id)', 'Created with this Laborer before!')]
 
+    @api.multi
+    def unlock(self):
+        self.state='edit_after_selected'
+
+    @api.multi
+    def lock(self):
+        self.state = 'selected'
+
+    @api.depends('state')
+    def compute_edit_selected(self):
+        if self.state == 'edit_after_selected' and self.env.user.has_group('master_data.group_registeration_manager') or self.state in ('draft','available','sent'):
+            self.edit_selected = True
+        else:
+            self.edit_selected = False
     @api.multi
     def action_send_cv(self):
         self.ensure_one()
@@ -234,7 +249,7 @@ class SpecifyAgent(models.Model):
                         'district': rec.labor_id.district.id,
                         'agency': rec.agency.id,
                         'agency_code': rec.name,
-                        'destination_city': rec.destination_city,})
+                        'destination_city': rec.destination_city.id,})
 
     @api.multi
     def select(self):

@@ -1,4 +1,5 @@
 from odoo import models, fields,api, _
+from odoo.exceptions import ValidationError
 
 
 class LabourAccommodation(models.Model):
@@ -6,7 +7,7 @@ class LabourAccommodation(models.Model):
     _order = 'id desc'
     _inherit = ['portal.mixin', 'mail.thread', 'mail.activity.mixin']
     _rec_name = 'labour_id'
-    # name = fields.Char()
+
     labour_id = fields.Many2one('labor.profile',required=True,track_visibility="onchange")
     start_date = fields.Date(track_visibility="onchange")
     end_date = fields.Date(track_visibility="onchange")
@@ -15,7 +16,16 @@ class LabourAccommodation(models.Model):
     extra_days = fields.Integer()
     national_id = fields.Char(related='labour_id.national_id')
     passport_no = fields.Char(related='labour_id.passport_no')
-    state = fields.Selection([('new','New'),('confirm','Confirm'),('invoiced','Invoiced')],)
+    state = fields.Selection([('new','New'),('confirm','Confirm'),('invoiced','Invoiced'),('blocked','Blocked')],default='new',track_visibility="onchange")
+    accommodation_list_id = fields.Many2one('accommodation.list')
+    reasons = fields.Char()
+
+    @api.onchange('labour_id')
+    def labour_not_done_accommodation(self):
+        accommodation = self.env['labour.accommodation'].search([('labour_id','=',self.labour_id.id),('state','=','new')])
+        if self.labour_id:
+            for rec in accommodation:
+                raise ValidationError(_('There is accommodation for this laborer that is not confirmed in list # %s') % rec.accommodation_list_id.name)
 
     @api.depends('start_date','end_date','extra_days')
     def calculate_accommodation_period(self):

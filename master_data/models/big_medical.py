@@ -1,3 +1,5 @@
+from datetime import date
+
 from odoo import fields, models , api,_
 from dateutil.relativedelta import relativedelta
 from odoo.exceptions import ValidationError
@@ -8,7 +10,7 @@ class BigMedical(models.Model):
     _description = 'Big Medical'
     _inherit = ['portal.mixin', 'mail.thread', 'mail.activity.mixin']
     _order = 'id desc'
-
+    _sql_constraints = [('laborer_unique', 'unique(labor_id)', 'Created with this Laborer before!')]
     name = fields.Char(string="Number",readonly=True,default='New')
     labor_id = fields.Many2one('labor.profile')
 
@@ -23,9 +25,9 @@ class BigMedical(models.Model):
     gcc = fields.Many2one('res.partner',readonly=True,domain=[('vendor_type', '=', 'gcc')],default=_get_gcc_default)
     labor = fields.Char('Labor Name')
     gcc_no =fields.Char('GCC#')
-    state = fields.Selection([('new', 'New'),('pending', 'On Examination'),('fit','Finished'),('rejected','Rejected'),('unfit','Unfit')], default='new', track_visibility="onchange")
-    national_id = fields.Char(size=14,string='National ID')
-    passport_no = fields.Char()
+    state = fields.Selection([('new', 'New'),('pending', 'On Examination'),('fit','Finished'),('rejected','Rejected'),('unfit','Unfit'),('blocked','Blocked')], default='new', track_visibility="onchange")
+    national_id = fields.Char(size=14,string='National ID',related='labor_id.national_id',store=True)
+    passport_no = fields.Char(related='labor_id.passport_no',store=True)
     hospital = fields.Many2one('res.partner', domain=[('vendor_type','=','hospital')],track_visibility="onchange")
     booking_date = fields.Date(track_visibility='onchange')
     check_date = fields.Date(string="Examination Date",track_visibility='onchange')
@@ -36,6 +38,8 @@ class BigMedical(models.Model):
     recheck_appear =fields.Boolean(compute='compute_recheck_appear')
     confirm_appear =fields.Boolean(compute='compute_confirm_appear')
     deadline =fields.Date(compute='onchange_check_date',store=True,readonly=False,track_visibility='onchange')
+    deadline_medical =fields.Date(track_visibility='onchange',string='Deadline')
+    date_today = fields.Date(default=date.today())
 
     @api.depends('state','medical_check')
     def compute_recheck_appear(self):
@@ -94,8 +98,9 @@ class BigMedical(models.Model):
         append_labor = []
         append_labor.append(self.labor_id.id)
         invoice_line = []
-        purchase_journal = self.env['account.journal'].search([('type', '=', 'purchase')])[0]
         product = self.env['product.recruitment.config'].search([('type', '=', 'gcc')])[0]
+        if not product.journal_id:
+            raise ValidationError(_('Please, you must select journal in gcc from configration'))
         accounts = product.product.product_tmpl_id.get_product_accounts()
         invoice_line.append((0, 0, {
             'product_id': product.product.id,
@@ -116,7 +121,7 @@ class BigMedical(models.Model):
             'type': 'in_invoice',
             'partner_type': self.gcc.vendor_type,
             'origin': self.name,
-            'journal_id': purchase_journal.id,
+            'journal_id': product.journal_id.id,
             'account_id': self.gcc.property_account_payable_id.id,
             'invoice_line_ids': invoice_line,
 

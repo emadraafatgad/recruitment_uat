@@ -11,11 +11,12 @@ class ProductConfig(models.Model):
         ('type_uniq', 'unique (type)', 'Type is already exist')
     ]
 
-    product = fields.Many2one('product.product')
-    price = fields.Float(string="Amount")
-    currency_id = fields.Many2one('res.currency',required=True)
-    journal_id = fields.Many2one('account.journal')
-    type = fields.Selection([('pre_medical_check', 'Pre Medical Check'),('agent', 'Agent'),('nira', 'Nira Broker'),('passport', 'Passport Broker'),('passport_placing_issue', 'Internal affairs'), ('interpol', 'Interpol Broker'),('gcc', 'GCC'),('hospital', 'Big Medical'),('agency', 'Agency'),('enjaz', 'Enjaz'),('embassy', 'Stamping'),('travel_company', 'Travel'),('training', 'Training'),('labor_reject', 'Labor Reject')], string='Type',required=True)
+    product = fields.Many2one('product.product',track_visibility="onchange")
+    price = fields.Float(string="Amount",track_visibility="onchange")
+    currency_id = fields.Many2one('res.currency', track_visibility="onchange", required=True)
+    journal_id = fields.Many2one('account.journal',track_visibility="onchange")
+    type = fields.Selection([('pre_medical_check', 'Pre Medical Check'),('agent', 'Agent'),('nira', 'Nira Broker'),('passport', 'Passport Broker'),('passport_placing_issue', 'Internal affairs'), ('interpol', 'Interpol Broker'),('gcc', 'GCC'),('hospital', 'Big Medical'),('agency', 'Agency'),('enjaz', 'Enjaz'),('embassy', 'Stamping'),('travel_company', 'Travel'),('training', 'Training'),('accommodation', 'Accommodation'),('labor_reject', 'Labor Reject')],
+                            string='Type',track_visibility="onchange",required=True)
 
     @api.constrains('price')
     def constrains_price(self):

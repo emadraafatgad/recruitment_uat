@@ -32,10 +32,10 @@
                 <header>
                     <button name="action_to_invoice" states="new"
                                 string="To Invoice" type="object"
-                                class="oe_highlight" groups="master_data.group_registeration_user"/>
+                                class="oe_highlight" groups="master_data.group_registeration_user" confirm="Are you sure you want to transfer this list to (to invoice) state?"/>
                     <button name="action_invoice" states="to_invoice"
                                 string="Invoice" type="object"
-                                class="oe_highlight" groups="account.group_account_invoice"/>
+                                class="oe_highlight" groups="account.group_account_invoice" confirm="Are you sure you want to invoice this list?"/>
 
                     <field name="state" widget="statusbar"
                                statusbar_visible="new,to_invoice,invoiced"/>
@@ -124,7 +124,7 @@
         </record>
 
     <menuitem id="menu_passport_request_invoice" sequence="2" name="PRN" parent="main_menu_passport"
-              action="passport_request_invoice_action" />
+              action="passport_request_invoice_action" groups="group_passport_user"/>
     <menuitem id="menu_passport_request_invoice_billing" sequence="3" name="Invoicing" parent="main_menu_passport"
               action="passport_request_invoice_action_billing" groups="account.group_account_manager"/>
 

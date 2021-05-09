@@ -67,10 +67,10 @@
                                     <field name="start_date"/>
                                     <button name="nira_request_done" states="releasing"
                                       string="Done" type="object"
-                                       class="oe_highlight"/>
+                                       class="oe_highlight" confirm="Are you sure you want to confirm that?"/>
                                     <button name="nira_reject" states="releasing"
                                       string="Reject" type="object"
-                                      class="btn-danger"/>
+                                      class="btn-danger" confirm="Are you sure you want to reject this laborer?"/>
                                     <field name="reject_reason" states="releasing"/>
                                    <field name="state" readonly="1"/>
                                    <field name="broker" invisible="1"/>

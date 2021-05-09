@@ -34,27 +34,27 @@ class LaborProfile(models.Model):
     ]
 
     state = fields.Selection(
-        [('new', 'New'), ('editing', 'Editing'), ('confirmed', 'Confirmed'), ('travelled', 'Travelled'),
+        [('new', 'New'), ('editing', 'Editing'), ('confirmed', 'Confirmed'), ('block', 'Blocked'),('travelled', 'Travelled'),
          ('rejected', 'Rejected')], default="new", track_visibility="onchange")
     partner_id = fields.Many2one('res.partner', string='Related Partner', required=True, ondelete='cascade',
                                  help='Partner-related data of the patient')
-    age = fields.Integer(compute='_compute_slave_age', store=True)
-    gender = fields.Selection(SEX, string='Gender', index=True)
+    age = fields.Integer(compute='_compute_slave_age',track_visibility="onchange", store=True)
+    gender = fields.Selection(SEX, string='Gender', track_visibility="onchange",index=True)
     # country_id = fields.Many2one('res.country', string='Nationality')
-    identification_code = fields.Char(string='Labor Code', copy=True, index=True, default=lambda self: _('New'),
+    identification_code = fields.Char(string='Labor Code', copy=True, index=True,track_visibility="onchange", default=lambda self: _('New'),
                                       help='Labor Identifier provided by the Health Center', readonly=True)
-    national_id = fields.Char(size=14, string='National ID')
+    national_id = fields.Char(size=14, string='National ID',track_visibility="onchange")
     card_no = fields.Char()
-    start_date = fields.Date('Date Of Issue')
-    end_date = fields.Date('Date of Expiry')
+    start_date = fields.Date('Date Of Issue',track_visibility="onchange")
+    end_date = fields.Date('Date of Expiry',track_visibility="onchange")
 
-    general_info = fields.Text(string='General Information', help="General information about the patient")
-    have_skills = fields.Boolean()
-    skills_ids = fields.Many2one('labor.skills')
+    general_info = fields.Text(string='General Information', track_visibility="onchange",help="General information about the patient")
+    have_skills = fields.Boolean(track_visibility="onchange")
+    skills_ids = fields.Many2one('labor.skills',track_visibility="onchange")
     occupation = fields.Selection(
         [('house_maid', 'House Maid'), ('pro_maid', 'Pro Maid'), ('pro_worker', 'Pro Worker')],
-        default="house_maid", string='Occupation')
-    salary = fields.Float(default=900)
+        default="house_maid", track_visibility="onchange",string='Occupation')
+    salary = fields.Float(default=900,track_visibility="onchange")
 
     def get_default_currency(self):
         currency = self.env['res.currency'].search([('currency_subunit_label', '=', 'Halala')])
@@ -63,57 +63,145 @@ class LaborProfile(models.Model):
     currency = fields.Many2one('res.currency', default=get_default_currency)
     agent = fields.Many2one('res.partner', domain=[('vendor_type', '=', 'agent')], required=True)
     experience = fields.Selection([('first_time', 'First Time'), ('has_experience', 'Has Experience')],
-                                  default="first_time", required=True)
-    experience_ids = fields.One2many('prior.experience', 'laborer_id')
-    language = fields.Many2many('res.lang')
-    specifications = fields.Many2many('labor.specifications')
-    height = fields.Float()
-    weight = fields.Float()
-    general_remarks = fields.Text()
-    children = fields.Char()
-    other_mob = fields.Char('Other Mob')
+                                  default="first_time", track_visibility="onchange",required=True)
+    experience_ids = fields.One2many('prior.experience', 'laborer_id',track_visibility="onchange")
+    language = fields.Many2many('res.lang',track_visibility="onchange")
+    specifications = fields.Many2many('labor.specifications',track_visibility="onchange")
+    height = fields.Float(track_visibility="onchange")
+    weight = fields.Float(track_visibility="onchange")
+    general_remarks = fields.Text(track_visibility="onchange")
+    children = fields.Char(track_visibility="onchange")
+    other_mob = fields.Char('Other Mob',track_visibility="onchange")
     marital_status = fields.Selection(
         [('single', 'Single'), ('married', 'Married'), ('windowed', 'Windowed'), ('divorced', 'Divorced')],
         'Marital Status')
     religion = fields.Selection([('muslim', 'Muslim'), ('christian', 'Christian'), ('jew', 'Jew'), ('other', 'Other')],
-                                'Religion')
+                                'Religion',track_visibility="onchange")
     children_ids = fields.One2many('children.number', 'laborer_id')
     education_certificate = fields.Selection(
         [('primary', 'Primary Education'), ('preparatory', 'Preparatory Education'),
          ('secondary', 'Secondary Education'), ('university', 'University'), ('diploma', 'Diploma'),
-         ('no_education', 'No Education')], 'Educational Certificate')
-    end_education = fields.Char('Education Remarks')
-    no_education = fields.Char('Remarks')
-    agent_invoice = fields.Many2one('account.invoice')
+         ('no_education', 'No Education')], 'Educational Certificate',track_visibility="onchange")
+    end_education = fields.Char('Education Remarks',track_visibility="onchange")
+    no_education = fields.Char('Remarks',track_visibility="onchange")
+    agent_invoice = fields.Many2one('account.invoice',track_visibility="onchange")
     register_with = fields.Selection([('national_id', 'National ID'), ('nira', 'Nira'), ('passport', 'Passport')],
-                                     'Document')
-    allow_passport_request = fields.Boolean('Allow Passport Request')
-    lc1 = fields.Many2one('labor.village', string='Village /LC1')
-    lc2 = fields.Many2one('labor.parish', string='Parish /LC2')
-    lc3 = fields.Many2one('labor.subcounty', string='Sub County /LC3')
-    lc4 = fields.Many2one('labor.county', string='County /LC4')
-    district = fields.Many2one('labor.district', string='District')
-    origin_lc1 = fields.Many2one('labor.village', string='Village /LC1')
-    origin_lc2 = fields.Many2one('labor.parish', string='Parish /LC2')
-    origin_lc3 = fields.Many2one('labor.subcounty', string='Sub County /LC3')
-    origin_lc4 = fields.Many2one('labor.county', string='County /LC4')
-    origin_district = fields.Many2one('labor.district', string='District')
-    origin_tribe = fields.Many2one('labor.tribe', string='Tribe')
-    origin_clan = fields.Many2one('labor.clan', string='Clan')
-    origin_descendants = fields.Char(string='Descendants')
-    interpol_no = fields.Char('Interpol No')
-    interpol_start_date = fields.Date('Interpol Start Date')
-    interpol_end_date = fields.Date('Interpol End Date')
-    allow_passport = fields.Boolean('Expenses of passport', compute='passport_expense', store=True)
-    large_image = fields.Binary()
+                                     'Document',track_visibility="onchange")
+    allow_passport_request = fields.Boolean('Allow Passport Request',track_visibility="onchange")
+    lc1 = fields.Many2one('labor.village', string='Village /LC1',track_visibility="onchange")
+    lc2 = fields.Many2one('labor.parish', string='Parish /LC2',track_visibility="onchange")
+    lc3 = fields.Many2one('labor.subcounty', string='Sub County /LC3',track_visibility="onchange")
+    lc4 = fields.Many2one('labor.county', string='County /LC4',track_visibility="onchange")
+    district = fields.Many2one('labor.district', string='District',track_visibility="onchange")
+    origin_lc1 = fields.Many2one('labor.village', string='Village /LC1',track_visibility="onchange")
+    origin_lc2 = fields.Many2one('labor.parish', string='Parish /LC2',track_visibility="onchange")
+    origin_lc3 = fields.Many2one('labor.subcounty', string='Sub County /LC3',track_visibility="onchange")
+    origin_lc4 = fields.Many2one('labor.county', string='County /LC4',track_visibility="onchange")
+    origin_district = fields.Many2one('labor.district', string='District',track_visibility="onchange")
+    origin_tribe = fields.Many2one('labor.tribe', string='Tribe',track_visibility="onchange")
+    origin_clan = fields.Many2one('labor.clan', string='Clan',track_visibility="onchange")
+    origin_descendants = fields.Char(string='Descendants',track_visibility="onchange")
+    interpol_no = fields.Char('Interpol No',track_visibility="onchange")
+    interpol_start_date = fields.Date('Interpol Start Date',track_visibility="onchange")
+    interpol_end_date = fields.Date('Interpol End Date',track_visibility="onchange")
+    allow_passport = fields.Boolean('Expenses of passport', compute='passport_expense',track_visibility="onchange", store=True)
+    large_image = fields.Binary(track_visibility="onchange")
     after_medical_check = fields.Selection([('fit', 'Fit'), ('unfit', 'Unfit'), ('pending', 'Pending')])
-    medical_unfit_reason = fields.Char()
-    cv_sent = fields.Boolean()
-    agency = fields.Many2one('res.partner', domain=[('agency', '=', True)])
-    agency_code = fields.Many2one('specify.agent')
+    medical_unfit_reason = fields.Char(track_visibility="onchange")
+    cv_sent = fields.Boolean(track_visibility="onchange")
+    agency = fields.Many2one('res.partner', track_visibility="onchange",domain=[('agency', '=', True)])
+    agency_code = fields.Many2one('specify.agent',track_visibility="onchange")
     specify_agency = fields.Selection(
         [('draft', 'CV Available'), ('available', 'Specified'), ('sent', 'CV Sent'), ('selected', 'Selected')],
         track_visibility="onchange", string='Specify Agency State')
+    update_id = fields.Boolean(compute='_compute_update_id')
+    update_pass = fields.Boolean(compute='_compute_update_pass')
+
+    @api.depends('state','register_with')
+    def _compute_update_id(self):
+        if self.state == 'confirmed' and self.register_with == 'nira':
+            self.update_id = True
+        else:
+            self.update_id = False
+
+    @api.depends('state', 'register_with')
+    def _compute_update_pass(self):
+        if self.state == 'confirmed' and self.register_with != 'passport':
+            self.update_pass = True
+        else:
+            self.update_pass = False
+
+    @api.multi
+    def action_update_id_wizard(self):
+        view_id = self.env.ref('master_data.labor_profile_national_id_wizard')
+        context = dict(self._context or {})
+        active_ids = context.get('active_ids', []) or []
+        for record in self.env['labor.profile'].browse(active_ids):
+            if len(active_ids) > 1:
+                raise ValidationError(_('You cannot update national id more than one record'))
+            return {
+                'name': _('Passport Info'),
+                'type': 'ir.actions.act_window',
+                'res_model': 'labor.profile',
+                'view_type': 'form',
+                'view_mode': 'form',
+                'view_id': view_id.id,
+                'views': [(view_id.id, 'form')],
+                'target': 'new',
+                'res_id': record.id,
+            }
+
+    @api.multi
+    def action_update_national_id(self):
+        self.ensure_one()
+        passport_request = self.env['nira.letter.request'].search([('labourer_id', '=', self.id)])
+        for rec in passport_request:
+            rec.national_id = self.national_id
+            rec.end_date = self.end_date
+
+    @api.multi
+    def action_update_passport_wizard(self):
+        view_id = self.env.ref('master_data.labor_profile_passport_wizard')
+        context = dict(self._context or {})
+        active_ids = context.get('active_ids', []) or []
+        for record in self.env['labor.profile'].browse(active_ids):
+            if len(active_ids) > 1:
+                raise ValidationError(_('You cannot update passport more than one record'))
+            return {
+                'name': _('Passport Info'),
+                'type': 'ir.actions.act_window',
+                'res_model': 'labor.profile',
+                'view_type': 'form',
+                'view_mode': 'form',
+                'view_id': view_id.id,
+                'views': [(view_id.id, 'form')],
+                'target': 'new',
+                'res_id': record.id,
+            }
+
+    @api.multi
+    def action_update_passport(self):
+        passport_request = self.env['passport.request'].search([('labor_id','=',self.id)])
+        for rec in passport_request:
+            rec.passport_no = self.passport_no
+            rec.pass_start_date = self.pass_start_date
+            rec.pass_end_date = self.pass_end_date
+
+    @api.multi
+    def create_passport_request(self):
+        context = dict(self._context or {})
+        active_ids = context.get('active_ids', []) or []
+        request_obj = self.env['passport.request']
+        for record in self.env['labor.profile'].browse(active_ids):
+            request = self.env['passport.request'].search([('labor_id', '=', record.id)])
+            if request:
+                raise ValidationError(_('there is a passport request for laborer %s')% record.name)
+            request_obj.create({
+                'labor_id': record.id,
+                'labor_id_no_edit': record.id,
+                'national_id': record.national_id,
+                'religion': record.religion,
+            })
 
     @api.multi
     def default_cv_values(self):
@@ -277,7 +365,7 @@ class LaborProfile(models.Model):
                         }
         }
 
-    allow_over_age = fields.Boolean()
+    allow_over_age = fields.Boolean(track_visibility="onchange")
     # allow_over_age = fields.Boolean()
 
     @api.onchange('date_of_birth')
@@ -317,6 +405,9 @@ class LaborProfile(models.Model):
     def action_confirm(self):
         self.ensure_one()
         # if self.pre_medical_check == 'unfit'
+        labor_confirmed = self.env['labor.profile'].search([('state', '=', 'confirmed'),('id', '=', self.id)])
+        if labor_confirmed:
+            raise ValidationError(_('Confirmed before'))
         if self.occupation == 'house_maid':
             self.identification_code = self.env['ir.sequence'].next_by_code('house.maid')
             training_req = self.env['slave.training']
@@ -347,9 +438,9 @@ class LaborProfile(models.Model):
             price = 0.0
             name = ''
             invoice_line = []
-            purchase_journal = self.env['account.journal'].search([('type', '=', 'purchase')])[0]
             product = self.env['product.recruitment.config'].search([('type', '=', 'agent')])[0]
-            bank_journal = self.env['account.journal'].search([('type', '=', 'bank')])[0]
+            if not product.journal_id:
+                raise ValidationError(_('Please, you must select journal in agent from configration'))
             method = self.env['account.payment.method'].search([('payment_type', '=', 'outbound')])[0]
             accounts = product.product.product_tmpl_id.get_product_accounts()
 
@@ -385,7 +476,7 @@ class LaborProfile(models.Model):
                 'type': 'in_invoice',
                 'partner_type': self.agent.vendor_type,
                 'origin': self.identification_code,
-                'journal_id': purchase_journal.id,
+                'journal_id': product.journal_id.id,
                 'account_id': self.agent.property_account_payable_id.id,
                 'invoice_line_ids': invoice_line,
 
@@ -398,7 +489,7 @@ class LaborProfile(models.Model):
                 'partner_id': self.agent.id,
                 'partner_type': 'supplier',
                 'payment_type': 'outbound',
-                'journal_id': bank_journal.id,
+                'journal_id': product.journal_id.id,
                 'currency_id': product.currency_id.id,
                 'payment_method_id': method.id,
                 'payment': 'first',
@@ -413,10 +504,83 @@ class LaborProfile(models.Model):
                 'payment': 'first'
 
             }))
+            line.append((0, 0, {
+                'type': 'agent_commission',
+            }))
             self.labor_process_ids = line
             self.show = True
-        accommodation = self.env['labour.accommodation'].create({'labour_id':self.id})
         self.state = 'confirmed'
+
+    @api.multi
+    def action_block(self):
+        self.ensure_one()
+        training = self.env['slave.training'].search([('slave_id', '=', self.id),('invoiced', '=', False)])
+        for rec in training:
+            rec.state='blocked'
+        nira = self.env['nira.letter.request'].search([('labourer_id', '=', self.id),('state', '!=', 'done')])
+        for rec in nira:
+            rec.state = 'blocked'
+        passport = self.env['passport.request'].search([('labor_id', '=', self.id),('state', 'in', ('new','to_invoice'))])
+        for rec in passport:
+            rec.state = 'blocked'
+        interpol = self.env['interpol.request'].search([('labor_id', '=', self.id),('state', 'in', ('new','assigned'))])
+        for rec in interpol:
+            rec.state = 'blocked'
+        big_medical = self.env['big.medical'].search([('labor_id', '=', self.id),('state', '=', 'new')])
+        for rec in big_medical:
+            rec.state = 'blocked'
+        enjaz = self.env['labor.enjaz.stamping'].search([('labor_id', '=', self.id),('type', '=', 'enjaz'),('state', '!=', 'done')])
+        for rec in enjaz:
+            rec.state = 'blocked'
+        stamping = self.env['labor.enjaz.stamping'].search(
+            [('labor_id', '=', self.id), ('type', '=', 'stamping'), ('state', '!=', 'done')])
+        for rec in stamping:
+            rec.state = 'blocked'
+        clearance = self.env['labor.clearance'].search([('labor_id', '=', self.id)])
+        for rec in clearance:
+            rec.state = 'blocked'
+        travel = self.env['travel.company'].search([('labor_id', '=', self.id),('state', '!=', 'done')])
+        for rec in travel:
+            rec.state = 'blocked'
+        pcr = self.env['pcr.exam'].search([('labour_id', '=', self.id)])
+        for rec in pcr:
+            rec.state = 'blocked'
+        accommodation = self.env['labour.accommodation'].search([('labour_id', '=', self.id),('state', '!=', 'invoiced')])
+        for rec in accommodation:
+            rec.state = 'blocked'
+        price = 0.0
+        for record in self.labor_process_ids:
+            price += record.total_cost
+        append_labor = []
+        append_labor.append(self.id)
+        invoice_line = []
+        product = self.env['product.recruitment.config'].search([('type', '=', 'agent')])[0]
+        if not product.journal_id:
+            raise ValidationError(_('Please, you must select journal in agent from configration'))
+        accounts = product.product.product_tmpl_id.get_product_accounts()
+        invoice_line.append((0, 0, {
+            'product_id': product.product.id,
+            'labors_id': [(6, 0, append_labor)],
+            'name': 'Block Laborer',
+            'uom_id': product.product.uom_id.id,
+            'price_unit': price,
+            'discount': 0.0,
+            'quantity': 1,
+            'account_id': accounts.get('stock_input') and accounts['stock_input'].id or \
+                          accounts['expense'].id,
+        }))
+        self.env['account.invoice'].create({
+            'partner_id': self.agent.id,
+            'currency_id': product.currency_id.id,
+            'type': 'in_refund',
+            'partner_type': self.agent.vendor_type,
+            'origin': self.identification_code,
+            'journal_id': product.journal_id.id,
+            'account_id': self.agent.property_account_payable_id.id,
+            'invoice_line_ids': invoice_line,
+
+        })
+        self.state = 'block'
 
     @api.multi
     def action_reject(self):
@@ -656,10 +820,10 @@ class LaborProfile(models.Model):
                     rec.age = age_calc
 
     passport_available = fields.Boolean()
-    passport_no = fields.Char()
-    pass_start_date = fields.Date("Issued Date")
-    pass_end_date = fields.Date("Expire Date")
-    pass_from = fields.Char('Place of Issue')
+    passport_no = fields.Char(track_visibility="onchange")
+    pass_start_date = fields.Date("Issued Date",track_visibility="onchange")
+    pass_end_date = fields.Date("Expire Date",track_visibility="onchange")
+    pass_from = fields.Char('Place of Issue',track_visibility="onchange")
 
     id_available = fields.Boolean("ID")
 
@@ -764,7 +928,7 @@ class LaborProfile(models.Model):
             'agency': False,
             'agent_invoice': False,
             'identification_code': 'New',
-            'phone': self.phoneR,
+            'phone': self.phone,
             'cv_sent': False,
             'agency_code': False,
             'specify_agency': False,
@@ -949,7 +1113,7 @@ class LaborProcessline(models.Model):
     _inherit = ['portal.mixin', 'mail.thread', 'mail.activity.mixin']
 
     labor = fields.Many2one('labor.profile')
-    type = fields.Selection([('agent_payment', 'Agent Payment'), ('nira', 'Nira'), ('passport', 'Passport'),
+    type = fields.Selection([('agent_commission', 'Agent Commision'),('agent_payment', 'Agent Payment'), ('nira', 'Nira'), ('passport', 'Passport'),
                              ('interpol', 'Interpol'), ('big_medical', 'Big Medical'), ('agency', 'Agency'),
                              ('enjaz', 'Enjaz'), ('stamping', 'Stamping'), ('clearance', 'Clearance'),
                              ('travel_company', 'Travel'),
@@ -974,6 +1138,9 @@ class LaborProcessline(models.Model):
                 for rec in bill:
                     record.total_cost += rec.amount
                 # record.total_cost = bill.amount
+            if record.type == 'agent_commission':
+                record.total_cost = record.labor.agent_invoice.amount_total
+
             if record.type == 'training':
                 bill = self.env['account.invoice.line'].search(
                     [('partner_id.vendor_type', '=', 'training'), ('invoice_type', '=', 'in_invoice')])
@@ -1047,6 +1214,8 @@ class LaborProcessline(models.Model):
             last_payment = self.env['account.payment'].search(
                 [('labor_id', '=', self.labor.id), ('payment', '=', 'last')])
             self.state = dict(last_payment._fields['state'].selection).get(last_payment.state)
+        if self.type == 'agent_commission':
+            self.state = dict(self.labor.agent_invoice._fields['state'].selection).get(self.labor.agent_invoice.state)
         if self.type == 'training':
             training = self.env['slave.training'].search([('slave_id', '=', self.labor.id)])
             self.state = dict(training._fields['state'].selection).get(training.state)
@@ -1089,6 +1258,12 @@ class AgentPayment(models.Model):
          ('passport_placing_issue', 'Passport Placing Issue'), ('interpol_broker', 'Interpol Broker'), ('gcc', 'Gcc'),
          ('hospital', 'Hospital'), ('embassy', 'Embassy'), ('travel_company', 'Travel Company'),
          ('training', 'Training Center')], related='partner_id.vendor_type')
+
+    @api.depends('invoice_ids')
+    @api.onchange('invoice_ids')
+    def _default_journal_id(self):
+        if self.invoice_ids:
+           self.journal_id = self.invoice_ids.journal_id
 
     @api.multi
     def post(self):

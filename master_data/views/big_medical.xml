@@ -16,14 +16,13 @@
         <field name="context">{}</field>
     </record>
 
-
     <record id="view_big_medical_form" model="ir.ui.view">
         <field name="name">Big Medical</field>
         <field name="model">big.medical</field>
         <field name="arch" type="xml">
             <form string="Big Medical">
                 <header>
-                    <button name="move_gcc" states="new" string="Confirm" type="object" class="oe_highlight"/>
+                    <button name="move_gcc" states="new" string="Confirm" type="object" class="oe_highlight" confirm="Are you sure you want to confirm that?"/>
                     <button name="action_done" attrs="{'invisible':[('confirm_appear','=',False)]}" string="Confirm" type="object" class="oe_highlight"/>
                     <button name="action_recheck" attrs="{'invisible':[('recheck_appear','=',False)]}" string="Recheck" type="object" class="oe_highlight"/>
                     <button name="action_reject" attrs="{'invisible':[('confirm_appear','=',False)]}" string="Reject" type="object" class="oe_highlight"/>
@@ -50,6 +49,7 @@
                                    attrs="{'readonly':[('state', '!=', 'hospital')],'required':[('state', '=', 'hospital')]}"/>
                             <field name="reason" attrs="{'invisible':[('medical_check', '!=', 'unfit')],
                                 'required':[('medical_check', '=', 'unfit')],'readonly':[('state', '!=', 'hospital')]}"/>
+                            <field name="deadline_medical"/>
                         </group>
                     </group>
                     <group>
@@ -79,10 +79,10 @@
             <form string="Big Medical">
                 <header>
                     <button name="move_gcc" states="new"
-                            string="Confirm" type="object" class="oe_highlight"/>
+                            string="Confirm" type="object" class="oe_highlight" confirm="Are you sure you want to confirm that?"/>
                      <button name="action_done" attrs="{'invisible':[('confirm_appear','=',False)]}" string="Confirm" type="object" class="oe_highlight"/>
                     <button name="action_recheck" attrs="{'invisible':[('recheck_appear','=',False)]}" string="Recheck" type="object" class="oe_highlight"/>
-                    <button name="action_reject" attrs="{'invisible':[('confirm_appear','=',False)]}" string="Reject" type="object" class="oe_highlight"/>
+                    <button name="action_reject" attrs="{'invisible':[('confirm_appear','=',False)]}" string="Reject" type="object"/>
                     <field name="state" widget="statusbar"
                            statusbar_visible="new,pending,fit"/>
                 </header>
@@ -169,7 +169,9 @@
         <field name="name">Big Medical Tree</field>
         <field name="model">big.medical</field>
         <field name="arch" type="xml">
-            <tree string="Big Medical">
+            <tree string="Big Medical" decoration-danger="date_today >= deadline and deadline and state == 'pending'">
+                <field name="date_today" invisible="1"/>
+                <field name="deadline" invisible="1"/>
                 <field name="name"/>
                 <field name="labor_id" string="Laborer"/>
                 <field name="national_id" invisible="1"/>
@@ -182,13 +184,15 @@
         </field>
     </record>
     <menuitem id="main_menu_big_medical" sequence="60" name="Big Medical" parent="menu_recruitment_root"/>
-    <menuitem id="menu_big_medical" sequence="1" name="GCC" parent="main_menu_big_medical" action="big_medical_action"/>
+    <menuitem id="menu_big_medical" sequence="1" name="GCC" parent="main_menu_big_medical" action="big_medical_action" groups="group_gcc_user"/>
 
     <record model="ir.ui.view" id="view_big_medical_labour_tree">
         <field name="name">Big Medical Tree</field>
         <field name="model">big.medical</field>
         <field name="arch" type="xml">
-            <tree string="Big Medical">
+            <tree string="Big Medical" decoration-danger="date_today >= deadline_medical and deadline_medical and state == 'pending'">
+                <field name="date_today" invisible="1"/>
+                <field name="deadline_medical" invisible="1"/>
                 <field name="name"/>
                 <field name="labor_id" string="Laborer"/>
                 <field name="hospital"/>
@@ -217,5 +221,5 @@
     </record>
 
     <menuitem id="menu_big_labour_medical" sequence="70" name="Big Medical" parent="main_menu_big_medical"
-              action="big_medical_labor_action"/>
+              action="big_medical_labor_action" groups="group_big_medical"/>
 </odoo>

@@ -97,7 +97,6 @@ class RecruitmentReport(models.TransientModel):
                     worksheet.write(row, 7, rec.labor_id.agent.mobile)
                     row += 1
 
-
             if self.choose == 'travel_company':
                 worksheet.write(1, 0, _('Name'), column_heading_style)
                 worksheet.write(1, 1, _('Agent'), column_heading_style)

@@ -100,6 +100,7 @@
                     <group >
                         <group col="2" >
                             <field name="slave_id" readonly="1"/>
+                            <field name="passport_no" />
                             <field name="training_center_id" readonly="1"/>
                         </group>
                         <group col="2">
@@ -129,6 +130,7 @@
                 <tree string="Payment Type" >
                     <field name="name" placeholder="Sequence"/>
                     <field name="slave_id"/>
+                    <field name="passport_no" />
                     <field name="start_date"/>
                     <field name="end_date"/>
                     <field name="training_center_id"/>
@@ -161,13 +163,17 @@
                 <header>
                     <button name="action_start" states="new"
                                 string="Start" type="object"
-                                class="oe_highlight"/>
+                                class="oe_highlight" confirm="Are you sure you want to start?"/>
+                    <button name="set_to_draft" attrs="{'invisible':[('show_set_draft', '=',False)]}"
+                                string="Set To Draft" type="object"
+                                class="oe_highlight" confirm="Are you sure you want to set this list to draft"/>
                     <button name="action_finish" states="in_progress"
                                 string="Finish" type="object"
-                                class="oe_highlight"/>
+                                class="oe_highlight" confirm="Are you sure you want to finish this list?"/>
+
                     <button name="create_bill"
                                 string="Create Bill" type="object"
-                                class="oe_highlight"  attrs="{'invisible':['|',('show', '=',True),('state', '=','new')]}"/>
+                                class="oe_highlight"  attrs="{'invisible':['|',('show', '=',True),('state', '=','new')]}" confirm="Are you sure you want to create bill to this list?"/>
 
                     <field name="state" widget="statusbar"
                                statusbar_visible="new,in_progress,finished"/>
@@ -191,6 +197,7 @@
                            <field name="total_lines"/>
                            <field name="list_now_len" invisible="1"/>
                            <field name="bill" invisible="1"/>
+                           <field name="show_set_draft" invisible="1"/>
 
                        </group>
                        <group>
@@ -288,7 +295,7 @@
                 </tree>
             </field>
         </record>
-    <menuitem id="menu_training_main" sequence="11" name="Training" parent="menu_recruitment_root"  action="slave_training_action" />
-    <menuitem id="menu_training_salve" sequence="1" name="Candidates" parent="menu_training_main" action="slave_training_action" />
-    <menuitem id="menu_training_list" sequence="2" name="Training Center" parent="menu_training_main" action="action_training_list" />
+    <menuitem id="menu_training_main" sequence="11" name="Training" parent="menu_recruitment_root"/>
+    <menuitem id="menu_training_salve" sequence="1" name="Candidates" parent="menu_training_main" action="slave_training_action" groups="group_training_user"/>
+    <menuitem id="menu_training_list" sequence="2" name="Training Center" parent="menu_training_main" action="action_training_list" groups="group_training_user"/>
 </odoo>

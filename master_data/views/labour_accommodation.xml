@@ -15,25 +15,29 @@
         <field name="model">labour.accommodation</field>
         <field name="arch" type="xml">
             <form string="Labour Accommodation ">
+                <header>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="new,confirm,invoiced"/>
+                </header>
                 <sheet>
                     <div class="oe_title">
 			            <label for="labour_id" />
 			            <h1>
-<!--			            	<field name="name" required="1" placeholder="e.g. Training"/>-->
                             <field name="labour_id"/>
                         </h1>
                     </div>
                     <group>
                         <group>
                             <field name="training_center"/>
-<!--                            <field name="national_id"/>-->
                             <field name="passport_no"/>
+                            <field name="accommodation_list_id" invisible="1"/>
                         </group>
                         <group col="2" >
                             <field name="start_date"/>
                             <field name="end_date"/>
                             <field name="extra_days"/>
                             <field name="accommodation_period"/>
+                            <field name="reasons"/>
                         </group>
                         <group>
                         </group>
@@ -60,6 +64,8 @@
                 <field name="start_date"/>
                 <field name="end_date"/>
                 <field name="accommodation_period"/>
+                <field name="reasons"/>
+                <field name="state"/>
             </tree>
         </field>
     </record>
@@ -67,7 +73,8 @@
     <menuitem id="menu_labour_accommodation_id"
               name="Accommodation"
               parent="menu_training_main"
-              action="action_labor_accommodation" />
+              action="action_labor_accommodation"
+              groups="group_registeration_user"/>
 
 
 

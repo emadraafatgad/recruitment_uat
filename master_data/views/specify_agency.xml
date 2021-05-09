@@ -12,7 +12,8 @@
         <field name="model">specify.agent</field>
         <field name="arch" type="xml">
             <search>
-                <field name="labor_id" string="Labourer"/>
+                <field name="labor_id" string="Laborer"/>
+                <field name="passport_no"/>
                 <field name="occupation"/>
                 <field name="religion"/>
                 <field name="agency"/>
@@ -86,7 +87,7 @@
                             class="oe_highlight" states="draft"/>
                     <button name="set_to_draft"
                             string="Set Draft" type="object"
-                            class="oe_highlight" states="available,sent"/>
+                            class="oe_highlight" states="available,sent" confirm="Are you sure you want to set draft?"/>
                     <button name="action_send_cv" attrs="{'invisible':[('state', '!=','available')]}"
                             string="Send CV By Email" type="object"
                             class="oe_highlight"/>
@@ -94,7 +95,13 @@
                             string="Resend CV By Email" type="object"/>
                     <button name="select"
                             string="Select" type="object"
-                            class="oe_highlight" states="sent"/>
+                            class="oe_highlight" states="sent" confirm="Are you sure you want this laborer to be selected?"/>
+                    <button name="unlock"
+                            string="Unlock" type="object"
+                            class="oe_highlight" states="selected" groups ="master_data.group_registeration_manager"/>
+                    <button name="lock"
+                            string="Lock" type="object"
+                            class="oe_highlight" states="edit_after_selected" groups ="master_data.group_registeration_manager"/>
                     <field name="state" widget="statusbar"
                            statusbar_visible="draft,available,selected"/>
                 </header>
@@ -106,6 +113,7 @@
                     <group>
 
                         <group>
+                            <field name="edit_selected" invisible="1"/>
                             <field name="labor_id" readonly="1"/>
                             <field name="passport_no" readonly="1"/>
                             <field name="religion" readonly="1"/>
@@ -114,10 +122,10 @@
                                    attrs="{'readonly':[('state','!=','draft')]}"/>
                         </group>
                         <group>
-                            <field name="employer" attrs="{'readonly':[('state','in',('selected'))]}"/>
-                            <field name="visa_no" attrs="{'readonly':[('state','in',('selected'))]}"/>
-                            <field name="employer_mobile" attrs="{'readonly':[('state','in',('selected'))]}"/>
-                            <field name="destination_city" attrs="{'readonly':[('state','in',('selected'))]}"/>
+                            <field name="employer" attrs="{'readonly':['|',('state','in',('selected')),('edit_selected','=',False)]}"/>
+                            <field name="visa_no" attrs="{'readonly':['|',('state','in',('selected')),('edit_selected','=',False)]}"/>
+                            <field name="employer_mobile" attrs="{'readonly':['|',('state','in',('selected')),('edit_selected','=',False)]}"/>
+                            <field name="destination_city" attrs="{'readonly':['|',('state','in',('selected')),('edit_selected','=',False)]}"/>
 
 
                         </group>
@@ -158,7 +166,7 @@
                 <field name="name" string="Code/Agency"/>
                 <field name="labor_id" string="Labourer"/>
                 <field name="occupation"/>
-                <field name="age"/>
+                <field name="passport_no"/>
                 <field name="religion"/>
                 <field name="agency"/>
                 <field name="employer"/>
@@ -167,7 +175,7 @@
                 <field name="state"/>
                 <button name="set_to_draft"
                         string="Set Draft" type="object"
-                        class="oe_highlight" states="available"/>
+                        class="oe_highlight" states="available" confirm="Are you sure you want to set draft?"/>
             </tree>
         </field>
     </record>
@@ -182,7 +190,7 @@
                     </group>
                 </group>
                 <footer>
-                    <button string="Enter" name="enter_agency" type="object" default_focus="1" class="btn-primary"/>
+                    <button string="Enter" name="enter_agency" type="object" default_focus="1" class="btn-primary" confirm="Are you sure you want specify this agency to all selected?"/>
                 </footer>
             </form>
         </field>
@@ -218,9 +226,9 @@
     <menuitem id="menu_specify_agent_root" sequence="61" name="Specify Agency"
                parent="menu_recruitment_root"/>
     <menuitem id="menu_specify_agent" sequence="1" name="Specify Agency" parent="menu_specify_agent_root"
-              action="specify_agent_action"/>
+              action="specify_agent_action" groups="group_specify_agency"/>
     <menuitem id="menu_specify_agent_draft_cv" sequence="2" name="CV Available" parent="menu_specify_agent_root"
-              action="specify_agent_action_draft_cv"/>
+              action="specify_agent_action_draft_cv" groups="group_specify_agency"/>
 
     <!-- <menuitem id="menu_specify_agent_done" sequence="2" name="Done" parent="menu_specify_agent_root"
                action="specify_agent_action_done" />-->

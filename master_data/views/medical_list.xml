@@ -23,7 +23,7 @@
             <form>
                 <header>
                     <button name="invoice" states="new"
-                            string="Invoice" type="object" class="oe_highlight"/>
+                            string="Invoice" type="object" class="oe_highlight" confirm="Are you sure you want invoice this list?"/>
                     <field name="state" widget="statusbar"
                            statusbar_visible="new,invoiced,done"/>
                 </header>
@@ -65,13 +65,13 @@
                                     <field name="invoiced" invisible="1"/>
                                     <button name="action_done" attrs="{'invisible':[('confirm_appear','=',False)]}"
                                             string="Confirm" type="object"
-                                            class="oe_highlight"/>
+                                            class="oe_highlight" confirm="Are you sure you want to confirm that?"/>
                                     <button name="action_recheck" attrs="{'invisible':[('recheck_appear','=',False)]}"
                                             string="Recheck" type="object"
                                             class="oe_highlight"/>
                                     <button name="action_reject" attrs="{'invisible':[('confirm_appear','=',False)]}"
                                             string="Reject" type="object"
-                                            class="oe_highlight"/>
+                                            class="oe_highlight" confirm="Are you sure you want to reject this laborer?"/>
                                 </tree>
                             </field>
 
