@@ -1,4 +1,4 @@
-from odoo import fields, models,api,_
+from odoo import fields, models,api,_,tools
 from datetime import date
 import base64
 from odoo.exceptions import ValidationError,UserError
@@ -71,6 +71,7 @@ class SpecifyAgent(models.Model):
         attachment_ids = []
         attach_id = attach_obj.create(attach_data)
         attachment_ids.append(attach_id.id)
+        subject = 'New Application/ ' + self.env.user.company_id.name
         body = 'Dear ' + self.agency.name + '\n' + 'Here is in attachment a labor CV/ ' + self.name
         return {
             'name': _('Compose Email'),
@@ -85,7 +86,7 @@ class SpecifyAgent(models.Model):
                         'default_res_id': self.ids[0],
                         'default_partner_ids': l,
                         'default_body': body,
-                        'default_subject': 'Labors CVS',
+                        'default_subject': subject,
                         'default_composition_mode': 'comment',
                         'custom_layout': "mail.mail_notification_paynow",
                         'force_email': True,
@@ -118,6 +119,7 @@ class SpecifyAgent(models.Model):
         attachment_ids = []
         attach_id = attach_obj.create(attach_data)
         attachment_ids.append(attach_id.id)
+        subject = 'New Application/ ' + self.env.user.company_id.name
         body = 'Dear ' + self.agency.name + '\n' + 'Here is in attachment a labor CV/ ' + self.name
         return {
             'name': _('Compose Email'),
@@ -131,6 +133,7 @@ class SpecifyAgent(models.Model):
             'context': {'default_model': 'specify.agent',
                         'default_res_id': self.ids[0],
                         'default_partner_ids': l,
+                        'default_subject': subject,
                         'default_body': body,
                         'default_composition_mode': 'comment',
                         'custom_layout': "mail.mail_notification_paynow",
@@ -173,6 +176,7 @@ class SpecifyAgent(models.Model):
             attach_id = attach_obj.create(attach_data)
             attachment_ids.append(attach_id.id)
             labor.append(record.labor_id.id)
+        subject = 'New Application/ ' + self.env.user.company_id.name
         return {
             'name': _('Send CVS'),
             'type': 'ir.actions.act_window',
@@ -185,6 +189,7 @@ class SpecifyAgent(models.Model):
             'context': {
                 'default_model': 'specify.agent',
                 'default_body': body,
+                'default_subject': subject,
                 'default_partner_ids': l,
                 'default_composition_mode': 'comment',
                 'force_email': True,
@@ -330,7 +335,7 @@ class MassAgency(models.TransientModel):
             attach_id = attach_obj.create(attach_data)
             attachment_ids.append(attach_id.id)
             labor.append(record.labor_id.id)
-
+        subject = 'New Application/ ' + self.env.user.company_id.name
         return {
             'name': _('Send CVS'),
             'type': 'ir.actions.act_window',
@@ -341,7 +346,9 @@ class MassAgency(models.TransientModel):
             'view_id': view_id.id,
             'views': [(view_id.id, 'form')],
             'context': {
+                'default_model': 'specify.agent',
                 'default_body': body,
+                'default_subject': subject,
                 'default_partner_ids': l,
                 'default_composition_mode': 'comment',
                 'force_email': True,
@@ -366,4 +373,34 @@ class MailComposeMessageInherit(models.TransientModel):
                 agency.state = 'sent'
                 labor.cv_sent = True
         return super(MailComposeMessageInherit, self).action_send_mail()
+
+    @api.model
+    def get_record_data(self, values):
+        """ Returns a defaults-like dict with initial values for the composition
+        wizard when sending an email related a previous email (parent_id) or
+        a document (model, res_id). This is based on previously computed default
+        values. """
+        result, subject = {}, False
+        if values.get('parent_id'):
+            parent = self.env['mail.message'].browse(values.get('parent_id'))
+            result['record_name'] = parent.record_name,
+            subject = tools.ustr(parent.subject or parent.record_name or '')
+            if not values.get('model'):
+                result['model'] = parent.model
+            if not values.get('res_id'):
+                result['res_id'] = parent.res_id
+            partner_ids = values.get('partner_ids', list()) + [(4, id) for id in parent.partner_ids.ids]
+            if self._context.get(
+                    'is_private') and parent.author_id:  # check message is private then add author also in partner list.
+                partner_ids += [(4, parent.author_id.id)]
+            result['partner_ids'] = partner_ids
+        elif values.get('model') and values.get('res_id'):
+            doc_name_get = self.env[values.get('model')].browse(values.get('res_id')).name_get()
+            result['record_name'] = doc_name_get and doc_name_get[0][1] or ''
+            subject = tools.ustr(result['record_name'])
+
+        re_prefix = _('Re:')
+        if subject and not (subject.startswith('Re:') or subject.startswith(re_prefix)):
+            subject = "%s %s" % (re_prefix, subject)
+        return result
 
