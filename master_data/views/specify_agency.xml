@@ -43,7 +43,7 @@
                             context="{'group_by':'agency'}"/>
                 </group>
                 <group expand="0" string="Group By...">
-                    <filter name="religion" string="Agency" icon="terp-partner" domain="[]"
+                    <filter name="religion" string="Religion" icon="terp-partner" domain="[]"
                             context="{'group_by':'religion'}"/>
                 </group>
             </search>
