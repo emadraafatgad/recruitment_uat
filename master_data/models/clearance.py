@@ -3,13 +3,20 @@ from odoo import fields, models , api,_
 from datetime import date
 from dateutil.relativedelta import relativedelta
 
+from odoo.exceptions import ValidationError
+
+
 class LaborClearance(models.Model):
     _name = 'labor.clearance'
     _order = 'id desc'
     _inherit = ['portal.mixin', 'mail.thread', 'mail.activity.mixin']
     _sql_constraints = [('laborer_unique', 'unique(labor_id)', 'Created with this Laborer before!')]
+<<<<<<< HEAD
 
     state = fields.Selection([('new','New'),('rejected','Rejected'),('confirmed','Confirmed')],default='new',track_visibility="onchange")
+=======
+    state = fields.Selection([('new','New'),('rejected','Rejected'),('confirmed','Confirmed'),('blocked','Blocked')],default='new',track_visibility="onchange")
+>>>>>>> 1de8c53e84f982f9a66ba18a7ddee7e14daa24f1
     name = fields.Char(string="Number",readonly=True,default='New')
     labor_id = fields.Many2one('labor.profile',required=True)
     labor_name = fields.Char()
@@ -47,6 +54,9 @@ class LaborClearance(models.Model):
     @api.multi
     def action_reject(self):
         self.ensure_one()
+        request = self.env['labor.clearance'].search([('id', '=', self.id), ('state', '=', 'rejected')])
+        if request:
+            raise ValidationError(_('Done before'))
         labor = self.env['labor.profile'].search([('id', '=', self.labor_id.id)])
         type = ''
         price = 0.0

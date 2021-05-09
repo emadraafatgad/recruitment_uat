@@ -71,6 +71,9 @@ class BigMedical(models.Model):
     @api.multi
     def move_gcc(self):
         self.ensure_one()
+        inv = self.env['account.invoice'].search([('origin', '=', self.name),('type', '=','in_invoice')])
+        if inv:
+            raise ValidationError(_('Done before'))
         if not self.gcc:
             raise ValidationError(_('Gcc'))
         if not self.gcc_no:
@@ -158,6 +161,8 @@ class BigMedical(models.Model):
     @api.multi
     def action_done(self):
         self.ensure_one()
+        if self.state in ('fit','unfit'):
+            raise ValidationError(_('Done before'))
         agency = self.env['specify.agent'].search([('labor_id', '=', self.labor_id.id)])
         if self.medical_check != 'fit':
             raise ValidationError(_('Result must be fit'))
@@ -185,6 +190,10 @@ class BigMedical(models.Model):
 
     @api.multi
     def action_reject(self):
+        self.ensure_one()
+        request = self.env['big.medical'].search([('id', '=', self.id), ('state', '=', 'rejected')])
+        if request:
+            raise ValidationError(_('Done before'))
         if self.medical_check != 'unfit':
             raise ValidationError(_('Result must be Unfit'))
         if not self.reason:

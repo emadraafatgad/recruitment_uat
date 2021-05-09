@@ -34,6 +34,9 @@ class TravelCompany(models.Model):
     @api.multi
     def action_done(self):
         self.ensure_one()
+        list = self.env['travel.company'].search([('id', '=', self.id), ('state', '=', 'done')])
+        if list:
+            raise ValidationError(_('Done before '))
         if not self.reservation_no:
             raise ValidationError(_('Enter Reservation No.'))
         if not self.departure_date:
@@ -122,6 +125,9 @@ class TravelCompany(models.Model):
     @api.multi
     def action_reject(self):
         self.ensure_one()
+        request = self.env['travel.company'].search([('id', '=', self.id), ('state', '=', 'rejected')])
+        if request:
+            raise ValidationError(_('Done before'))
         labor = self.env['labor.profile'].search([('id', '=', self.labor_id.id)])
         type = ''
         price = 0.0

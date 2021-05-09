@@ -59,6 +59,9 @@ class LaborEnjaz(models.Model):
     @api.multi
     def action_done(self):
         self.ensure_one()
+        request = self.env['labor.enjaz.stamping'].search([('id', '=', self.id), ('state', '=', 'done')])
+        if request:
+            raise ValidationError(_('Done before'))
         append_labor = []
         append_labor.append(self.labor_id.id)
         if self.type == 'enjaz':
@@ -190,6 +193,46 @@ class LaborEnjaz(models.Model):
 
     @api.multi
     def action_reject(self):
+        self.ensure_one()
+        request = self.env['labor.enjaz.stamping'].search([('id', '=', self.id), ('state', '=', 'rejected')])
+        if request:
+            raise ValidationError(_('Done before'))
+        labor = self.env['labor.profile'].search([('id', '=', self.labor_id.id)])
+        type = ''
+        price = 0.0
+        for record in labor.labor_process_ids:
+            if record.type != 'agent_payment':
+                type += record.type + ' , '
+                price += record.total_cost
+        append_labor = []
+        append_labor.append(self.labor_id.id)
+        invoice_line = []
+        purchase_journal = self.env['account.journal'].search([('type', '=', 'purchase')])[0]
+        product = self.env['product.recruitment.config'].search([('type', '=', 'labor_reject')])[0]
+        accounts = product.product.product_tmpl_id.get_product_accounts()
+        invoice_line.append((0, 0, {
+            'product_id': product.product.id,
+            'labors_id': [(6, 0, append_labor)],
+            'name': type,
+            'uom_id': product.product.uom_id.id,
+            'price_unit': price,
+            'discount': 0.0,
+            'quantity': 1,
+            'account_id': accounts.get('stock_input') and accounts['stock_input'].id or \
+                          accounts['expense'].id,
+        }))
+        if labor.labor_process_ids:
+            self.env['account.invoice'].create({
+                'partner_id': labor.agent.id,
+                'currency_id': product.currency_id.id,
+                'type': 'in_refund',
+                'partner_type': labor.agent.vendor_type,
+                'origin': self.name,
+                'journal_id': purchase_journal.id,
+                'account_id': labor.agent.property_account_payable_id.id,
+                'invoice_line_ids': invoice_line,
+
+            })
         self.state = 'rejected'
 
     @api.multi

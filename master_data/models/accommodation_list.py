@@ -70,6 +70,8 @@ class AccommodationList(models.Model):
     @api.multi
     def create_bill(self):
         self.ensure_one()
+        if self.state == 'invoiced':
+            raise ValidationError(_('Done before'))
         for record in self.accommodation_list:
             record.state = 'invoiced'
         invoice_line = []
@@ -78,6 +80,8 @@ class AccommodationList(models.Model):
             raise ValidationError(_('There is no configration for accommodation you must put configration for accommodation'))
         if not product.journal_id:
             raise ValidationError(_('Please, you must select journal in accomodation from configration'))
+        if self.training_center.accommodation_cost <= 0:
+            raise ValidationError(_('Please, you must enter accommodation cost in training center screen'))
         accounts = product.product.product_tmpl_id.get_product_accounts()
         for rec in self.accommodation_list:
             append_labor = []
@@ -86,6 +90,7 @@ class AccommodationList(models.Model):
                 'product_id': product.product.id,
                 'labors_id': [(6, 0, append_labor)],
                 'name': rec.labour_id.name,
+                'accommodation': True,
                 'uom_id': product.product.uom_id.id,
                 'price_unit': self.training_center.accommodation_cost,
                 'discount': 0.0,

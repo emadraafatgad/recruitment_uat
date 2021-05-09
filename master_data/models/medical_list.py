@@ -54,6 +54,9 @@ class MedicalList(models.Model):
 
     @api.multi
     def invoice(self):
+        list = self.env['medical.list'].search([('id', '=', self.id), ('state', '=', 'invoiced')])
+        if list:
+            raise ValidationError(_('Done before '))
         if not self.hospital:
             raise ValidationError(_('Enter hospital'))
         if not self.medical_request:

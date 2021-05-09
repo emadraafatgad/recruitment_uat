@@ -72,6 +72,10 @@ class NiraLetter(models.Model):
         invoice = self.env['account.invoice'].search(
             [('origin', '=', self.broker_list_id.name), ('state', '=', 'draft'), ('type', '=', 'in_invoice')])
         if invoice:
+            for rec in invoice.invoice_line_ids:
+                for labor in rec.labors_id:
+                    if labor.id == self.labourer_id.id:
+                        raise ValidationError(_('Done before'))
             invoice.write({'invoice_line_ids': invoice_line})
         else:
             self.env['account.invoice'].create({
@@ -92,6 +96,9 @@ class NiraLetter(models.Model):
     @api.multi
     def nira_reject(self):
         self.ensure_one()
+        request = self.env['nira.letter.request'].search([('id', '=', self.id), ('state', '=', 'rejected')])
+        if request:
+            raise ValidationError(_('Done before'))
         if not self.reject_reason:
             raise ValidationError(_('Enter any reject reason'))
         self.state = 'rejected'

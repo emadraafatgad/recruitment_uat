@@ -514,6 +514,9 @@ class LaborProfile(models.Model):
     @api.multi
     def action_block(self):
         self.ensure_one()
+        labor_blocked = self.env['labor.profile'].search([('state', '=', 'block'), ('id', '=', self.id)])
+        if labor_blocked:
+            raise ValidationError(_('Blocked before'))
         training = self.env['slave.training'].search([('slave_id', '=', self.id),('invoiced', '=', False)])
         for rec in training:
             rec.state='blocked'
@@ -585,6 +588,9 @@ class LaborProfile(models.Model):
     @api.multi
     def action_reject(self):
         self.ensure_one()
+        labor_rejected = self.env['labor.profile'].search([('state', '=', 'rejected'), ('id', '=', self.id)])
+        if labor_rejected:
+            raise ValidationError(_('Rejected before'))
         append_labor = []
         append_labor.append(self.id)
         invoice_line = []
@@ -1117,7 +1123,7 @@ class LaborProcessline(models.Model):
                              ('interpol', 'Interpol'), ('big_medical', 'Big Medical'), ('agency', 'Agency'),
                              ('enjaz', 'Enjaz'), ('stamping', 'Stamping'), ('clearance', 'Clearance'),
                              ('travel_company', 'Travel'),
-                             ('training', 'Training')])
+                             ('training', 'Training'),('accommodation', 'Accommodation')])
     state = fields.Char(compute='compute_state')
     payment = fields.Selection([('first', 'First'), ('last', 'Last')])
     cost = fields.Float('Paid Cost')
@@ -1143,10 +1149,18 @@ class LaborProcessline(models.Model):
 
             if record.type == 'training':
                 bill = self.env['account.invoice.line'].search(
-                    [('partner_id.vendor_type', '=', 'training'), ('invoice_type', '=', 'in_invoice')])
+                    [('partner_id.vendor_type', '=', 'training'), ('invoice_type', '=', 'in_invoice'),
+                     ('accommodation', '=', False)])
                 for rec in bill:
                     if record.labor in rec.labors_id:
-                        record.total_cost = rec.price_unit
+                        record.total_cost += rec.price_unit
+            if record.type == 'accommodation':
+                bill = self.env['account.invoice.line'].search(
+                    [('partner_id.vendor_type', '=', 'training'), ('invoice_type', '=', 'in_invoice'),
+                     ('accommodation', '=', True)])
+                for rec in bill:
+                    if record.labor in rec.labors_id:
+                        record.total_cost += rec.price_subtotal
             if record.type == 'nira':
                 bill = self.env['account.invoice.line'].search(
                     [('partner_id.vendor_type', '=', 'nira_broker'), ('invoice_type', '=', 'in_invoice')])

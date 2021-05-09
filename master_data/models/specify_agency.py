@@ -254,6 +254,8 @@ class SpecifyAgent(models.Model):
     @api.multi
     def select(self):
         self.ensure_one()
+        if self.state == 'selected':
+            raise ValidationError(_('Done before'))
         if not self.employer:
             raise ValidationError(_('Enter employer'))
         if not self.employer_mobile:
@@ -354,7 +356,6 @@ class MassAgency(models.TransientModel):
 class MailComposeMessageInherit(models.TransientModel):
     _inherit = 'mail.compose.message'
     labor_ids = fields.Many2many('labor.profile')
-    
 
     @api.multi
     def action_send_mail(self):

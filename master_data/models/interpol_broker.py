@@ -36,6 +36,10 @@ class InterpolBroker(models.Model):
 
     @api.multi
     def action_assign(self):
+        list = self.env['interpol.broker'].search(
+            [('id', '=', self.id), ('state', '=', 'assigned')])
+        if list:
+            raise ValidationError(_('Assigned before'))
         if self.list_total_count < 1:
             raise ValidationError(_('You must enter at least one line'))
         self.assign_date =datetime.now()
@@ -134,14 +138,14 @@ class PartnerPayments(models.Model):
                             labor = self.env['labor.process'].search(
                                 [('labor', 'in', lab.ids), ('type', '=', 'travel_company')])
                             labor.cost += rec.price_unit
-                        if self.partner_id.vendor_type == 'training':
+                        if self.partner_id.vendor_type == 'training' and not rec.accommodation:
                             labor = self.env['labor.process'].search(
                                 [('labor', 'in', lab.ids), ('type', '=', 'training')])
                             labor.cost += rec.price_unit
-                        #if self.partner_id.vendor_type == 'training' and self.accommodation:
-                          #  labor = self.env['labor.process'].search(
-                             #   [('labor', 'in', lab.ids), ('type', '=', 'accommodation')])
-                            #labor.cost += rec.price_unit
+                        if self.partner_id.vendor_type == 'training' and rec.accommodation:
+                         labor = self.env['labor.process'].search(
+                              [('labor', 'in', lab.ids), ('type', '=', 'accommodation')])
+                         labor.cost += rec.price_unit
 
 
         return super(PartnerPayments, self).action_validate_invoice_payment()
@@ -151,6 +155,7 @@ class AccountInvoiceLine(models.Model):
     _inherit = 'account.invoice.line'
     labors_id = fields.Many2many('labor.profile')
     labor_id = fields.Many2one('labor.profile')
+    accommodation = fields.Boolean()
 
 
 

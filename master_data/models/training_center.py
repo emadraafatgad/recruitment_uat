@@ -44,6 +44,9 @@ class SlaveTraining(models.Model):
     @api.multi
     def action_reject(self):
         self.ensure_one()
+        request = self.env['slave.training'].search([('id', '=', self.id), ('state', '=', 'rejected')])
+        if request:
+            raise ValidationError(_('Done before'))
         labor = self.env['labor.profile'].search([('id', '=', self.slave_id.id)])
         type = ''
         price = 0.0
@@ -200,6 +203,9 @@ class TrainingList(models.Model):
 
     @api.multi
     def action_start(self):
+        list = self.env['training.list'].search([('id', '=', self.id), ('state', '=', 'in_progress')])
+        if list:
+            raise ValidationError(_('Done before '))
         if not self.training_center:
             raise ValidationError(_('you must enter training center'))
         if len(self.training_requests) < 1:
@@ -213,6 +219,9 @@ class TrainingList(models.Model):
 
     @api.multi
     def action_finish(self):
+        list = self.env['training.list'].search([('id', '=', self.id), ('state', '=', 'finished')])
+        if list:
+            raise ValidationError(_('Finished before '))
         self.end_date = date.today()
         for rec in self.training_requests:
             rec.state = 'finished'
@@ -240,6 +249,9 @@ class TrainingList(models.Model):
 
     @api.multi
     def create_bill(self):
+        list = self.env['training.list'].search([('id', '=', self.id), ('show', '=', True)])
+        if list:
+            raise ValidationError(_('Created before '))
         invoice_line = []
         purchase_journal = self.env['account.journal'].search([('type', '=', 'purchase')])[0]
         product = self.env['product.recruitment.config'].search([('type', '=', 'training')])[0]

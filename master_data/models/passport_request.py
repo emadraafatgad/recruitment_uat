@@ -63,9 +63,13 @@ class PassportNumber(models.Model):
     @api.multi
     def request_passport_approve(self):
         self.state = 'releasing'
+
     @api.multi
     def request_passport_done(self):
         self.ensure_one()
+        list = self.env['passport.request'].search([('id', '=', self.id), ('state', '=', 'done')])
+        if list:
+            raise ValidationError(_('Done before '))
         if not self.passport_no or not self.pass_start_date or not self.pass_end_date or not self.pass_from:
             raise ValidationError(_('You must enter passport info'))
         else:
@@ -98,6 +102,10 @@ class PassportNumber(models.Model):
         invoice = self.env['account.invoice'].search(
             [('origin', '=', self.broker_list_id.name), ('state', '=', 'draft')])
         if invoice:
+            for rec in invoice.invoice_line_ids:
+                for labor in rec.labors_id:
+                    if labor.id == self.labor_id.id:
+                        raise ValidationError(_('Done before'))
             invoice.write({'invoice_line_ids': invoice_line})
         else:
             self.env['account.invoice'].create({
@@ -158,6 +166,9 @@ class PassportNumber(models.Model):
     @api.multi
     def action_reject(self):
         self.ensure_one()
+        request = self.env['passport.request'].search([('id', '=', self.id), ('state', '=', 'rejected')])
+        if request:
+            raise ValidationError(_('Done before'))
         labor = self.env['labor.profile'].search([('id', '=', self.labor_id.id)])
         type=''
         price=0.0

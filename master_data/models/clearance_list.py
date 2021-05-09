@@ -27,6 +27,8 @@ class ClearanceList(models.Model):
 
     @api.multi
     def action_confirm(self):
+        if self.state == 'confirmed':
+            raise ValidationError(_('Confirmed before'))
         if not self.reference_no:
             raise ValidationError(_('You must enter reference #'))
 
