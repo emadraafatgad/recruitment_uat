@@ -184,7 +184,7 @@
         </field>
     </record>
     <menuitem id="main_menu_big_medical" sequence="60" name="Big Medical" parent="menu_recruitment_root"/>
-    <menuitem id="menu_big_medical" sequence="1" name="GCC" parent="main_menu_big_medical" action="big_medical_action" groups="group_gcc_user"/>
+    <menuitem id="menu_big_medical" sequence="1" name="GCC" parent="main_menu_big_medical" action="big_medical_action" groups="group_gcc_read"/>
 
     <record model="ir.ui.view" id="view_big_medical_labour_tree">
         <field name="name">Big Medical Tree</field>
@@ -221,5 +221,5 @@
     </record>
 
     <menuitem id="menu_big_labour_medical" sequence="70" name="Big Medical" parent="main_menu_big_medical"
-              action="big_medical_labor_action" groups="group_big_medical"/>
+              action="big_medical_labor_action" groups="group_big_medical_read"/>
 </odoo>

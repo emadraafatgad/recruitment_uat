@@ -106,7 +106,7 @@
     </record>
 
     <menuitem id="menu_clearance_List" sequence="2" name="Processing" parent="menu_clearance_main"
-              action="clearance_list_action"/>
+              action="clearance_list_action" groups="group_clearance_read"/>
 
 
 </odoo>

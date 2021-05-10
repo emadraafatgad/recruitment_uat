@@ -106,7 +106,7 @@
         </record>
       <menuitem id="menu_nira_main" sequence="11" name="Nira" parent="menu_recruitment_root"/>
     <menuitem id="menu_nira_request" sequence="1" name="Candidates" parent="menu_nira_main"
-              action="nira_request_action" groups="group_nira_user"/>
+              action="nira_request_action" groups="group_nira_read"/>
 
 
  </data>

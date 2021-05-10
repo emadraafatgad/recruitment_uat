@@ -118,5 +118,5 @@
       <menuitem id="menu_clearance_main" sequence="64" name="Clearance" parent="menu_recruitment_root"/>
 
       <menuitem id="menu_labor_clearance" sequence="1" name="Candidates" parent="menu_clearance_main"
-              action="labor_clearance_action" groups="group_clearance_user"/>
+              action="labor_clearance_action" groups="group_clearance_read"/>
 </odoo>

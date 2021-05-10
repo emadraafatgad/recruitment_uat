@@ -24,7 +24,7 @@
         <field name="target">new</field>
     </record>
 
-    <menuitem action="action_interpol_compute" id="menu_interpol_compute" parent="main_menu_interpol" sequence="135"/>
+    <menuitem action="action_interpol_compute" id="menu_interpol_compute" parent="main_menu_interpol" sequence="135" groups="group_registeration_user"/>
 
 
 </odoo>

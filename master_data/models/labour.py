@@ -438,7 +438,7 @@ class LaborProfile(models.Model):
             price = 0.0
             name = ''
             invoice_line = []
-            product = self.env['product.recruitment.config'].search([('type', '=', 'agent')])[0]
+            product = self.env['product.recruitment.config'].search([('type', '=', 'agent')],limit=1)
             if not product.journal_id:
                 raise ValidationError(_('Please, you must select journal in agent from configration'))
             method = self.env['account.payment.method'].search([('payment_type', '=', 'outbound')])[0]

@@ -86,7 +86,8 @@
     <menuitem id="menu_labour_pcr_exam_id"
               name="PCR Test"
               parent="menu_pcr_exam_root_id"
-              action="action_pcr_exam"/>
+              action="action_pcr_exam"
+              groups="group_pcr_test_read"/>
 
 
 

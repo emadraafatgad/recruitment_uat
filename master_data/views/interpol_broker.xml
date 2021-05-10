@@ -199,7 +199,7 @@
     </field>
 </record>
     <menuitem id="menu_interpol_broker" sequence="3" name="Interpol Broker" parent="main_menu_interpol"
-              action="interpol_broker_action"/>
+              action="interpol_broker_action" groups="group_interpol_read"/>
 
 
 </odoo>

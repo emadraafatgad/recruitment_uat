@@ -117,7 +117,7 @@
     </record>
 
     <menuitem id="menu_pcr_exam_list" sequence="40" name="PCR Exam  List" parent="menu_pcr_exam_root_id"
-              action="action_pcr_exam_list"/>
+              action="action_pcr_exam_list" groups="group_pcr_test_read"/>
 
 
 </odoo>

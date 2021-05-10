@@ -131,7 +131,7 @@
         </record>
 
     <menuitem id="menu_nira_broker" sequence="2" name="Nira Broker" parent="menu_nira_main"
-              action="nira_broker_action"/>
+              action="nira_broker_action" groups="group_nira_read"/>
 
 
  </data>

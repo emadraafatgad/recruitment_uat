@@ -25,6 +25,10 @@
                         domain="[('state','=','sent')]"/>
                 <filter name="state_selected" string="Selected"
                         domain="[('state','=','selected')]"/>
+                <filter name="gcc_yes" string="GCC Yes"
+                        domain="[('big_medical_state','!=','New')]"/>
+                <filter name="gcc_no" string="GCC No"
+                        domain="[('big_medical_state','=','New')]"/>
                 <filter string="Today" name="today" domain="[('create_date','&gt;=',time.strftime('%%Y-%%m-%%d'))]"/>
                 <filter string="This Week" name="this_week" domain="[
                                 '&amp;',
@@ -46,6 +50,15 @@
                     <filter name="religion" string="Agency" icon="terp-partner" domain="[]"
                             context="{'group_by':'religion'}"/>
                 </group>
+
+                <group expand="0" string="Group By...">
+                    <filter name="interpol_state" string="Interpol State" icon="terp-partner" domain="[]"
+                            context="{'group_by':'interpol_state'}"/>
+                </group>
+                <group expand="0" string="Group By...">
+                    <filter name="big_medical_state" string="Big Medical State" icon="terp-partner" domain="[]"
+                            context="{'group_by':'big_medical_state'}"/>
+                </group>
             </search>
         </field>
     </record>
@@ -58,6 +71,7 @@
         <field name="domain">[('state','!=','draft')]</field>
         <field name="context">{}</field>
     </record>
+
     <record id="specify_agent_action_draft_cv" model="ir.actions.act_window">
         <field name="name">Specify Agency</field>
         <field name="res_model">specify.agent</field>
@@ -173,6 +187,8 @@
                 <field name="destination_city"/>
                 <field name="visa_no"/>
                 <field name="state"/>
+                <!--<field name="interpol_state"/>
+                <field name="big_medical_state"/>-->
                 <button name="set_to_draft"
                         string="Set Draft" type="object"
                         class="oe_highlight" states="available" confirm="Are you sure you want to set draft?"/>
@@ -216,7 +232,7 @@
         <field name="model">mail.compose.message</field>
         <field name="inherit_id" ref="mail.email_compose_message_wizard_form"/>
         <field name="arch" type="xml">
-            <field name="subject" position="after">
+            <field name="subject" position="before">
                 <field name="labor_ids" widget="many2many_tags" invisible="1"/>
             </field>
         </field>
@@ -226,9 +242,9 @@
     <menuitem id="menu_specify_agent_root" sequence="61" name="Specify Agency"
                parent="menu_recruitment_root"/>
     <menuitem id="menu_specify_agent" sequence="1" name="Specify Agency" parent="menu_specify_agent_root"
-              action="specify_agent_action" groups="group_specify_agency"/>
+              action="specify_agent_action" groups="group_specify_agency_read"/>
     <menuitem id="menu_specify_agent_draft_cv" sequence="2" name="CV Available" parent="menu_specify_agent_root"
-              action="specify_agent_action_draft_cv" groups="group_specify_agency"/>
+              action="specify_agent_action_draft_cv" groups="group_specify_agency_read"/>
 
     <!-- <menuitem id="menu_specify_agent_done" sequence="2" name="Done" parent="menu_specify_agent_root"
                action="specify_agent_action_done" />-->
