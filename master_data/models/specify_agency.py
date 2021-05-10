@@ -30,6 +30,7 @@ class SpecifyAgent(models.Model):
     edit_selected = fields.Boolean(compute='compute_edit_selected')
     occupation = fields.Selection([('house_maid', 'House Maid'), ('pro_maid', 'Pro Maid'), ('pro_worker', 'Pro Worker')], string='Occupation')
     _sql_constraints = [('visa_uniq', 'unique(visa_no , labor_id)', 'Visa# must be unique!'),('laborer_unique', 'unique(labor_id)', 'Created with this Laborer before!')]
+
     """interpol_state = fields.Char(compute='compute_interpol_state',store=True)
     big_medical_state = fields.Char(compute='compute_interpol_state',store=True)
 

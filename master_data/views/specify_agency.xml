@@ -25,10 +25,10 @@
                         domain="[('state','=','sent')]"/>
                 <filter name="state_selected" string="Selected"
                         domain="[('state','=','selected')]"/>
-                <filter name="gcc_yes" string="GCC Yes"
+               <!-- <filter name="gcc_yes" string="GCC Yes"
                         domain="[('big_medical_state','!=','New')]"/>
                 <filter name="gcc_no" string="GCC No"
-                        domain="[('big_medical_state','=','New')]"/>
+                        domain="[('big_medical_state','=','New')]"/>-->
                 <filter string="Today" name="today" domain="[('create_date','&gt;=',time.strftime('%%Y-%%m-%%d'))]"/>
                 <filter string="This Week" name="this_week" domain="[
                                 '&amp;',
@@ -51,14 +51,14 @@
                             context="{'group_by':'religion'}"/>
                 </group>
 
-                <group expand="0" string="Group By...">
+              <!--  <group expand="0" string="Group By...">
                     <filter name="interpol_state" string="Interpol State" icon="terp-partner" domain="[]"
                             context="{'group_by':'interpol_state'}"/>
                 </group>
                 <group expand="0" string="Group By...">
                     <filter name="big_medical_state" string="Big Medical State" icon="terp-partner" domain="[]"
                             context="{'group_by':'big_medical_state'}"/>
-                </group>
+                </group>-->
             </search>
         </field>
     </record>
