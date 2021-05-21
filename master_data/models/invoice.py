@@ -1,4 +1,4 @@
-from odoo import fields, models , api,_
+from odoo import fields, models, api, _
 from datetime import date
 
 
@@ -8,21 +8,20 @@ class PassportInvoice(models.Model):
     _description = 'Passport Request Invoice'
     _inherit = ['portal.mixin', 'mail.thread', 'mail.activity.mixin']
 
-    name = fields.Char(string="Number", track_visibility="onchange",readonly=True, default='New')
-    placing_issue = fields.Many2one('res.partner',string='Internal affairs', track_visibility="onchange", domain=[('supplier','=',True)])
-    state = fields.Selection([('new', 'new'),('to_invoice', 'to Invoice'),('invoiced', 'Invoiced')], default='new',track_visibility='onchange')
+    name = fields.Char(string="Number", track_visibility="onchange", readonly=True, default='New')
+    placing_issue = fields.Many2one('res.partner', string='Internal affairs', track_visibility="onchange",
+                                    domain=[('supplier', '=', True)])
+    state = fields.Selection([('new', 'new'), ('to_invoice', 'to Invoice'), ('invoiced', 'Invoiced')], default='new',
+                             track_visibility='onchange')
     issued_date = fields.Date(default=date.today(), track_visibility="onchange", readonly=True)
     invoice_date = fields.Date(readonly=True, track_visibility="onchange")
     passport_request = fields.Many2many('passport.request', track_visibility="onchange", string='Passport Requests')
 
     def _get_product_default(self):
-
         product = self.env['product.recruitment.config'].search([('type', '=', 'passport')])
         self.product = product.product
 
-    product = fields.Many2one('product.product',compute=_get_product_default)
-
-
+    product = fields.Many2one('product.product', compute=_get_product_default)
 
     @api.multi
     def action_invoice(self):
@@ -57,17 +56,14 @@ class PassportInvoice(models.Model):
             'view_mode': 'tree,form',
             'res_model': 'account.invoice',
             'type': 'ir.actions.act_window',
-            'domain' :[('origin','=',self.name)]
-
+            'domain': [('origin', '=', self.name)]
         }
-
-
-
 
     @api.model
     def create(self, vals):
         vals['name'] = self.env['ir.sequence'].next_by_code('passport.request.invoice')
         return super(PassportInvoice, self).create(vals)
+
 
 class PassportAccountInvoice(models.Model):
     _inherit = 'account.invoice'

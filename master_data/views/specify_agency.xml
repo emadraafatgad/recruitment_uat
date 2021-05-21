@@ -136,6 +136,10 @@
                                 <group>
                                     <field name="request_date" readonly="1"/>
                                 </group>
+                                <group>
+                                    <field name="interpol_state"  readonly="1"/>
+                                    <field name="medical_state" readonly="1"/>
+                                </group>
                             </group>
 
                             <group>
@@ -172,6 +176,8 @@
                 <field name="employer"/>
                 <field name="destination_city"/>
                 <field name="visa_no"/>
+                <field name="interpol_state"/>
+                <field name="medical_state"/>
                 <field name="state"/>
                 <button name="set_to_draft"
                         string="Set Draft" type="object"

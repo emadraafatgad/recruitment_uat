@@ -1,5 +1,5 @@
 <odoo>
-     <record id="passport_request_invoice_code" model="ir.sequence">
+    <record id="passport_request_invoice_code" model="ir.sequence">
         <field name="name">Passport Request Invoice</field>
         <field name="code">passport.request.invoice</field>
         <field name="prefix">list/</field>
@@ -22,11 +22,10 @@
             <form string="Passport Request Invoice">
                 <header>
                     <button name="action_invoice" states="new"
-                                string="Invoice" type="object"
-                                class="oe_highlight"/>
-
+                            string="Invoice" type="object"
+                            class="oe_highlight"/>
                     <field name="state" widget="statusbar"
-                               statusbar_visible="new,to_invoice,invoiced"/>
+                           statusbar_visible="new,to_invoice,invoiced"/>
                 </header>
                 <sheet>
                     <h1>
@@ -34,7 +33,8 @@
                     </h1>
                     <group>
                         <group>
-                            <field name="placing_issue" attrs="{'readonly':[('state','!=','new')],'required':[('state','=','new')]}"/>
+                            <field name="placing_issue"
+                                   attrs="{'readonly':[('state','!=','new')],'required':[('state','=','new')]}"/>
                             <field name="product" invisible="1"/>
                         </group>
                         <group>
@@ -43,18 +43,19 @@
                         </group>
 
                     </group>
-                  <notebook>
-                     <page string="Requests">
-                       <field name="passport_request" domain="[('state','=','new')]" attrs="{'readonly':[('state','!=','new')],'required':[('state','=','new')]}">
-                           <tree>
-                  <field name="name" />
-                 <field name="prn"/>
-                 <field name="invoice_no"/>
-                 <field name="state"/>
-                           </tree>
-                               </field>
-                     </page>
-                   </notebook>
+                    <notebook>
+                        <page string="Requests">
+                            <field name="passport_request" domain="[('state','=','new')]"
+                                   attrs="{'readonly':[('state','!=','new')],'required':[('state','=','new')]}">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="prn"/>
+                                    <field name="invoice_no"/>
+                                    <field name="state"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
                 </sheet>
                 <div class="oe_chatter">
                     <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
@@ -69,15 +70,14 @@
         <field name="model">passport.request.invoice</field>
         <field name="arch" type="xml">
             <tree string="Request">
-                 <field name="name" />
-                 <field name="state" />
-             </tree>
+                <field name="name"/>
+                <field name="state"/>
+            </tree>
         </field>
     </record>
 
     <menuitem id="menu_passport_request_invoice" sequence="3" name="To Invoice" parent="main_menu_passport"
-              action="passport_request_invoice_action" />
-
+              action="passport_request_invoice_action"/>
 
 
 </odoo>

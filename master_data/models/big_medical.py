@@ -11,6 +11,7 @@ class BigMedical(models.Model):
     _inherit = ['portal.mixin', 'mail.thread', 'mail.activity.mixin']
     _order = 'id desc'
     _sql_constraints = [('laborer_unique', 'unique(labor_id)', 'Created with this Laborer before!')]
+
     name = fields.Char(string="Number",readonly=True,default='New')
     labor_id = fields.Many2one('labor.profile')
 
@@ -67,6 +68,8 @@ class BigMedical(models.Model):
     def action_recheck(self):
         self.medical_check = 'pending'
         self.state = 'pending'
+        agency = self.env['specify.agent'].search([('labor_id', '=', self.labor_id.id)])
+        agency.medical_state = 'pending'
 
     @api.multi
     def move_gcc(self):
@@ -185,8 +188,12 @@ class BigMedical(models.Model):
 
         if self.medical_check == 'fit':
            self.state = 'fit'
+           agency = self.env['specify.agent'].search([('labor_id', '=', self.labor_id.id)])
+           agency.medical_state = 'fit'
         elif self.medical_check == 'unfit':
             self.state = 'unfit'
+            agency = self.env['specify.agent'].search([('labor_id', '=', self.labor_id.id)])
+            agency.medical_state = 'unfit'
 
     @api.multi
     def action_reject(self):
@@ -235,6 +242,8 @@ class BigMedical(models.Model):
 
             })
         self.state = 'rejected'
+        agency = self.env['specify.agent'].search([('labor_id', '=', self.labor_id.id)])
+        agency.medical_state = 'rejected'
 
     @api.model
     def create(self, vals):

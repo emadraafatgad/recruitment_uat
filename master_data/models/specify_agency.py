@@ -27,6 +27,12 @@ class SpecifyAgent(models.Model):
     agency_short_code = fields.Char(related='agency.short_code')
     destination_city = fields.Many2one('res.country.state')
     visa_no = fields.Char()
+    interpol_state = fields.Selection([('new','New'),('assigned','Assigned'),('rejected','rejected'),
+                             ('done','Done'),('blocked','Blocked')], track_visibility="onchange")
+    medical_state = fields.Selection(
+        [('new', 'New'), ('pending', 'On Examination'), ('fit', 'Finished'), ('rejected', 'Rejected'),
+         ('unfit', 'Unfit'), ('blocked', 'Blocked')],track_visibility="onchange")
+
     edit_selected = fields.Boolean(compute='compute_edit_selected')
     occupation = fields.Selection([('house_maid', 'House Maid'), ('pro_maid', 'Pro Maid'), ('pro_worker', 'Pro Worker')], string='Occupation')
     _sql_constraints = [('visa_uniq', 'unique(visa_no , labor_id)', 'Visa# must be unique!'),('laborer_unique', 'unique(labor_id)', 'Created with this Laborer before!')]

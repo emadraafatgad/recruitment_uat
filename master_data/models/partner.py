@@ -108,6 +108,7 @@ class Partner(models.Model):
     @api.model
     def create(self,vals):
         if self.agency:
+            super(Partner, self).create(vals)
             sequence = self.env['ir.sequence'].create({
                 'name': self.name,
                 'code': self.name,

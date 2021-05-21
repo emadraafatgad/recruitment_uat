@@ -57,6 +57,7 @@ class InterpolRequest(models.Model):
             self.labor_id.interpol_end_date = self.interpol_end_date
             self.state = 'done'
         agency = self.env['specify.agent'].search([('labor_id', '=', self.labor_id.id)])
+        agency.interpol_state = 'done'
         if self.labor_id.after_medical_check == 'fit' and agency.state == 'selected':
             self.env['labor.enjaz.stamping'].sudo().create({
                 'labor_id': self.labor_id.id,
@@ -156,10 +157,13 @@ class InterpolRequest(models.Model):
     def action_assign(self):
         self.end_date = datetime.now()
         self.state = 'assigned'
+        agency = self.env['specify.agent'].search([('labor_id', '=', self.labor_id.id)])
+        agency.interpol_state = 'assigned'
 
     @api.multi
     def action_reject(self):
         request = self.env['interpol.request'].search([('id', '=', self.id), ('state', '=', 'rejected')])
+
         if request:
             raise ValidationError(_('Done before'))
         labor = self.env['labor.profile'].search([('id', '=', self.labor_id.id)])
@@ -199,6 +203,8 @@ class InterpolRequest(models.Model):
 
             })
         self.state = 'rejected'
+        agency = self.env['specify.agent'].search([('labor_id', '=', self.labor_id.id)])
+        agency.interpol_state = 'rejected'
 
     @api.model
     def create(self, vals):

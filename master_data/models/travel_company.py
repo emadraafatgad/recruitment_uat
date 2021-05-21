@@ -37,12 +37,12 @@ class TravelCompany(models.Model):
         list = self.env['travel.company'].search([('id', '=', self.id), ('state', '=', 'done')])
         if list:
             raise ValidationError(_('Done before '))
-        if not self.reservation_no:
-            raise ValidationError(_('Enter Reservation No.'))
+        # if not self.reservation_no:
+        #     raise ValidationError(_('Enter Reservation No.'))
         if not self.departure_date:
             raise ValidationError(_('Enter Departure Date'))
-        if not self.confirmation_date:
-            raise ValidationError(_('Enter Confirmation Date'))
+        # if not self.confirmation_date:
+        #     raise ValidationError(_('Enter Confirmation Date'))
         self.state='done'
         self.labor_id.state = 'travelled'
         product = self.env['product.recruitment.config'].search([('type', '=', 'agent')])[0]
@@ -121,6 +121,18 @@ class TravelCompany(models.Model):
         if self.travel_list_id:
             if all(l.state == 'done' for l in self.travel_list_id.travel_list):
                 self.travel_list_id.state = 'done'
+        self.create_pcr(self.labor_id.id)
+
+    def create_pcr_list(self):
+        self.create_pcr(self.labor_id.id)
+
+    def create_pcr(self, labour_id):
+        exam = self.env['pcr.exam'].search([('labour_id', '=', labour_id)])
+        if not exam:
+            valuse = {'labour_id': labour_id, 'state': 'new'}
+            self.env['pcr.exam'].create(valuse)
+        else:
+            raise ValidationError("You Can't Create 2 test")
 
     @api.multi
     def action_reject(self):

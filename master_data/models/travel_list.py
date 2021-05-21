@@ -14,6 +14,8 @@ class TravelList(models.Model):
     state = fields.Selection([('new', 'new'),('in_progress', 'InProgress'),('done', 'Done')], default='new',track_visibility='onchange')
     list_total_count = fields.Integer(compute='_compute_value')
     list_now_len = fields.Integer()
+    booking_date = fields.Date()
+    flight_details = fields.Char()
 
     @api.one
     @api.depends('travel_list')
@@ -48,12 +50,18 @@ class TravelList(models.Model):
         domain = {'travel_list': [('id', 'not in', line),('state', '=', 'new')]}
         return {'domain': domain}
 
+    def action_done_all_list(self):
+        for line in self.travel_list:
+            line.action_done()
+
+
     # @api.multi
     # def unlink(self):
     #     for rec in self:
     #         if rec.state != 'new':
     #             raise ValidationError(_('You cannot delete %s as it is not in new state') % rec.name)
     #     return super(TravelList, self).unlink()
+
     @api.model
     def create(self, vals):
         vals['name'] = self.env['ir.sequence'].next_by_code('travel.list')

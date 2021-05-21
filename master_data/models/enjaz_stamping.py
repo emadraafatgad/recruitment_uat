@@ -128,6 +128,7 @@ class LaborEnjaz(models.Model):
                     'agency': self.agency.id,
                     'agency_code': self.agency_code,
                     'destination_city': self.city.id,
+                    'country_id':self.agency.country_id.id,
                     'employer': self.employer,
                     'visa_no': self.visa_no, })
 
@@ -159,10 +160,8 @@ class LaborEnjaz(models.Model):
                     'journal_id': sale_journal.id,
                     'account_id': self.agency.property_account_receivable_id.id,
                     'invoice_line_ids': invoice_line,
-
                 })
                 cr.action_invoice_open()
-
         self.state = 'done'
 
     def gcc_bill_paid(self, invoice_obj):

@@ -22,9 +22,9 @@
         <field name="arch" type="xml">
             <form>
                 <header>
-                    <button name="action_done" states="new"
-                                string="Done" type="object"
-                                class="oe_highlight"/>
+<!--                    <button name="action_done" states="new"-->
+<!--                                string="Done" type="object"-->
+<!--                                class="oe_highlight"/>-->
                      <field name="state" widget="statusbar"
                                statusbar_visible="new,in_progress,done"/>
                 </header>
@@ -75,9 +75,9 @@
                 <field name="visa_no"/>
                 <field name="agency"/>
                 <field name="destination_city"/>
-                <field name="reservation_no"/>
+                <field name="reservation_no" invisible="1"/>
                 <field name="departure_date"/>
-                <field name="flight_details"/>
+                <field name="flight_details" invisible="1"/>
                 <field name="state"/>
              </tree>
         </field>

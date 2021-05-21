@@ -20,6 +20,7 @@ class EmbassyList(models.Model):
         for rec in self.embassy_list:
             rec.state='confirmed'
         self.state = 'confirmed'
+
     @api.model
     def create(self, vals):
         vals['name'] = self.env['ir.sequence'].next_by_code('embassy.list')
