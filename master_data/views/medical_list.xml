@@ -133,7 +133,7 @@
         </field>
     </record>
     <menuitem id="menu_medical_list" sequence="2" name="Big Medical Invoice" parent="main_menu_big_medical"
-              action="medical_list_action"/>
+              action="medical_list_action" groups="group_big_medical_read"/>
 
 
 </odoo>

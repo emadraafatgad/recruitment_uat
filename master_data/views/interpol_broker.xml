@@ -56,8 +56,8 @@
                                     <field name="national_id" readonly="1"/>
                                     <field name="passport_no" readonly="1"/>
                                     <field name="interpol_no" readonly="0"/>
-                                    <field name="attachment" filename="filename" readonly="0"/>
-                                    <field name="filename" invisible="1"/>
+<!--                                    <field name="attachment" filename="filename" readonly="0"/>-->
+<!--                                    <field name="filename" invisible="1"/>-->
                                     <field name="interpol_start_date" readonly="0"/>
                                     <field name="interpol_end_date" readonly="0"/>
                                     <field name="broker_list_id" invisible="1"/>
@@ -189,17 +189,17 @@
         </field>
     </record>
     <record id="account_invoice_search_laborer" model="ir.ui.view">
-    <field name="name">Search Laborer</field>
-    <field name="model">account.invoice</field>
-    <field name="inherit_id" ref="account.view_account_invoice_filter"/>
-    <field name="arch" type="xml">
-          <field name="partner_id" position="after">
-              <field name="laborer"/>
-          </field>
-    </field>
+        <field name="name">Search Laborer</field>
+        <field name="model">account.invoice</field>
+        <field name="inherit_id" ref="account.view_account_invoice_filter"/>
+        <field name="arch" type="xml">
+            <field name="partner_id" position="after">
+                <field name="laborer"/>
+            </field>
+        </field>
     </record>
     <menuitem id="menu_interpol_broker" sequence="3" name="Interpol Broker" parent="main_menu_interpol"
-              action="interpol_broker_action"/>
+              action="interpol_broker_action" groups="group_interpol_read"/>
 
 
 </odoo>

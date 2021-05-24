@@ -1,7 +1,7 @@
-from odoo import fields, models,api,_
+from odoo import fields, models, api, _, tools
 from datetime import date
 import base64
-from odoo.exceptions import ValidationError,UserError
+from odoo.exceptions import ValidationError, UserError
 
 
 class SpecifyAgent(models.Model):
@@ -10,36 +10,51 @@ class SpecifyAgent(models.Model):
     _inherit = ['portal.mixin', 'mail.thread', 'mail.activity.mixin']
     _order = 'id desc'
 
-    name = fields.Char('Sequence',default='New',readonly=True)
-    labor_id = fields.Many2one('labor.profile',required=True)
+    name = fields.Char('Sequence', default='New', readonly=True)
+    labor_id = fields.Many2one('labor.profile', required=True)
     user_id = fields.Many2one('res.users')
     labor_name = fields.Char()
-    passport_no = fields.Char(required=True,related='labor_id.passport_no')
-    religion = fields.Selection([('muslim', 'Muslim'), ('christian', 'Christian'), ('jew', 'Jew'), ('other', 'Other')],'Religion')
+    passport_no = fields.Char(required=True, related='labor_id.passport_no')
+    religion = fields.Selection([('muslim', 'Muslim'), ('christian', 'Christian'), ('jew', 'Jew'), ('other', 'Other')],
+                                'Religion')
     age = fields.Integer()
-    state = fields.Selection([('draft', 'CV Available'),('available', 'Specified'), ('sent', 'CV Sent'),('selected', 'Selected'),('edit_after_selected', 'Edit After Selected'),('blocked','Blocked')], default='draft', track_visibility="onchange")
+    state = fields.Selection(
+        [('draft', 'CV Available'), ('available', 'Specified'), ('sent', 'CV Sent'), ('selected', 'Selected'),
+         ('edit_after_selected', 'Edit After Selected'), ('blocked', 'Blocked')], default='draft',
+        track_visibility="onchange")
     request_date = fields.Date(default=date.today())
     available_date = fields.Date()
     select_date = fields.Date('Selection Date')
     employer = fields.Char()
     employer_mobile = fields.Char()
-    agency = fields.Many2one('res.partner',domain=[('agency','=',True)])
+    agency = fields.Many2one('res.partner', domain=[('agency', '=', True)])
     agency_short_code = fields.Char(related='agency.short_code')
     destination_city = fields.Many2one('res.country.state')
     visa_no = fields.Char()
-    interpol_state = fields.Selection([('new','New'),('assigned','Assigned'),('rejected','rejected'),
-                             ('done','Done'),('blocked','Blocked')], track_visibility="onchange")
+    interpol_state = fields.Selection([('new', 'New'), ('assigned', 'Assigned'), ('rejected', 'rejected'),
+                                       ('done', 'Done'), ('blocked', 'Blocked')], track_visibility="onchange")
     medical_state = fields.Selection(
         [('new', 'New'), ('pending', 'On Examination'), ('fit', 'Finished'), ('rejected', 'Rejected'),
-         ('unfit', 'Unfit'), ('blocked', 'Blocked')],track_visibility="onchange")
+         ('unfit', 'Unfit'), ('blocked', 'Blocked')], track_visibility="onchange")
 
     edit_selected = fields.Boolean(compute='compute_edit_selected')
-    occupation = fields.Selection([('house_maid', 'House Maid'), ('pro_maid', 'Pro Maid'), ('pro_worker', 'Pro Worker')], string='Occupation')
-    _sql_constraints = [('visa_uniq', 'unique(visa_no , labor_id)', 'Visa# must be unique!'),('laborer_unique', 'unique(labor_id)', 'Created with this Laborer before!')]
+    occupation = fields.Selection(
+        [('house_maid', 'House Maid'), ('pro_maid', 'Pro Maid'), ('pro_worker', 'Pro Worker')], string='Occupation')
+    _sql_constraints = [('visa_uniq', 'unique(visa_no , labor_id)', 'Visa# must be unique!'),
+                        ('laborer_unique', 'unique(labor_id)', 'Created with this Laborer before!')]
+
+    """interpol_state = fields.Char(compute='compute_interpol_state',store=True)
+    big_medical_state = fields.Char(compute='compute_interpol_state',store=True)
+
+    def compute_interpol_state(self):
+        interpol = self.env['interpol.request'].search([('labor_id', '=', self.labor_id.id)])
+        big_medical = self.env['big.medical'].search([('labor_id', '=', self.labor_id.id)])
+        self.interpol_state = dict(interpol._fields['state'].selection).get(interpol.state)
+        self.big_medical_state = dict(big_medical._fields['state'].selection).get(big_medical.state)"""
 
     @api.multi
     def unlock(self):
-        self.state='edit_after_selected'
+        self.state = 'edit_after_selected'
 
     @api.multi
     def lock(self):
@@ -47,10 +62,12 @@ class SpecifyAgent(models.Model):
 
     @api.depends('state')
     def compute_edit_selected(self):
-        if self.state == 'edit_after_selected' and self.env.user.has_group('master_data.group_registeration_manager') or self.state in ('draft','available','sent'):
+        if self.state == 'edit_after_selected' and self.env.user.has_group(
+                'master_data.group_registeration_manager') or self.state in ('draft', 'available', 'sent'):
             self.edit_selected = True
         else:
             self.edit_selected = False
+
     @api.multi
     def action_send_cv(self):
         self.ensure_one()
@@ -77,6 +94,7 @@ class SpecifyAgent(models.Model):
         attachment_ids = []
         attach_id = attach_obj.create(attach_data)
         attachment_ids.append(attach_id.id)
+        subject = 'New Application/ ' + self.env.user.company_id.name
         body = 'Dear ' + self.agency.name + '\n' + 'Here is in attachment a labor CV/ ' + self.name
         return {
             'name': _('Compose Email'),
@@ -91,7 +109,7 @@ class SpecifyAgent(models.Model):
                         'default_res_id': self.ids[0],
                         'default_partner_ids': l,
                         'default_body': body,
-                        'default_subject': 'Labors CVS',
+                        'default_subject': subject,
                         'default_composition_mode': 'comment',
                         'custom_layout': "mail.mail_notification_paynow",
                         'force_email': True,
@@ -99,6 +117,7 @@ class SpecifyAgent(models.Model):
                         'default_attachment_ids': [(6, 0, attachment_ids)]
                         }
         }
+
     @api.multi
     def action_resend_cv(self):
         self.ensure_one()
@@ -124,6 +143,7 @@ class SpecifyAgent(models.Model):
         attachment_ids = []
         attach_id = attach_obj.create(attach_data)
         attachment_ids.append(attach_id.id)
+        subject = 'New Application/ ' + self.env.user.company_id.name
         body = 'Dear ' + self.agency.name + '\n' + 'Here is in attachment a labor CV/ ' + self.name
         return {
             'name': _('Compose Email'),
@@ -137,6 +157,7 @@ class SpecifyAgent(models.Model):
             'context': {'default_model': 'specify.agent',
                         'default_res_id': self.ids[0],
                         'default_partner_ids': l,
+                        'default_subject': subject,
                         'default_body': body,
                         'default_composition_mode': 'comment',
                         'custom_layout': "mail.mail_notification_paynow",
@@ -145,6 +166,7 @@ class SpecifyAgent(models.Model):
                         'default_attachment_ids': [(6, 0, attachment_ids)]
                         }
         }
+
     @api.multi
     def send_more_cv(self):
         view_id = self.env.ref('mail.email_compose_message_wizard_form')
@@ -179,6 +201,7 @@ class SpecifyAgent(models.Model):
             attach_id = attach_obj.create(attach_data)
             attachment_ids.append(attach_id.id)
             labor.append(record.labor_id.id)
+        subject = 'New Application/ ' + self.env.user.company_id.name
         return {
             'name': _('Send CVS'),
             'type': 'ir.actions.act_window',
@@ -191,6 +214,7 @@ class SpecifyAgent(models.Model):
             'context': {
                 'default_model': 'specify.agent',
                 'default_body': body,
+                'default_subject': subject,
                 'default_partner_ids': l,
                 'default_composition_mode': 'comment',
                 'force_email': True,
@@ -198,12 +222,12 @@ class SpecifyAgent(models.Model):
                 'default_labor_ids': [(6, 0, labor)],
             }
         }
+
     @api.multi
     def set_to_draft(self):
         self.agency = False
         self.name = "/"
         self.state = 'draft'
-
 
     @api.multi
     def move_to_available(self):
@@ -218,7 +242,7 @@ class SpecifyAgent(models.Model):
             if sequence:
                 rec.name = rec.agency.short_code + '-' + sequence
             else:
-                raise ValidationError('please we need agency sequence %s %s' %(rec.agency.short_code,str(sequence)))
+                raise ValidationError('please we need agency sequence %s %s' % (rec.agency.short_code, str(sequence)))
             rec.state = 'available'
             rec.available_date = date.today()
             interpol = self.env['interpol.request'].search([('labor_id', '=', rec.labor_id.id)])
@@ -255,7 +279,7 @@ class SpecifyAgent(models.Model):
                         'district': rec.labor_id.district.id,
                         'agency': rec.agency.id,
                         'agency_code': rec.name,
-                        'destination_city': rec.destination_city.id,})
+                        'destination_city': rec.destination_city.id, })
 
     @api.multi
     def select(self):
@@ -281,11 +305,10 @@ class SpecifyAgent(models.Model):
                 'agency': self.agency.id,
                 'agency_code': self.name,
                 'employer': self.employer,
-                'passport_no':self.passport_no,
+                'passport_no': self.passport_no,
                 'city': self.destination_city.id,
                 'visa_no': self.visa_no,
             })
-
 
     @api.model
     def create(self, vals):
@@ -302,7 +325,7 @@ class SpecifyAgent(models.Model):
 
 class MassAgency(models.TransientModel):
     _name = 'mass.agency'
-    agency = fields.Many2one('res.partner',required=True,domain=[('agency','=',True)])
+    agency = fields.Many2one('res.partner', required=True, domain=[('agency', '=', True)])
 
     @api.multi
     def enter_agency(self):
@@ -336,7 +359,7 @@ class MassAgency(models.TransientModel):
             attach_id = attach_obj.create(attach_data)
             attachment_ids.append(attach_id.id)
             labor.append(record.labor_id.id)
-
+        subject = 'New Application/ ' + self.env.user.company_id.name
         return {
             'name': _('Send CVS'),
             'type': 'ir.actions.act_window',
@@ -347,7 +370,9 @@ class MassAgency(models.TransientModel):
             'view_id': view_id.id,
             'views': [(view_id.id, 'form')],
             'context': {
+                'default_model': 'specify.agent',
                 'default_body': body,
+                'default_subject': subject,
                 'default_partner_ids': l,
                 'default_composition_mode': 'comment',
                 'force_email': True,
@@ -356,7 +381,6 @@ class MassAgency(models.TransientModel):
             }
 
         }
-
 
 
 class MailComposeMessageInherit(models.TransientModel):
@@ -373,3 +397,32 @@ class MailComposeMessageInherit(models.TransientModel):
                 labor.cv_sent = True
         return super(MailComposeMessageInherit, self).action_send_mail()
 
+    @api.model
+    def get_record_data(self, values):
+        """ Returns a defaults-like dict with initial values for the composition
+        wizard when sending an email related a previous email (parent_id) or
+        a document (model, res_id). This is based on previously computed default
+        values. """
+        result, subject = {}, False
+        if values.get('parent_id'):
+            parent = self.env['mail.message'].browse(values.get('parent_id'))
+            result['record_name'] = parent.record_name,
+            subject = tools.ustr(parent.subject or parent.record_name or '')
+            if not values.get('model'):
+                result['model'] = parent.model
+            if not values.get('res_id'):
+                result['res_id'] = parent.res_id
+            partner_ids = values.get('partner_ids', list()) + [(4, id) for id in parent.partner_ids.ids]
+            if self._context.get(
+                    'is_private') and parent.author_id:  # check message is private then add author also in partner list.
+                partner_ids += [(4, parent.author_id.id)]
+            result['partner_ids'] = partner_ids
+        elif values.get('model') and values.get('res_id'):
+            doc_name_get = self.env[values.get('model')].browse(values.get('res_id')).name_get()
+            result['record_name'] = doc_name_get and doc_name_get[0][1] or ''
+            subject = tools.ustr(result['record_name'])
+
+        re_prefix = _('Re:')
+        if subject and not (subject.startswith('Re:') or subject.startswith(re_prefix)):
+            subject = "%s %s" % (re_prefix, subject)
+        return result

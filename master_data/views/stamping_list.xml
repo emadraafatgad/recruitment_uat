@@ -92,7 +92,7 @@
 
 
     <menuitem id="menu_list_stamping" sequence="3" name="Stamping List" parent="menu_embassy_main"
-              action="stamping_list_action"/>
+              action="stamping_list_action" groups="group_stamping_read"/>
 
 
 </odoo>

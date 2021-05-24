@@ -1,4 +1,4 @@
-from odoo import fields, models , api,_
+from odoo import fields, models, api, _
 from datetime import date
 
 from odoo.exceptions import ValidationError
@@ -10,19 +10,22 @@ class StampingList(models.Model):
     _inherit = ['portal.mixin', 'mail.thread', 'mail.activity.mixin']
     _order = 'id desc'
 
-    name = fields.Char(string="Number",readonly=True,default='New')
-    state = fields.Selection([('new','New'),('in_progress','InProgress'),('done','Done')],default='new',track_visibility="onchange")
+    name = fields.Char(string="Number", readonly=True, default='New')
+    state = fields.Selection([('new', 'New'), ('in_progress', 'InProgress'), ('done', 'Done')], default='new',
+                             track_visibility="onchange")
     stamping_list = fields.Many2many('labor.enjaz.stamping')
     list_total_count = fields.Integer(compute='_compute_value')
     assign_date = fields.Date()
     list_now_len = fields.Integer()
+
     def _get_embassy_default(self):
         embassy = self.env['res.partner'].search([('vendor_type', '=', 'embassy')])
         if not embassy:
             raise ValidationError(_('Embassy Partner is not exist,you can create partner its type is embassy'))
         return embassy[0].id
 
-    embassy = fields.Many2one('res.partner',readonly=True, domain=[('vendor_type', '=', 'embassy')],default=_get_embassy_default)
+    embassy = fields.Many2one('res.partner', readonly=True, domain=[('vendor_type', '=', 'embassy')],
+                              default=_get_embassy_default)
 
     @api.one
     @api.depends('stamping_list')
@@ -53,7 +56,8 @@ class StampingList(models.Model):
         for record in request:
             for rec in record.stamping_list:
                 line.append(rec.id)
-        domain = {'stamping_list': [('id', 'not in', line),('type', '=', 'stamping'),('state', 'not in', ('done','rejected','blocked'))]}
+        domain = {'stamping_list': [('id', 'not in', line), ('type', '=', 'stamping'),
+                                    ('state', 'not in', ('done', 'rejected', 'blocked'))]}
         return {'domain': domain}
 
     @api.multi
@@ -99,8 +103,6 @@ class StampingList(models.Model):
         for rec in self.stamping_list:
             rec.state = 'in_progress'
 
-
-
     # @api.multi
     # def unlink(self):
     #     for rec in self:
@@ -113,4 +115,3 @@ class StampingList(models.Model):
         vals['name'] = self.env['ir.sequence'].next_by_code('stamping.list')
         vals['assign_date'] = date.today()
         return super(StampingList, self).create(vals)
-

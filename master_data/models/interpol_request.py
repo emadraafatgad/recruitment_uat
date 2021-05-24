@@ -49,8 +49,6 @@ class InterpolRequest(models.Model):
             raise ValidationError(_('Done before '))
         if not self.interpol_no :
             raise ValidationError(_('You must enter interpol Number #'))
-        elif not self.attachment:
-            raise ValidationError(_('you must add attachment'))
         else:
             self.labor_id.interpol_no = self.interpol_no
             self.labor_id.interpol_start_date = self.interpol_start_date

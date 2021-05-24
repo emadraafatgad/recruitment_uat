@@ -78,15 +78,16 @@
     </record>
 
     <menuitem id="menu_pcr_exam_root_id"
-              name="PCR Test"
+              name="PRR Test"
               parent="menu_recruitment_root"
               sequence="80"
                />
 
     <menuitem id="menu_labour_pcr_exam_id"
-              name="PCR Test"
+              name="Candidates"
               parent="menu_pcr_exam_root_id"
-              action="action_pcr_exam"/>
+              action="action_pcr_exam"
+              groups="group_pcr_test_read"/>
 
 
 

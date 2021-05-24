@@ -113,14 +113,11 @@
                         domain="[('create_date','&gt;=',time.strftime('%%Y-%%m-01'))]"/>
                 <filter string="This Year" name="this_year"
                         domain="[('create_date','&gt;=',time.strftime('%%Y-01-01'))]"/>
-
-
-            </search>
-        </field>
-    </record>
-
+                </search>
+            </field>
+        </record>
     <menuitem id="menu_travel_list" sequence="2" name="Bookings" parent="menu_travel_company"
-              action="travel_list_action"/>
+              action="travel_list_action" groups="group_travel_company_read"/>
 
 
 </odoo>

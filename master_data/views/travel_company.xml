@@ -115,5 +115,5 @@
 
     <menuitem id="menu_travel_company" sequence="65" name="Travel Company" parent="menu_recruitment_root" />
     <menuitem id="menu_travel_company_request" sequence="1" name="Candidates" parent="menu_travel_company"
-              action="travel_company_action" groups="master_data.group_travel_company_user"/>
+              action="travel_company_action" groups="group_travel_company_read"/>
 </odoo>

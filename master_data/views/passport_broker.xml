@@ -56,8 +56,8 @@
                  <field name="passport_no"/>
                  <field name="pass_start_date"/>
                  <field name="pass_end_date"/>
-                 <field name="filename" invisible="1"/>
-                 <field name="attachment" filename="filename"/>
+<!--                 <field name="filename" invisible="1"/>-->
+<!--                 <field name="attachment" filename="filename"/>-->
                  <field name="state" readonly="1"/>
                  <button name="request_passport_done" states="releasing"
                                 string="Confirm" type="object"
@@ -128,7 +128,7 @@
 
 
     <menuitem id="menu_passport_broker"  sequence="4" name="Passport Broker" parent="main_menu_passport"
-              action="passport_broker_action" />
+              action="passport_broker_action" groups="group_passport_read"/>
 
 
 

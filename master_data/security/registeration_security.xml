@@ -5,22 +5,87 @@
         <field name="name">registeration</field>
         <field name="sequence">1</field>
     </record>
-
     <record id="group_registeration_user" model="res.groups">
         <field name="name">User</field>
         <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
         <field name="category_id" ref="module_category_registeration"/>
 
     </record>
-
     <record id="group_registeration_manager" model="res.groups">
         <field name="name">Manager</field>
         <field name="implied_ids" eval="[(4, ref('master_data.group_registeration_user'))]"/>
         <field name="category_id" ref="module_category_registeration"/>
     </record>
 
+    <record model="ir.module.category" id="module_recruitment_group_read">
+        <field name="name">Recruitment  Can Only View</field>
+        <field name="sequence">1</field>
+    </record>
+
+    <record id="group_nira_read" model="res.groups">
+        <field name="name">Nira</field>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="category_id" ref="module_recruitment_group_read"/>
+    </record>
+    <record id="group_training_read" model="res.groups">
+        <field name="name">Training</field>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="category_id" ref="module_recruitment_group_read"/>
+    </record>
+    <record id="group_passport_read" model="res.groups">
+        <field name="name">Passport</field>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="category_id" ref="module_recruitment_group_read"/>
+    </record>
+    <record id="group_interpol_read" model="res.groups">
+        <field name="name">Interpol</field>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="category_id" ref="module_recruitment_group_read"/>
+    </record>
+    <record id="group_gcc_read" model="res.groups">
+        <field name="name">GCC</field>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="category_id" ref="module_recruitment_group_read"/>
+    </record>
+    <record id="group_big_medical_read" model="res.groups">
+        <field name="name">Big Medical</field>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="category_id" ref="module_recruitment_group_read"/>
+    </record>
+    <record id="group_specify_agency_read" model="res.groups">
+        <field name="name">Agency</field>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="category_id" ref="module_recruitment_group_read"/>
+    </record>
+    <record id="group_enjaz_read" model="res.groups">
+        <field name="name">Enjaz</field>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="category_id" ref="module_recruitment_group_read"/>
+    </record>
+    <record id="group_stamping_read" model="res.groups">
+        <field name="name">Stamping</field>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="category_id" ref="module_recruitment_group_read"/>
+    </record>
+    <record id="group_clearance_read" model="res.groups">
+        <field name="name">Clearance</field>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="category_id" ref="module_recruitment_group_read"/>
+    </record>
+    <record id="group_travel_company_read" model="res.groups">
+        <field name="name">Travel Company</field>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="category_id" ref="module_recruitment_group_read"/>
+    </record>
+    <record id="group_pcr_test_read" model="res.groups">
+        <field name="name">PCR Test</field>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="category_id" ref="module_recruitment_group_read"/>
+    </record>
+
+
      <record model="ir.module.category" id="module_recruitment_groups">
-        <field name="name">Recruitment</field>
+        <field name="name">Recruitment Managing</field>
         <field name="sequence">1</field>
     </record>
 
@@ -32,62 +97,62 @@
 
     <record id="group_nira_user" model="res.groups">
         <field name="name">Nira</field>
-        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="implied_ids" eval="[(4, ref('master_data.group_nira_read'))]"/>
         <field name="category_id" ref="module_recruitment_groups"/>
     </record>
     <record id="group_training_user" model="res.groups">
         <field name="name">Training</field>
-        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="implied_ids" eval="[(4, ref('master_data.group_training_read'))]"/>
         <field name="category_id" ref="module_recruitment_groups"/>
     </record>
     <record id="group_passport_user" model="res.groups">
         <field name="name">Passport</field>
-        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="implied_ids" eval="[(4, ref('master_data.group_passport_read'))]"/>
         <field name="category_id" ref="module_recruitment_groups"/>
     </record>
     <record id="group_interpol_user" model="res.groups">
         <field name="name">Interpol</field>
-        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="implied_ids" eval="[(4, ref('master_data.group_interpol_read'))]"/>
         <field name="category_id" ref="module_recruitment_groups"/>
     </record>
     <record id="group_gcc_user" model="res.groups">
         <field name="name">GCC</field>
-        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="implied_ids" eval="[(4, ref('master_data.group_gcc_read'))]"/>
         <field name="category_id" ref="module_recruitment_groups"/>
     </record>
     <record id="group_big_medical" model="res.groups">
         <field name="name">Big Medical</field>
-        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="implied_ids" eval="[(4, ref('master_data.group_big_medical_read'))]"/>
         <field name="category_id" ref="module_recruitment_groups"/>
     </record>
     <record id="group_specify_agency" model="res.groups">
         <field name="name">Agency</field>
-        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="implied_ids" eval="[(4, ref('master_data.group_specify_agency_read'))]"/>
         <field name="category_id" ref="module_recruitment_groups"/>
     </record>
     <record id="group_enjaz_user" model="res.groups">
         <field name="name">Enjaz</field>
-        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="implied_ids" eval="[(4, ref('master_data.group_enjaz_read'))]"/>
         <field name="category_id" ref="module_recruitment_groups"/>
     </record>
     <record id="group_stamping_user" model="res.groups">
         <field name="name">Stamping</field>
-        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="implied_ids" eval="[(4, ref('master_data.group_stamping_read'))]"/>
         <field name="category_id" ref="module_recruitment_groups"/>
     </record>
     <record id="group_clearance_user" model="res.groups">
         <field name="name">Clearance</field>
-        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="implied_ids" eval="[(4, ref('master_data.group_clearance_read'))]"/>
         <field name="category_id" ref="module_recruitment_groups"/>
     </record>
     <record id="group_travel_company_user" model="res.groups">
         <field name="name">Travel Company</field>
-        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="implied_ids" eval="[(4, ref('master_data.group_travel_company_read'))]"/>
         <field name="category_id" ref="module_recruitment_groups"/>
     </record>
     <record id="group_pcr_test_user" model="res.groups">
         <field name="name">PCR Test</field>
-        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="implied_ids" eval="[(4, ref('master_data.group_pcr_test_read'))]"/>
         <field name="category_id" ref="module_recruitment_groups"/>
     </record>
     <record id="group_configuration" model="res.groups">
@@ -95,5 +160,4 @@
         <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
         <field name="category_id" ref="module_recruitment_groups"/>
     </record>
-
 </odoo>

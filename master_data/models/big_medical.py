@@ -239,7 +239,6 @@ class BigMedical(models.Model):
                 'journal_id': purchase_journal.id,
                 'account_id': self.labor_id.agent.property_account_payable_id.id,
                 'invoice_line_ids': invoice_line,
-
             })
         self.state = 'rejected'
         agency = self.env['specify.agent'].search([('labor_id', '=', self.labor_id.id)])

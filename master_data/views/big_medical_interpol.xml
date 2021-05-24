@@ -6,12 +6,14 @@
         <field name="arch" type="xml">
             <form string="Parameters">
                 <p>
-                this operation will update all GCC .
+                    this operation will update all GCC .
                 </p>
                 <footer>
-                    <button name="update_gcc_from_interpol" string="Update GCC" type="object" class="btn-primary" confirm="Are you sure you want to update all GCC?"/>
-                    <button name="update_agency_medical_interpol" string="Update Agency" type="object" class="btn-primary" confirm="Are you sure you want to update all Agency?"/>
-                    <button string="Cancel" class="btn-secondary" special="cancel" />
+                    <button name="update_gcc_from_interpol" string="Update GCC" type="object" class="btn-primary"
+                            confirm="Are you sure you want to update all GCC?"/>
+                    <button name="update_agency_medical_interpol" string="Update Agency" type="object"
+                            class="btn-primary" confirm="Are you sure you want to update all Agency?"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
                 </footer>
             </form>
         </field>
@@ -25,7 +27,9 @@
         <field name="target">new</field>
     </record>
 
-    <menuitem action="action_interpol_compute" name="Updates" id="menu_interpol_compute" parent="menu_recruitment_configuration" sequence="135"/>
+
+    <menuitem action="action_interpol_compute" id="menu_interpol_compute" parent="menu_recruitment_configuration"
+              sequence="135" groups="group_registeration_user"/>
 
 
 </odoo>

@@ -1,30 +1,30 @@
 <odoo>
-     <record id="labor_enjaz_code" model="ir.sequence">
+    <record id="labor_enjaz_code" model="ir.sequence">
         <field name="name">Enjaz Code</field>
         <field name="code">labor.enjaz</field>
         <field name="prefix">enjaz/%(year)s/</field>
         <field name="padding">5</field>
         <field name="company_id" eval="False"/>
-     </record>
-      <record id="labor_stamping_code" model="ir.sequence">
+    </record>
+    <record id="labor_stamping_code" model="ir.sequence">
         <field name="name">Staming Code</field>
         <field name="code">labor.stamping</field>
         <field name="prefix">Stamp/%(year)s/</field>
         <field name="padding">5</field>
         <field name="company_id" eval="False"/>
-     </record>
+    </record>
     <record id="view_labor_enjaz_form" model="ir.ui.view">
         <field name="name">Enjaz</field>
         <field name="model">labor.enjaz.stamping</field>
         <field name="arch" type="xml">
-            <form >
+            <form>
                 <header>
 
-                   <button name="action_done" states="new"
-                                string="Done" type="object"
-                                class="oe_highlight"/>
+                    <button name="action_done" states="new"
+                            string="Done" type="object"
+                            class="oe_highlight"/>
                     <field name="state" widget="statusbar"
-                               statusbar_visible="new,done"/>
+                           statusbar_visible="new,done"/>
                 </header>
                 <sheet>
                     <h1>
@@ -34,7 +34,8 @@
                         <group>
                             <field name="labor_name"/>
                             <field name="type" invisible="1"/>
-                            <field name="enjaz_no" invisible="1" attrs="{'readonly':['|',('state','=','done'),('type','=','stamping')]}"/>
+                            <field name="enjaz_no" invisible="1"
+                                   attrs="{'readonly':['|',('state','=','done'),('type','=','stamping')]}"/>
                         </group>
                     </group>
 
@@ -48,18 +49,18 @@
         </field>
     </record>
 
-     <record id="view_labor_stamping_form" model="ir.ui.view">
+    <record id="view_labor_stamping_form" model="ir.ui.view">
         <field name="name">stamping</field>
         <field name="model">labor.enjaz.stamping</field>
         <field name="arch" type="xml">
-            <form >
+            <form>
                 <header>
 
-                   <button name="action_done" states="new"
-                                string="Done" type="object"
-                                class="oe_highlight"/>
+                    <button name="action_done" states="new"
+                            string="Done" type="object"
+                            class="oe_highlight"/>
                     <field name="state" widget="statusbar"
-                               statusbar_visible="new,done"/>
+                           statusbar_visible="new,done"/>
                 </header>
                 <sheet>
                     <h1>
@@ -70,7 +71,8 @@
                             <field name="labor_name"/>
                             <field name="embassy"/>
                             <field name="type" invisible="1"/>
-                            <field name="enjaz_no" attrs="{'readonly':['|',('state','=','done'),('type','=','stamping')]}"/>
+                            <field name="enjaz_no"
+                                   attrs="{'readonly':['|',('state','=','done'),('type','=','stamping')]}"/>
                         </group>
                     </group>
 
@@ -91,8 +93,8 @@
             <tree editable="top">
                 <field name="name" readonly="1"/>
                 <button name="action_view_labor" states="new"
-                                string="View Profile" type="object"
-                                class="oe_highlight"/>
+                        string="View Profile" type="object"
+                        class="oe_highlight"/>
                 <field name="type" invisible="1"/>
                 <field name="labor_name" string="Labourer Name" readonly="1"/>
                 <field name="passport_no" readonly="1"/>
@@ -102,13 +104,13 @@
                 <field name="city" invisible="1" readonly="1"/>
                 <field name="visa_no" readonly="1"/>
                 <field name="bill_date" invisible="1" string="Bill Date"/>
-                <field name="enjaz_no"  attrs="{'readonly':['|',('state','=','done'),('type','=','stamping')]}"/>
+                <field name="enjaz_no" attrs="{'readonly':['|',('state','=','done'),('type','=','stamping')]}"/>
                 <field name="state" readonly="1"/>
                 <button name="action_done" states="new"
-                                string="Done" type="object"
-                                class="oe_highlight" confirm="Are you sure you want to confirm that?"/>
+                        string="Done" type="object"
+                        class="oe_highlight" confirm="Are you sure you want to confirm that?"/>
 
-             </tree>
+            </tree>
         </field>
     </record>
 
@@ -122,80 +124,79 @@
                 <field name="labor_name" string="Labourer Name" readonly="1"/>
                 <field name="passport_no" readonly="1"/>
                 <field name="agency" readonly="1"/>
-                <field name="agency_code"  string="Code/Agency" readonly="1"/>
+                <field name="agency_code" string="Code/Agency" readonly="1"/>
                 <field name="employer" readonly="1"/>
                 <field name="city" readonly="1"/>
                 <field name="enjaz_no" attrs="{'readonly':['|',('state','=','done'),('type','=','stamping')]}"/>
                 <field name="visa_no" readonly="1"/>
                 <field name="visa_date" attrs="{'invisible':[('type','=','enjaz')],'readonly':[('state','=','done')]}"/>
-                <field name="visa_expiry_date" attrs="{'invisible':[('type','=','enjaz')],'readonly':[('state','=','done')]}"/>
+                <field name="visa_expiry_date"
+                       attrs="{'invisible':[('type','=','enjaz')],'readonly':[('state','=','done')]}"/>
                 <field name="state" readonly="1"/>
                 <button name="action_done" states="new"
-                                string="Done" type="object"
-                                class="oe_highlight"/>
+                        string="Done" type="object"
+                        class="oe_highlight"/>
 
-             </tree>
+            </tree>
         </field>
     </record>
 
 
-<record id="labor_enjaz_action" model="ir.actions.act_window">
-    <field name="name">Enjaz</field>
-    <field name="res_model">labor.enjaz.stamping</field>
-    <field name="view_type">form</field>
-    <field name="view_mode">tree,form</field>
-    <field eval="False" name="view_id"/>
-    <field name="domain">[('type','=','enjaz')]</field>
-    <field name="context">{'default_type':'enjaz'}</field>
-</record>
+    <record id="labor_enjaz_action" model="ir.actions.act_window">
+        <field name="name">Enjaz</field>
+        <field name="res_model">labor.enjaz.stamping</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field eval="False" name="view_id"/>
+        <field name="domain">[('type','=','enjaz')]</field>
+        <field name="context">{'default_type':'enjaz'}</field>
+    </record>
 
-<record id="labor_enjaz_action_tree" model="ir.actions.act_window.view">
-    <field eval="1" name="sequence"/>
-    <field name="view_mode">tree</field>
-    <field name="view_id" ref="view_labor_enjaz_tree"/>
-    <field name="act_window_id" ref="labor_enjaz_action"/>
-</record>
+    <record id="labor_enjaz_action_tree" model="ir.actions.act_window.view">
+        <field eval="1" name="sequence"/>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="view_labor_enjaz_tree"/>
+        <field name="act_window_id" ref="labor_enjaz_action"/>
+    </record>
 
-<record id="labor_enjaz_action_view" model="ir.actions.act_window.view">
-    <field eval="2" name="sequence"/>
-    <field name="view_mode">form</field>
-    <field name="view_id" ref="view_labor_enjaz_form"/>
-    <field name="act_window_id" ref="labor_enjaz_action"/>
-</record>
+    <record id="labor_enjaz_action_view" model="ir.actions.act_window.view">
+        <field eval="2" name="sequence"/>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_labor_enjaz_form"/>
+        <field name="act_window_id" ref="labor_enjaz_action"/>
+    </record>
 
-<record id="labor_stamping_action" model="ir.actions.act_window">
-    <field name="name">Stamping</field>
-    <field name="res_model">labor.enjaz.stamping</field>
-    <field name="view_type">form</field>
-    <field name="view_mode">tree,form</field>
-    <field eval="False" name="view_id"/>
-    <field name="domain">[('type','=','stamping')]</field>
-    <field name="context">{'default_type':'stamping'}</field>
-</record>
+    <record id="labor_stamping_action" model="ir.actions.act_window">
+        <field name="name">Stamping</field>
+        <field name="res_model">labor.enjaz.stamping</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field eval="False" name="view_id"/>
+        <field name="domain">[('type','=','stamping')]</field>
+        <field name="context">{'default_type':'stamping'}</field>
+    </record>
 
-<record id="labor_stamping_action_tree" model="ir.actions.act_window.view">
-    <field eval="1" name="sequence"/>
-    <field name="view_mode">tree</field>
-    <field name="view_id" ref="view_labor_stamping_tree"/>
-    <field name="act_window_id" ref="labor_stamping_action"/>
-</record>
+    <record id="labor_stamping_action_tree" model="ir.actions.act_window.view">
+        <field eval="1" name="sequence"/>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="view_labor_stamping_tree"/>
+        <field name="act_window_id" ref="labor_stamping_action"/>
+    </record>
 
-<record id="labor_stamping_action_view" model="ir.actions.act_window.view">
-    <field eval="2" name="sequence"/>
-    <field name="view_mode">form</field>
-    <field name="view_id" ref="view_labor_stamping_form"/>
-    <field name="act_window_id" ref="labor_stamping_action"/>
-</record>
-
-
+    <record id="labor_stamping_action_view" model="ir.actions.act_window.view">
+        <field eval="2" name="sequence"/>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_labor_stamping_form"/>
+        <field name="act_window_id" ref="labor_stamping_action"/>
+    </record>
 
 
-<record id="enjaz_stamping_search" model="ir.ui.view">
-            <field name="name">Enjaz Search</field>
-            <field name="model">labor.enjaz.stamping</field>
-            <field name="arch" type="xml">
+    <record id="enjaz_stamping_search" model="ir.ui.view">
+        <field name="name">Enjaz Search</field>
+        <field name="model">labor.enjaz.stamping</field>
+        <field name="arch" type="xml">
 
-                <search>
+            <search>
                 <field name="labor_name"/>
                 <field name="agency_code"/>
                 <field name="agency"/>
@@ -204,32 +205,32 @@
                 <field name="city"/>
                 <field name="visa_no"/>
                 <field name="enjaz_no"/>
-                    <separator/>
-                    <filter name="new" string="New"
-                            domain="[('state','=','new')]"/>
-                    <filter name="done" string="Done"
-                            domain="[('state','=','done')]"/>
-                    <filter string="Today" name="today" domain="[('create_date','&gt;=',time.strftime('%%Y-%%m-%%d'))]"/>
-                    <filter string="This Week" name="this_week" domain="[
+                <separator/>
+                <filter name="new" string="New"
+                        domain="[('state','=','new')]"/>
+                <filter name="done" string="Done"
+                        domain="[('state','=','done')]"/>
+                <filter string="Today" name="today" domain="[('create_date','&gt;=',time.strftime('%%Y-%%m-%%d'))]"/>
+                <filter string="This Week" name="this_week" domain="[
                                 '&amp;',
                                 ('create_date', '>=', (context_today() + relativedelta(weeks=-1,days=1,weekday=0)).strftime('%Y-%m-%d')),
                                 ('create_date', '&lt;=', (context_today() + relativedelta(weekday=6)).strftime('%Y-%m-%d')),]"/>
-                    <filter string="This Month" name="this_month" domain="[('create_date','&gt;=',time.strftime('%%Y-%%m-01'))]"/>
-                    <filter string="This Year" name="this_year" domain="[('create_date','&gt;=',time.strftime('%%Y-01-01'))]"/>
+                <filter string="This Month" name="this_month"
+                        domain="[('create_date','&gt;=',time.strftime('%%Y-%%m-01'))]"/>
+                <filter string="This Year" name="this_year"
+                        domain="[('create_date','&gt;=',time.strftime('%%Y-01-01'))]"/>
 
 
+            </search>
+        </field>
+    </record>
 
-                </search>
-            </field>
-        </record>
 
-
-    <menuitem id="menu_embassy_main" sequence="63" name="Embassy"  parent="menu_recruitment_root"/>
+    <menuitem id="menu_embassy_main" sequence="63" name="Embassy" parent="menu_recruitment_root"/>
     <menuitem id="menu_labor_enjaz" sequence="1" name="Enjaz" parent="menu_embassy_main"
-              action="labor_enjaz_action" groups="group_enjaz_user"/>
+              action="labor_enjaz_action" groups="group_enjaz_read"/>
     <menuitem id="menu_labor_stamping" sequence="2" name="Stamping Requests" parent="menu_embassy_main"
-              action="labor_stamping_action" groups="group_stamping_user"/>
-
+              action="labor_stamping_action" groups="group_stamping_read"/>
 
 
 </odoo>

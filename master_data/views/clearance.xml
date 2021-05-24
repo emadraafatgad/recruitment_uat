@@ -1,5 +1,5 @@
 <odoo>
-     <record id="labor_clearance_code" model="ir.sequence">
+    <record id="labor_clearance_code" model="ir.sequence">
         <field name="name">Clearance Code</field>
         <field name="code">labor.clearance</field>
         <field name="prefix">LC/%(year)s/</field>
@@ -19,13 +19,13 @@
         <field name="name">Clearance</field>
         <field name="model">labor.clearance</field>
         <field name="arch" type="xml">
-            <form >
+            <form>
                 <header>
-                   <button name="action_confirm" states="new"
-                                string="Confirm" type="object"
-                                class="oe_highlight"/>
+                    <button name="action_confirm" states="new"
+                            string="Confirm" type="object"
+                            class="oe_highlight"/>
                     <field name="state" widget="statusbar"
-                               statusbar_visible="new,confirmed"/>
+                           statusbar_visible="new,confirmed"/>
                 </header>
                 <sheet>
                     <h1>
@@ -82,39 +82,38 @@
                 <field name="agency"/>
                 <field name="destination_city" string="Destination"/>
                 <field name="state"/>
-             </tree>
+            </tree>
         </field>
     </record>
     <record id="clearance_search" model="ir.ui.view">
-            <field name="name">Clearance Search</field>
-            <field name="model">labor.clearance</field>
-            <field name="arch" type="xml">
+        <field name="name">Clearance Search</field>
+        <field name="model">labor.clearance</field>
+        <field name="arch" type="xml">
 
-                <search>
-                    <field name="labor_id"/>
-                    <field name="agency_code"/>
-                    <field name="agency"/>
-                    <field name="passport_no"/>
-                    <separator/>
-                    <filter name="new" string="New"
-                            domain="[('state','=','new')]"/>
-                    <filter name="confirmed" string="Confirmed"
-                            domain="[('state','=','confirmed')]"/>
-                    <filter string="Today" name="today" domain="[('create_date','&gt;=',time.strftime('%%Y-%%m-%%d'))]"/>
-                    <filter string="This Week" name="this_week" domain="[
+            <search>
+                <field name="labor_id"/>
+                <field name="agency_code"/>
+                <field name="agency"/>
+                <field name="passport_no"/>
+                <separator/>
+                <filter name="new" string="New"
+                        domain="[('state','=','new')]"/>
+                <filter name="confirmed" string="Confirmed"
+                        domain="[('state','=','confirmed')]"/>
+                <filter string="Today" name="today" domain="[('create_date','&gt;=',time.strftime('%%Y-%%m-%%d'))]"/>
+                <filter string="This Week" name="this_week" domain="[
                                 '&amp;',
                                 ('create_date', '>=', (context_today() + relativedelta(weeks=-1,days=1,weekday=0)).strftime('%Y-%m-%d')),
                                 ('create_date', '&lt;=', (context_today() + relativedelta(weekday=6)).strftime('%Y-%m-%d')),]"/>
-                    <filter string="This Month" name="this_month" domain="[('create_date','&gt;=',time.strftime('%%Y-%%m-01'))]"/>
-                    <filter string="This Year" name="this_year" domain="[('create_date','&gt;=',time.strftime('%%Y-01-01'))]"/>
+                <filter string="This Month" name="this_month"
+                        domain="[('create_date','&gt;=',time.strftime('%%Y-%%m-01'))]"/>
+                <filter string="This Year" name="this_year"
+                        domain="[('create_date','&gt;=',time.strftime('%%Y-01-01'))]"/>
+            </search>
+        </field>
+    </record>
+    <menuitem id="menu_clearance_main" sequence="64" name="Clearance" parent="menu_recruitment_root"/>
 
-
-
-                </search>
-            </field>
-        </record>
-      <menuitem id="menu_clearance_main" sequence="64" name="Clearance" parent="menu_recruitment_root"/>
-
-      <menuitem id="menu_labor_clearance" sequence="1" name="Candidates" parent="menu_clearance_main"
-              action="labor_clearance_action" groups="group_clearance_user"/>
+    <menuitem id="menu_labor_clearance" sequence="1" name="Candidates" parent="menu_clearance_main"
+              action="labor_clearance_action" groups="group_clearance_read"/>
 </odoo>

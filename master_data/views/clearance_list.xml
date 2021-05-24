@@ -25,8 +25,8 @@
                             string="Confirm" type="object"
                             class="oe_highlight" confirm="Are you sure you want to confirm this list?"/>
                     <button name="print_report_excel"
-                                string="Print Excel" type="object"
-                                class="oe_highlight"/>
+                            string="Print Excel" type="object"
+                            class="oe_highlight"/>
                     <field name="state" widget="statusbar"
                            statusbar_visible="new,confirmed"/>
                 </header>
@@ -106,7 +106,7 @@
     </record>
 
     <menuitem id="menu_clearance_List" sequence="2" name="Processing" parent="menu_clearance_main"
-              action="clearance_list_action"/>
+              action="clearance_list_action" groups="group_clearance_read"/>
 
 
 </odoo>

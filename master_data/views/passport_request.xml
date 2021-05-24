@@ -64,8 +64,8 @@
                                 <group>
                                     <field name="passport_no" attrs="{'readonly':[('state','!=','new')]}"/>
                                     <field name="pass_start_date" attrs="{'readonly':[('state','!=','new')]}"/>
-                                    <field name="filename" invisible="1"/>
-                                    <field name="attachment" filename="filename" attrs="{'readonly':[('state','=','done')]}"/>
+<!--                                    <field name="filename" invisible="1"/>-->
+<!--                                    <field name="attachment" filename="filename" attrs="{'readonly':[('state','=','done')]}"/>-->
                                 </group>
                                 <group>
                                     <field name="pass_end_date" attrs="{'readonly':[('state','!=','new')]}"/>
@@ -132,7 +132,7 @@
     <menuitem id="main_menu_passport" sequence="12" name="Passport" parent="menu_recruitment_root"
               />
     <menuitem id="menu_passport_request" sequence="1" name="Candidates" parent="main_menu_passport"
-              action="passport_request_action" groups="master_data.group_passport_user,account.group_account_invoice"/>
+              action="passport_request_action" groups="master_data.group_passport_read,account.group_account_invoice"/>
 
 
 

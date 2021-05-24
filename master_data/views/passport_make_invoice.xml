@@ -68,7 +68,7 @@
                  <field name="religion" readonly="1"/>
                  <field name="prn" attrs="{'readonly':[('state','=','to_invoice')]}"/>
                  <field name="invoice_no" groups="account.group_account_manager"/>
-                 <field name="attachment"/>
+<!--                 <field name="attachment"/>-->
                  <field name="state" readonly="1"/>
                            </tree>
                                </field>
@@ -124,7 +124,7 @@
         </record>
 
     <menuitem id="menu_passport_request_invoice" sequence="2" name="PRN" parent="main_menu_passport"
-              action="passport_request_invoice_action" groups="group_passport_user"/>
+              action="passport_request_invoice_action" groups="group_passport_read"/>
     <menuitem id="menu_passport_request_invoice_billing" sequence="3" name="Invoicing" parent="main_menu_passport"
               action="passport_request_invoice_action_billing" groups="account.group_account_manager"/>
 

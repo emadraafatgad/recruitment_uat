@@ -172,7 +172,12 @@ class PCRExamList(models.Model):
     #     })
     #     self.show = True
     #     self.bill = cr.id
-
+    @api.multi
+    def unlink(self):
+        for rec in self:
+            if rec.state != 'new':
+                raise ValidationError(_('You cannot delete %s as it is not in new state') % rec.name)
+        return super(PCRExamList, self).unlink()
     @api.model
     def create(self, vals):
         sequence = self.env['ir.sequence'].next_by_code('pcr.exam.list')
