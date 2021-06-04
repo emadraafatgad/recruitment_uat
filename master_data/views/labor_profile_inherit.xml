@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.ui.view" id="labor_profile_view_inherit_id">
+        <field name="name">Labor profile</field>
+        <field name="model">labor.profile</field>
+        <field name="inherit_id" ref="master_data.labor_profile_view_id"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page name="steps" string="All Cycle">
+                    <group>
+                        <field name="big_medical_ids"/>
+                        <field name="clearance_ids"/>
+                        <field name="enjaz_stamping_ids"/>
+                        <field name="interpol_ids"/>
+                        <field name="accommodation_ids"/>
+                        <field name="nira_ids"/>
+                        <field name="passport_ids"/>
+                        <field name="pcr_exam_ids"/>
+                        <field name="training_ids"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+
+</odoo>

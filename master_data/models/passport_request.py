@@ -1,7 +1,7 @@
-from odoo import fields, models , api,_
 from dateutil.relativedelta import relativedelta
-from datetime import datetime,date
-from odoo.exceptions import UserError, ValidationError
+
+from odoo import fields, models, api, _
+from odoo.exceptions import ValidationError
 
 
 class PassportNumber(models.Model):
@@ -10,23 +10,27 @@ class PassportNumber(models.Model):
     _inherit = ['portal.mixin', 'mail.thread', 'mail.activity.mixin']
     _order = 'id desc'
 
-    _sql_constraints = [('prn_uniq', 'unique(prn)', 'PRN must be unique!'),('invoice_uniq', 'unique(invoice_no)', 'Invoice# must be unique!')
-        ,('passport_no_unique', 'unique(passport_no)', 'Passport No must be unique!'),('laborer_unique', 'unique(labor_id)', 'Created with this Laborer before!')]
+    _sql_constraints = [('prn_uniq', 'unique(prn)', 'PRN must be unique!'),
+                        ('invoice_uniq', 'unique(invoice_no)', 'Invoice# must be unique!')
+        , ('passport_no_unique', 'unique(passport_no)', 'Passport No must be unique!'),
+                        ('laborer_unique', 'unique(labor_id)', 'Created with this Laborer before!')]
 
-    sequence = fields.Char(string="Sequence", readonly=True,default='New')
-    name = fields.Char(string="Labor Name",readonly=True)
-    national_id = fields.Char(required=True,size=14,string='National ID')
-    labor_id = fields.Many2one('labor.profile',required=True)
-    labor_id_no_edit = fields.Many2one('labor.profile',required=True)
-    broker = fields.Many2one('res.partner',domain=[('vendor_type','=','passport_broker')])
-    religion = fields.Selection([('muslim', 'Muslim'), ('christian', 'Christian'), ('jew', 'Jew'), ('other', 'Other')],'Religion')
+    sequence = fields.Char(string="Sequence", readonly=True, default='New')
+    name = fields.Char(string="Labor Name", readonly=True)
+    national_id = fields.Char(required=True, size=14, string='National ID')
+    labor_id = fields.Many2one('labor.profile', required=True)
+    labor_id_no_edit = fields.Many2one('labor.profile', required=True)
+    broker = fields.Many2one('res.partner', domain=[('vendor_type', '=', 'passport_broker')])
+    religion = fields.Selection([('muslim', 'Muslim'), ('christian', 'Christian'), ('jew', 'Jew'), ('other', 'Other')],
+                                'Religion')
     request_date = fields.Datetime(readonly=True, index=True, default=fields.Datetime.now)
     invoice_date = fields.Date('Invoice Date')
     invoice_id = fields.Many2one('account.invoice')
     end_date = fields.Datetime('Delivery Date')
     deadline = fields.Date('Deadline')
-    state = fields.Selection([('new','New'),('to_invoice','To Invoice'),('invoiced','Invoiced'),
-                              ('releasing','Releasing'),('rejected','Rejected'),('done','Done'),('blocked','Blocked')],default='new',track_visibility="onchange")
+    state = fields.Selection([('new', 'New'), ('to_invoice', 'To Invoice'), ('invoiced', 'Invoiced'),
+                              ('releasing', 'Releasing'), ('rejected', 'Rejected'), ('done', 'Done'),
+                              ('blocked', 'Blocked')], default='new', track_visibility="onchange")
     passport_no = fields.Char(track_visibility="onchange")
     pass_start_date = fields.Date(track_visibility="onchange")
     pass_end_date = fields.Date(track_visibility="onchange")
@@ -56,7 +60,7 @@ class PassportNumber(models.Model):
 
     @api.onchange('state')
     def onchange_state(self):
-        labor = self.env['labor.process'].search([('labor', '=', self.labor_id.id),('type', '=', 'passport')])
+        labor = self.env['labor.process'].search([('labor', '=', self.labor_id.id), ('type', '=', 'passport')])
         for rec in labor:
             rec.state = self.state
 
@@ -160,7 +164,7 @@ class PassportNumber(models.Model):
             'view_mode': 'form',
             'target': 'new',
             'res_id': self.labor_id.id,
-            #'flags': {'form': {'action_buttons': False}}
+            # 'flags': {'form': {'action_buttons': False}}
         }
 
     @api.multi
@@ -170,8 +174,8 @@ class PassportNumber(models.Model):
         if request:
             raise ValidationError(_('Done before'))
         labor = self.env['labor.profile'].search([('id', '=', self.labor_id.id)])
-        type=''
-        price=0.0
+        type = ''
+        price = 0.0
         for record in labor.labor_process_ids:
             if record.type != 'agent_payment':
                 type += record.type + ' , '
@@ -184,8 +188,8 @@ class PassportNumber(models.Model):
         accounts = product.product.product_tmpl_id.get_product_accounts()
         invoice_line.append((0, 0, {
             'product_id': product.product.id,
-            'labors_id': [(6,0, append_labor)],
-            'name':type,
+            'labors_id': [(6, 0, append_labor)],
+            'name': type,
             'uom_id': product.product.uom_id.id,
             'price_unit': price,
             'discount': 0.0,
@@ -214,29 +218,25 @@ class PassportNumber(models.Model):
 
     @api.model
     def create(self, vals):
-      sequence = self.env['ir.sequence'].next_by_code('passport.release')
-      vals['sequence'] = sequence
-      labor = self.env['labor.profile'].search([('id', '=',vals['labor_id'])])
-      for rec in labor:
-          line = []
-          line.append((0, 0, {
-              'type': 'passport',
+        sequence = self.env['ir.sequence'].next_by_code('passport.release')
+        vals['sequence'] = sequence
+        labor = self.env['labor.profile'].search([('id', '=', vals['labor_id'])])
+        for rec in labor:
+            line = []
+            line.append((0, 0, {
+                'type': 'passport',
 
-          }))
-          rec.labor_process_ids = line
-      return super(PassportNumber, self).create(vals)
+            }))
+            rec.labor_process_ids = line
+        return super(PassportNumber, self).create(vals)
 
     @api.constrains('labor_id')
     def constrain_labor(self):
         if self.labor_id != self.labor_id_no_edit:
-           raise ValidationError(_('You cannot change labor!'))
+            raise ValidationError(_('You cannot change labor!'))
 
 
+class LaborProfile(models.Model):
+    _inherit = 'labor.profile'
 
-
-
-
-
-
-
-
+    passport_ids = fields.One2many('passport.request', 'labor_id')

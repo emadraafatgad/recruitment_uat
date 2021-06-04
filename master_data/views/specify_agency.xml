@@ -25,6 +25,7 @@
                         domain="[('state','=','sent')]"/>
                 <filter name="state_selected" string="Selected"
                         domain="[('state','=','selected')]"/>
+                <filter name="traveled" string="Traveled" domain="[('state','=','traveled')]"/>
                <!-- <filter name="gcc_yes" string="GCC Yes"
                         domain="[('big_medical_state','!=','New')]"/>
                 <filter name="gcc_no" string="GCC No"
@@ -117,7 +118,7 @@
                             string="Lock" type="object"
                             class="oe_highlight" states="edit_after_selected" groups ="master_data.group_registeration_manager"/>
                     <field name="state" widget="statusbar"
-                           statusbar_visible="draft,available,selected"/>
+                           statusbar_visible="draft,available,selected,traveled"/>
                 </header>
                 <sheet>
                     <h1>

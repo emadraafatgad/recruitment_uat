@@ -19,7 +19,7 @@ class ClearanceList(models.Model):
     clearance_list = fields.Many2many('labor.clearance')
     list_total_count = fields.Integer(compute='_compute_value')
     list_now_len = fields.Integer()
-
+    labour_ids = fields.Many2many('labor.profile')
     @api.one
     @api.depends('clearance_list')
     def _compute_value(self):

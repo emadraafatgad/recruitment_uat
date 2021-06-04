@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from . import partner
-from . import training_center
 from . import labour
+from . import training_center
 from . import passport_request
 from . import nira_letter
 from . import nira_broker

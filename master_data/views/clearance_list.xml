@@ -88,6 +88,7 @@
         <field name="model">clearance.list</field>
         <field name="arch" type="xml">
             <search>
+                 <field name="labour_ids" />
                 <filter name="new" string="New"
                         domain="[('state','=','new')]"/>
                 <filter name="confirmed" string="Confirmed"

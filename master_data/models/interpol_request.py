@@ -1,6 +1,8 @@
-from odoo import fields, models , api,_
-from datetime import date,datetime
+from datetime import date, datetime
+
 from dateutil.relativedelta import relativedelta
+
+from odoo import fields, models, api, _
 from odoo.exceptions import ValidationError
 
 
@@ -10,24 +12,25 @@ class InterpolRequest(models.Model):
     _rec_name = 'labor_id'
     _order = 'id desc'
     _inherit = ['portal.mixin', 'mail.thread', 'mail.activity.mixin']
-    _sql_constraints = [('interpol_uniq', 'unique(interpol_no)', 'Interpol no must be unique!'),('laborer_unique', 'unique(labor_id)', 'Created with this Laborer before!')]
+    _sql_constraints = [('interpol_uniq', 'unique(interpol_no)', 'Interpol no must be unique!'),
+                        ('laborer_unique', 'unique(labor_id)', 'Created with this Laborer before!')]
 
-    name = fields.Char(string="Number",readonly=True,default='New')
-    labor_id = fields.Many2one('labor.profile',readonly=True)
-    labor = fields.Char('Labor Name',readonly=True)
+    name = fields.Char(string="Number", readonly=True, default='New')
+    labor_id = fields.Many2one('labor.profile', readonly=True)
+    labor = fields.Char('Labor Name', readonly=True)
     request_date = fields.Datetime(readonly=True, index=True, default=fields.Datetime.now)
-    end_date = fields.Datetime('Delivery Date',readonly=True)
+    end_date = fields.Datetime('Delivery Date', readonly=True)
     broker = fields.Many2one('res.partner')
-    national_id = fields.Char('National ID',size=14,required=True,readonly=True,related='labor_id.national_id')
-    state = fields.Selection([('new','New'),('assigned','Assigned'),('rejected','rejected'),
-                             ('done','Done'),('blocked','Blocked')],default='new',track_visibility="onchange")
+    national_id = fields.Char('National ID', size=14, required=True, readonly=True, related='labor_id.national_id')
+    state = fields.Selection([('new', 'New'), ('assigned', 'Assigned'), ('rejected', 'rejected'),
+                              ('done', 'Done'), ('blocked', 'Blocked')], default='new', track_visibility="onchange")
     gcc_updated = fields.Boolean()
-    passport_no = fields.Char(related='labor_id.passport_no',store=True)
-    interpol_no = fields.Char('Interpol No',readonly=True)
+    passport_no = fields.Char(related='labor_id.passport_no', store=True)
+    interpol_no = fields.Char('Interpol No', readonly=True)
     attachment = fields.Binary(readonly=True)
     filename = fields.Char()
-    interpol_start_date = fields.Date('Interpol Start Date',readonly=True)
-    interpol_end_date = fields.Date('Interpol End Date',readonly=True)
+    interpol_start_date = fields.Date('Interpol Start Date', readonly=True)
+    interpol_end_date = fields.Date('Interpol End Date', readonly=True)
     note = fields.Text(readonly=True)
     broker_list_id = fields.Many2one('interpol.broker')
 
@@ -47,7 +50,7 @@ class InterpolRequest(models.Model):
         list = self.env['interpol.request'].search([('id', '=', self.id), ('state', '=', 'done')])
         if list:
             raise ValidationError(_('Done before '))
-        if not self.interpol_no :
+        if not self.interpol_no:
             raise ValidationError(_('You must enter interpol Number #'))
         else:
             self.labor_id.interpol_no = self.interpol_no
@@ -80,7 +83,7 @@ class InterpolRequest(models.Model):
         accounts = product.product.product_tmpl_id.get_product_accounts()
         invoice_line.append((0, 0, {
             'product_id': product.product.id,
-            'labors_id': [(6,0, append_labor)],
+            'labors_id': [(6, 0, append_labor)],
             'name': self.labor_id.name,
             'uom_id': product.product.uom_id.id,
             'price_unit': self.broker_list_id.broker.cost,
@@ -104,7 +107,7 @@ class InterpolRequest(models.Model):
                 'currency_id': product.currency_id.id,
                 'state': 'draft',
                 'type': 'in_invoice',
-                'partner_type':self.broker_list_id.broker.vendor_type,
+                'partner_type': self.broker_list_id.broker.vendor_type,
                 'origin': self.broker_list_id.name,
                 'journal_id': purchase_journal.id,
                 'account_id': self.broker_list_id.broker.property_account_payable_id.id,
@@ -113,7 +116,7 @@ class InterpolRequest(models.Model):
             })
         if self.labor_id.occupation == 'house_maid':
             training = self.env['slave.training'].search([('slave_id', '=', self.labor_id.id)])
-            if training.state == 'finished' and agency.state in ('available','sent','selected'):
+            if training.state == 'finished' and agency.state in ('available', 'sent', 'selected'):
                 self.env['labor.clearance'].create({
                     'labor_id': self.labor_id.id,
                     'labor_name': self.labor_id.name,
@@ -130,7 +133,7 @@ class InterpolRequest(models.Model):
                     'destination_city': agency.destination_city.id,
                 })
         else:
-            if agency.state in ('available','sent','selected'):
+            if agency.state in ('available', 'sent', 'selected'):
                 self.env['labor.clearance'].sudo().create({
                     'labor_id': self.labor_id.id,
                     'labor_name': self.labor_id.name,
@@ -148,8 +151,6 @@ class InterpolRequest(models.Model):
                 })
         if all(l.state == 'done' for l in self.broker_list_id.interpol_request):
             self.broker_list_id.state = 'done'
-
-
 
     @api.multi
     def action_assign(self):
@@ -220,10 +221,12 @@ class InterpolRequest(models.Model):
 class LaborProfile(models.Model):
     _inherit = 'labor.profile'
 
+    interpol_ids = fields.One2many('interpol.request', 'labor_id')
+
     def request_passport(self):
         print("================================")
         request_obj = self.env['passport.request']
         request_obj.create({
-            'name':self.passport_no,
-            'labor_id':self.id,
+            'name': self.passport_no,
+            'labor_id': self.id,
         })

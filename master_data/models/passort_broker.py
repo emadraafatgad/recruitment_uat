@@ -19,6 +19,7 @@ class PassportBroker(models.Model):
     done_count = fields.Integer(compute='_compute_value')
     remaining_count = fields.Integer(compute='_compute_value')
     list_now_len = fields.Integer()
+    labour_ids = fields.Many2many('labor.profile')
 
     @api.one
     @api.depends('passport_request')

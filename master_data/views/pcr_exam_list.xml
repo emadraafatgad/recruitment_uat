@@ -22,21 +22,31 @@
         <field name="arch" type="xml">
             <form string="PCR Exam">
                 <header>
-                    <button name="confirm_exam_list_lines" type="object" string="Confirm List" class="oe_highlight" state="new" confirm="Are you sure you want confirm this list?"/>
+                    <button name="confirm_exam_list_lines" type="object" string="Confirm List" class="oe_highlight" states="new" confirm="Are you sure you want confirm this list?"/>
+                    <button name="action_create_invoice"  type="object" string="Create Invoice For list" class="oe_highlight" states="in_progress" confirm="Are you sure you want confirm this list?"/>
                     <field name="state" widget="statusbar" statusbar_visible="new,in_progress,finished"/>
                 </header>
                 <sheet>
-                    <h1>
-                        <field name="name"/>
-                    </h1>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_invoice" type="object" class="oe_stat_button" icon="fa-pencil-square-o" states="finished">
+                            <field name="invoice_id" widget="statinfo" string="Invoices"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
                     <group>
                         <group>
-                            <field name="hospital_id" options="{'no_create_edit':true}"
+                            <field name="lab_id" options="{'no_create_edit':true}"
                                    attrs="{'readonly':[('state','!=','new')]}"/>
+<!--                            <field name="invoice_id"/>-->
                         </group>
                         <group>
                             <field name="exam_date"/>
                             <field name="total_lines"/>
+                            <field name="list_now_len"/>
                         </group>
                     </group>
                     <notebook>
@@ -46,8 +56,6 @@
                                     <field name="labour_id" string="Laborer" readonly="1"/>
                                     <field name="national_id" readonly="1"/>
                                     <field name="passport_no" readonly="1"/>
-
-<!--                                    <field name="hospital_id" attrs="{'readonly':[('state','in',['positive','negative'])]}"/>-->
                                     <field name="exam_date" />
 <!--                                    <field name="deadline" attrs="{'readonly':[('state','in',['positive','negative'])]}"/>-->
 <!--                                    <field name="result" attrs="{'readonly':[('state','in',['positive','negative'])]}"/>-->
@@ -56,11 +64,11 @@
 <!--                                    <field name="confirm_appear" invisible="1"/>-->
 <!--                                    <field name="invoiced" invisible="1"/>-->
                                     <button name="action_positive"
-                                            string="Positive" type="object"
-                                            class="btn btn-danger" confirm="Are you sure you want to choose positive?"/>
+                                            string="Positive" type="object" states="in_progress"
+                                            class="btn btn-danger" />
                                     <button name="action_negative"
-                                            string="Negative" type="object"
-                                            class="btn btn-success" confirm="Are you sure you want to choose negative?"/>
+                                            string="Negative" states="in_progress" type="object"
+                                            class="btn btn-success" />
                                 </tree>
                             </field>
                         </page>
@@ -81,7 +89,7 @@
         <field name="arch" type="xml">
             <tree>
                 <field name="name"/>
-                <field name="hospital_id"/>
+                <field name="lab_id"/>
                 <field name="total_lines"/>
                 <field name="state"/>
             </tree>
@@ -94,15 +102,12 @@
         <field name="arch" type="xml">
 
             <search>
-                <field name="hospital_id"/>
+                <field name="lab_id"/>
                 <separator/>
                 <filter name="new" string="New"
                         domain="[('state','=','new')]"/>
-<!--                <filter name="invoiced" string="Invoiced"-->
-<!--                        domain="[('state','=','invoiced')]"/>-->
                 <filter name="finished" string="Finshed"
                         domain="[('state','=','finished')]"/>
-
                 <filter string="Today" name="today" domain="[('create_date','&gt;=',time.strftime('%%Y-%%m-%%d'))]"/>
                 <filter string="This Week" name="this_week" domain="[
                                 '&amp;',

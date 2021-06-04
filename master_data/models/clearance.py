@@ -10,6 +10,7 @@ class LaborClearance(models.Model):
     _name = 'labor.clearance'
     _order = 'id desc'
     _inherit = ['portal.mixin', 'mail.thread', 'mail.activity.mixin']
+
     _sql_constraints = [('laborer_unique', 'unique(labor_id)', 'Created with this Laborer before!')]
 
     state = fields.Selection([('new','New'),('rejected','Rejected'),('confirmed','Confirmed'),('blocked','Blocked')],default='new',track_visibility="onchange")
@@ -103,3 +104,7 @@ class LaborClearance(models.Model):
         return super(LaborClearance, self).create(vals)
 
 
+class LaborProfile(models.Model):
+    _inherit = 'labor.profile'
+
+    clearance_ids = fields.One2many('labor.clearance', 'labor_id')

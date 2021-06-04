@@ -17,7 +17,7 @@ class StampingList(models.Model):
     list_total_count = fields.Integer(compute='_compute_value')
     assign_date = fields.Date()
     list_now_len = fields.Integer()
-
+    labour_ids = fields.Many2many('labor.profile')
     def _get_embassy_default(self):
         embassy = self.env['res.partner'].search([('vendor_type', '=', 'embassy')])
         if not embassy:

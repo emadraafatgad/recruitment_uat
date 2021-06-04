@@ -1,6 +1,7 @@
-from odoo import fields, models, api, _, tools
-from datetime import date
 import base64
+from datetime import date
+
+from odoo import fields, models, api, _, tools
 from odoo.exceptions import ValidationError, UserError
 
 
@@ -20,7 +21,8 @@ class SpecifyAgent(models.Model):
     age = fields.Integer()
     state = fields.Selection(
         [('draft', 'CV Available'), ('available', 'Specified'), ('sent', 'CV Sent'), ('selected', 'Selected'),
-         ('edit_after_selected', 'Edit After Selected'), ('blocked', 'Blocked')], default='draft',
+         ('traveled', 'Traveled'), ('edit_after_selected', 'Edit After Selected'), ('blocked', 'Blocked')],
+        default='draft',
         track_visibility="onchange")
     request_date = fields.Date(default=date.today())
     available_date = fields.Date()
@@ -426,3 +428,9 @@ class MailComposeMessageInherit(models.TransientModel):
         if subject and not (subject.startswith('Re:') or subject.startswith(re_prefix)):
             subject = "%s %s" % (re_prefix, subject)
         return result
+
+
+class LaborProfile(models.Model):
+    _inherit = 'labor.profile'
+
+    specify_agency_ids = fields.One2many('specify.agent', 'labor_id')

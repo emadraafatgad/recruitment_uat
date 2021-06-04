@@ -7,7 +7,6 @@
             <field name="view_mode">tree,form</field>
             <field name="domain">[]</field>
             <field name="context">{}</field>
-
         </record>
 
         <record id="view_training_center_form" model="ir.ui.view">
@@ -235,6 +234,7 @@
                 <search string="Search Labor Training">
                     <field name='slave_id' string="Code or Name"/>
                     <field name='phone' string="phone"/>
+
                     <separator/>
                      <filter name="new" string="New"
                             domain="[('state','=','new')]"/>
@@ -258,6 +258,7 @@
             <field name="model">training.list</field>
             <field name="arch" type="xml">
                 <search string="Search List Training">
+                    <field name="labour_ids"/>
                       <filter name="billed" string="Bill Created"
                             domain="[('show','=',True)]"/>
                       <filter name="no_bill" string="No bill"
@@ -273,9 +274,6 @@
                                 ('create_date', '&lt;=', (context_today() + relativedelta(weekday=6)).strftime('%Y-%m-%d')),]"/>
                     <filter string="This Month" name="this_month" domain="[('create_date','&gt;=',time.strftime('%%Y-%%m-01'))]"/>
                     <filter string="This Year" name="this_year" domain="[('create_date','&gt;=',time.strftime('%%Y-01-01'))]"/>
-
-
-
 
                 </search>
             </field>

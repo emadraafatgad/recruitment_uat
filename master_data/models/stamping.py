@@ -42,3 +42,5 @@ class LaborStamping(models.Model):
         vals['name'] = self.env['ir.sequence'].next_by_code('labor.stamping')
         return super(LaborStamping, self).create(vals)
 
+class LaborProfile(models.Model):
+    _inherit = 'labor.profile'

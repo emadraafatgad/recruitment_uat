@@ -105,6 +105,7 @@
 
                 <search>
                     <field name="broker" />
+                     <field name="labour_ids" />
                     <separator/>
 
                     <filter name="new" string="New"

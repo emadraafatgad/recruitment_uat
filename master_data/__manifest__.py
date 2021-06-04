@@ -56,6 +56,7 @@
         'views/pcr_exam.xml',
         'views/pcr_exam_list.xml',
         'views/accommodation_list.xml',
+        'views/labor_profile_inherit.xml',
     ],
 
 }

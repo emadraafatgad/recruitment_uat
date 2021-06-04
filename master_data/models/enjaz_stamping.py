@@ -1,8 +1,7 @@
 # from extra.master_data.models.interpol_request import InterpolRequest
-from odoo import fields, models, api, _
-from datetime import date
 from dateutil.relativedelta import relativedelta
 
+from odoo import fields, models, api, _
 from odoo.exceptions import ValidationError
 
 
@@ -12,23 +11,24 @@ class LaborEnjaz(models.Model):
     _inherit = ['portal.mixin', 'mail.thread', 'mail.activity.mixin']
 
     state = fields.Selection(
-        [('new', 'New'), ('in_progress', 'InProgress'), ('rejected', 'Rejected'), ('done', 'Done'),('blocked','Blocked')], default='new',
+        [('new', 'New'), ('in_progress', 'InProgress'), ('rejected', 'Rejected'), ('done', 'Done'),
+         ('blocked', 'Blocked')], default='new',
         track_visibility="onchange")
-    name = fields.Char(string="Number",track_visibility="onchange", readonly=True, default='New')
-    labor_id = fields.Many2one('labor.profile',track_visibility="onchange")
+    name = fields.Char(string="Number", track_visibility="onchange", readonly=True, default='New')
+    labor_id = fields.Many2one('labor.profile', track_visibility="onchange")
     labor_name = fields.Char()
-    agency = fields.Many2one('res.partner',track_visibility="onchange", domain=[('agency', '=', True)])
+    agency = fields.Many2one('res.partner', track_visibility="onchange", domain=[('agency', '=', True)])
     agency_code = fields.Char()
-    type = fields.Selection([('enjaz', 'Enjaz'), ('stamping', 'Stamping')],track_visibility="onchange", required=True)
+    type = fields.Selection([('enjaz', 'Enjaz'), ('stamping', 'Stamping')], track_visibility="onchange", required=True)
     enjaz_no = fields.Char(track_visibility="onchange")
-    passport_no = fields.Char(track_visibility="onchange",related='labor_id.passport_no',store=True)
+    passport_no = fields.Char(track_visibility="onchange", related='labor_id.passport_no', store=True)
     employer = fields.Char(track_visibility="onchange")
-    city = fields.Many2one('res.country.state',track_visibility="onchange")
-    bill = fields.Many2one('account.invoice',track_visibility="onchange")
-    bill_date = fields.Date(related='bill.date_invoice',track_visibility="onchange")
+    city = fields.Many2one('res.country.state', track_visibility="onchange")
+    bill = fields.Many2one('account.invoice', track_visibility="onchange")
+    bill_date = fields.Date(related='bill.date_invoice', track_visibility="onchange")
     visa_no = fields.Char()
-    visa_date = fields.Date(string="Issue date",track_visibility="onchange")
-    visa_expiry_date = fields.Date(string="Expiry date",track_visibility="onchange")
+    visa_date = fields.Date(string="Issue date", track_visibility="onchange")
+    visa_expiry_date = fields.Date(string="Expiry date", track_visibility="onchange")
 
     def _get_enjaz_default(self):
         enjaz = self.env['res.partner'].search([('vendor_type', '=', 'enjaz')])
@@ -128,7 +128,7 @@ class LaborEnjaz(models.Model):
                     'agency': self.agency.id,
                     'agency_code': self.agency_code,
                     'destination_city': self.city.id,
-                    'country_id':self.agency.country_id.id,
+                    'country_id': self.agency.country_id.id,
                     'employer': self.employer,
                     'visa_no': self.visa_no, })
 
@@ -277,3 +277,9 @@ class LaborEnjaz(models.Model):
             raise ValidationError('there is no labour ')
 
         return super(LaborEnjaz, self).create(vals)
+
+
+class LaborProfile(models.Model):
+    _inherit = 'labor.profile'
+
+    enjaz_stamping_ids = fields.One2many('labor.enjaz.stamping','labor_id')

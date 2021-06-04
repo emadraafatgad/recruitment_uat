@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <record id="view_interpol_compute_wizard" model="ir.ui.view">
-        <field name="name">Interpol update GCC</field>
+        <field name="name"> updates</field>
         <field name="model">interpol.gcc.update</field>
         <field name="arch" type="xml">
             <form string="Parameters">
@@ -13,6 +13,17 @@
                             confirm="Are you sure you want to update all GCC?"/>
                     <button name="update_agency_medical_interpol" string="Update Agency" type="object"
                             class="btn-primary" confirm="Are you sure you want to update all Agency?"/>
+                    <button name="update_intepol_labours" string="Update interpol Broker" type="object"
+                            class="btn-primary" confirm="Are you sure you want to update all Interpol?"/>
+                    <button name="update_passports_labours" string="Update Passport Broker" type="object"
+                            class="btn-primary" confirm="Are you sure you want to update all Passports?"/>
+                    <button name="update_training_labours" string="Update Training" type="object"
+                            class="btn-primary" confirm="Are you sure you want to update all Training?"/>
+                    <button name="update_clearance_labours" string="Update Clearance" type="object"
+                            class="btn-primary" confirm="Are you sure you want to update all Clearance?"/>
+                    <button name="update_stamping_labours" string="Update Stamping" type="object"
+                            class="btn-primary" confirm="Are you sure you want to update all Stamping?"/>
+
                     <button string="Cancel" class="btn-secondary" special="cancel"/>
                 </footer>
             </form>
@@ -29,7 +40,7 @@
 
 
     <menuitem action="action_interpol_compute" id="menu_interpol_compute" parent="menu_recruitment_configuration"
-              sequence="135" groups="group_registeration_user"/>
+              sequence="135" groups="group_registeration_manager"/>
 
 
 </odoo>

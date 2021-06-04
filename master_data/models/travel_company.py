@@ -191,3 +191,5 @@ class TravelCompany(models.Model):
         labor.labor_process_ids = line
         return super(TravelCompany, self).create(vals)
 
+class LaborProfile(models.Model):
+    _inherit = 'labor.profile'

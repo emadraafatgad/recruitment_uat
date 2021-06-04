@@ -1,7 +1,8 @@
 from datetime import date
 
-from odoo import fields, models , api,_
 from dateutil.relativedelta import relativedelta
+
+from odoo import fields, models, api, _
 from odoo.exceptions import ValidationError
 
 
@@ -12,7 +13,7 @@ class BigMedical(models.Model):
     _order = 'id desc'
     _sql_constraints = [('laborer_unique', 'unique(labor_id)', 'Created with this Laborer before!')]
 
-    name = fields.Char(string="Number",readonly=True,default='New')
+    name = fields.Char(string="Number", readonly=True, default='New')
     labor_id = fields.Many2one('labor.profile')
 
     def _get_gcc_default(self):
@@ -23,26 +24,29 @@ class BigMedical(models.Model):
 
     company_id = fields.Many2one('res.company', 'Company', readonly=True,
                                  default=lambda self: self.env.user.company_id)
-    gcc = fields.Many2one('res.partner',readonly=True,domain=[('vendor_type', '=', 'gcc')],default=_get_gcc_default)
+    gcc = fields.Many2one('res.partner', readonly=True, domain=[('vendor_type', '=', 'gcc')], default=_get_gcc_default)
     labor = fields.Char('Labor Name')
-    gcc_no =fields.Char('GCC#')
-    state = fields.Selection([('new', 'New'),('pending', 'On Examination'),('fit','Finished'),('rejected','Rejected'),('unfit','Unfit'),('blocked','Blocked')], default='new', track_visibility="onchange")
-    national_id = fields.Char(size=14,string='National ID',related='labor_id.national_id',store=True)
-    passport_no = fields.Char(related='labor_id.passport_no',store=True)
-    hospital = fields.Many2one('res.partner', domain=[('vendor_type','=','hospital')],track_visibility="onchange")
+    gcc_no = fields.Char('GCC#')
+    state = fields.Selection(
+        [('new', 'New'), ('pending', 'On Examination'), ('fit', 'Finished'), ('rejected', 'Rejected'),
+         ('unfit', 'Unfit'), ('blocked', 'Blocked')], default='new', track_visibility="onchange")
+    national_id = fields.Char(size=14, string='National ID', related='labor_id.national_id', store=True)
+    passport_no = fields.Char(related='labor_id.passport_no', store=True)
+    hospital = fields.Many2one('res.partner', domain=[('vendor_type', '=', 'hospital')], track_visibility="onchange")
     booking_date = fields.Date(track_visibility='onchange')
-    check_date = fields.Date(string="Examination Date",track_visibility='onchange')
-    medical_check = fields.Selection([('fit', 'Fit'),('unfit', 'Unfit'),('pending', 'Pending')],string='Result',track_visibility="onchange")
+    check_date = fields.Date(string="Examination Date", track_visibility='onchange')
+    medical_check = fields.Selection([('fit', 'Fit'), ('unfit', 'Unfit'), ('pending', 'Pending')], string='Result',
+                                     track_visibility="onchange")
     reason = fields.Char()
     invoiced = fields.Boolean('Hospital Invoiced')
     interpol_done = fields.Boolean()
-    recheck_appear =fields.Boolean(compute='compute_recheck_appear')
-    confirm_appear =fields.Boolean(compute='compute_confirm_appear')
-    deadline =fields.Date(compute='onchange_check_date',store=True,readonly=False,track_visibility='onchange')
-    deadline_medical =fields.Date(track_visibility='onchange',string='Deadline')
+    recheck_appear = fields.Boolean(compute='compute_recheck_appear')
+    confirm_appear = fields.Boolean(compute='compute_confirm_appear')
+    deadline = fields.Date(compute='onchange_check_date', store=True, readonly=False, track_visibility='onchange')
+    deadline_medical = fields.Date(track_visibility='onchange', string='Deadline')
     date_today = fields.Date(default=date.today())
 
-    @api.depends('state','medical_check')
+    @api.depends('state', 'medical_check')
     def compute_recheck_appear(self):
         for rec in self:
             if rec.state == 'unfit' and rec.medical_check == 'unfit':
@@ -74,7 +78,7 @@ class BigMedical(models.Model):
     @api.multi
     def move_gcc(self):
         self.ensure_one()
-        inv = self.env['account.invoice'].search([('origin', '=', self.name),('type', '=','in_invoice')])
+        inv = self.env['account.invoice'].search([('origin', '=', self.name), ('type', '=', 'in_invoice')])
         if inv:
             raise ValidationError(_('Done before'))
         if not self.gcc:
@@ -88,7 +92,7 @@ class BigMedical(models.Model):
         if not self.check_date:
             raise ValidationError(_('Check Date'))
         medical_list_line = []
-        list_found = self.env['medical.list'].search([('hospital', '=', self.hospital.id),('state', '=', 'new')])
+        list_found = self.env['medical.list'].search([('hospital', '=', self.hospital.id), ('state', '=', 'new')])
         if list_found:
             medical_list_line.append(self.id)
             list_found[0].medical_request = medical_list_line
@@ -97,7 +101,7 @@ class BigMedical(models.Model):
             medical_list_line.append(self.id)
             cr = self.env['medical.list'].create({
                 'hospital': self.hospital.id,
-                'examination_date':self.check_date
+                'examination_date': self.check_date
 
             })
             cr.medical_request = medical_list_line
@@ -110,7 +114,7 @@ class BigMedical(models.Model):
         accounts = product.product.product_tmpl_id.get_product_accounts()
         invoice_line.append((0, 0, {
             'product_id': product.product.id,
-            'labors_id': [(6,0, append_labor)],
+            'labors_id': [(6, 0, append_labor)],
             'name': 'gcc',
             'uom_id': product.product.uom_id.id,
             'price_unit': product.price,
@@ -139,7 +143,7 @@ class BigMedical(models.Model):
 
     def gcc_bill_paid(self, invoice_obj):
         payment_obj = self.env["account.payment"]
-        configuration = self.env['product.recruitment.config'].search([('type', '=', 'gcc')],limit=1)
+        configuration = self.env['product.recruitment.config'].search([('type', '=', 'gcc')], limit=1)
         journal_id = configuration.journal_id
         # invoice_line_obj = self.env["account.invoice.line"]
         inv_ids = []
@@ -148,23 +152,22 @@ class BigMedical(models.Model):
             'communication': invoice_obj.name,
             'payment_method_id': 2,
             'partner_type': 'supplier',
-            'partner_id':invoice_obj.partner_id.id,
+            'partner_id': invoice_obj.partner_id.id,
             'amount': configuration.price,
             'payment_type': 'outbound',
             'journal_id': journal_id.id,
             'payment_date': fields.Date.today(),
         }
         payment = payment_obj.create(curr_payment)
-        print("i will paid",payment)
+        print("i will paid", payment)
         payment.action_validate_invoice_payment()
         print("i paid here")
         return True
 
-
     @api.multi
     def action_done(self):
         self.ensure_one()
-        if self.state in ('fit','unfit'):
+        if self.state in ('fit', 'unfit'):
             raise ValidationError(_('Done before'))
         agency = self.env['specify.agent'].search([('labor_id', '=', self.labor_id.id)])
         if self.medical_check != 'fit':
@@ -187,9 +190,9 @@ class BigMedical(models.Model):
             })
 
         if self.medical_check == 'fit':
-           self.state = 'fit'
-           agency = self.env['specify.agent'].search([('labor_id', '=', self.labor_id.id)])
-           agency.medical_state = 'fit'
+            self.state = 'fit'
+            agency = self.env['specify.agent'].search([('labor_id', '=', self.labor_id.id)])
+            agency.medical_state = 'fit'
         elif self.medical_check == 'unfit':
             self.state = 'unfit'
             agency = self.env['specify.agent'].search([('labor_id', '=', self.labor_id.id)])
@@ -220,7 +223,7 @@ class BigMedical(models.Model):
         accounts = product.product.product_tmpl_id.get_product_accounts()
         invoice_line.append((0, 0, {
             'product_id': product.product.id,
-            'labors_id': [(6,0, append_labor)],
+            'labors_id': [(6, 0, append_labor)],
             'name': type,
             'uom_id': product.product.uom_id.id,
             'price_unit': price,
@@ -257,3 +260,7 @@ class BigMedical(models.Model):
         return super(BigMedical, self).create(vals)
 
 
+class LaborProfile(models.Model):
+    _inherit = 'labor.profile'
+
+    big_medical_ids = fields.One2many('big.medical', 'labor_id')

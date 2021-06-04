@@ -77,6 +77,34 @@
         </field>
     </record>
 
+    <record id="pcr_exam_test_search" model="ir.ui.view">
+        <field name="name">PCR Test Search</field>
+        <field name="model">pcr.exam</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="labour_id"/>
+                <separator/>
+                <filter name="new" string="New"
+                        domain="[('state','=','new')]"/>
+                <filter name="in_progress" string="In progress"
+                        domain="[('state','=','in_progress')]"/>
+                <filter name="positive" string="Positive"
+                        domain="[('state','=','positive')]"/>
+                <filter name="negative" string="Negative"
+                        domain="[('state','=','negative')]"/>
+<!--                <filter string="Today" name="today" domain="[('create_date','&gt;=',time.strftime('%%Y-%%m-%%d'))]"/>-->
+<!--                <filter string="This Week" name="this_week" domain="[-->
+<!--                                '&amp;',-->
+<!--                                ('create_date', '>=', (context_today() + relativedelta(weeks=-1,days=1,weekday=0)).strftime('%Y-%m-%d')),-->
+<!--                                ('create_date', '&lt;=', (context_today() + relativedelta(weekday=6)).strftime('%Y-%m-%d')),]"/>-->
+<!--                <filter string="This Month" name="this_month"-->
+<!--                        domain="[('exam_date','&gt;=',time.strftime('%%Y-%%m-01'))]"/>-->
+<!--                <filter string="This Year" name="this_year"-->
+<!--                        domain="[('exam_date','&gt;=',time.strftime('%%Y-01-01'))]"/>-->
+            </search>
+        </field>
+    </record>
+
     <menuitem id="menu_pcr_exam_root_id"
               name="PRR Test"
               parent="menu_recruitment_root"

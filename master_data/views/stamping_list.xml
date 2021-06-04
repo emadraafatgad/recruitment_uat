@@ -39,6 +39,7 @@
                         </group>
                         <group>
                             <field name="assign_date"/>
+
                         </group>
                     </group>
                     <notebook>
@@ -89,7 +90,24 @@
             </tree>
         </field>
     </record>
+<record id="view_list_stamping_search" model="ir.ui.view">
+            <field name="name">List Training Search</field>
+            <field name="model">stamping.list</field>
+            <field name="arch" type="xml">
+                <search string="Search List Stamping">
+                    <field name="labour_ids"/>
 
+                    <filter string="Today" name="today" domain="[('create_date','&gt;=',time.strftime('%%Y-%%m-%%d'))]"/>
+                    <filter string="This Week" name="this_week" domain="[
+                                '&amp;',
+                                ('create_date', '>=', (context_today() + relativedelta(weeks=-1,days=1,weekday=0)).strftime('%Y-%m-%d')),
+                                ('create_date', '&lt;=', (context_today() + relativedelta(weekday=6)).strftime('%Y-%m-%d')),]"/>
+                    <filter string="This Month" name="this_month" domain="[('create_date','&gt;=',time.strftime('%%Y-%%m-01'))]"/>
+                    <filter string="This Year" name="this_year" domain="[('create_date','&gt;=',time.strftime('%%Y-01-01'))]"/>
+
+                </search>
+            </field>
+        </record>
 
     <menuitem id="menu_list_stamping" sequence="3" name="Stamping List" parent="menu_embassy_main"
               action="stamping_list_action" groups="group_stamping_read"/>
