@@ -264,3 +264,14 @@ class LaborProfile(models.Model):
     _inherit = 'labor.profile'
 
     big_medical_ids = fields.One2many('big.medical', 'labor_id')
+    medical_state = fields.Selection(
+        [('new', 'New'), ('pending', 'On Examination'), ('fit', 'Finished'), ('rejected', 'Rejected'),
+         ('unfit', 'Unfit'), ('blocked', 'Blocked')],compute="get_labour_medical_status",
+        store=True)
+
+    @api.depends('big_medical_ids.state')
+    def get_labour_medical_status(self):
+        for rec in self:
+            print("big medical state")
+            medical = self.env['big.medical'].search([('labor_id', '=', rec.id)], limit=1)
+            rec.medical_state = medical.state

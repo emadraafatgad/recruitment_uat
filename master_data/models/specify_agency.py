@@ -434,3 +434,13 @@ class LaborProfile(models.Model):
     _inherit = 'labor.profile'
 
     specify_agency_ids = fields.One2many('specify.agent', 'labor_id')
+    agency_state = fields.Selection(
+        [('draft', 'CV Available'), ('available', 'Specified'), ('sent', 'CV Sent'), ('selected', 'Selected'),
+         ('traveled', 'Traveled'), ('edit_after_selected', 'Edit After Selected'), ('blocked', 'Blocked')],
+        compute="get_agency_state", store=True)
+
+    @api.depends('specify_agency_ids')
+    def get_agency_state(self):
+        for rec in self:
+            agency = self.env['specify.agent'].search([('labor_id', '=', rec.id)], limit=1)
+            rec.agency_state = agency.state

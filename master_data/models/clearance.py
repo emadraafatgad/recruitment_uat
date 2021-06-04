@@ -1,7 +1,5 @@
 # from extra.master_data.models.interpol_request import InterpolRequest
-from odoo import fields, models , api,_
-from datetime import date
-from dateutil.relativedelta import relativedelta
+from odoo import fields, models, api, _
 
 from odoo.exceptions import ValidationError
 
@@ -13,27 +11,31 @@ class LaborClearance(models.Model):
 
     _sql_constraints = [('laborer_unique', 'unique(labor_id)', 'Created with this Laborer before!')]
 
-    state = fields.Selection([('new','New'),('rejected','Rejected'),('confirmed','Confirmed'),('blocked','Blocked')],default='new',track_visibility="onchange")
-    name = fields.Char(string="Number",readonly=True,default='New')
-    labor_id = fields.Many2one('labor.profile',required=True)
+    state = fields.Selection(
+        [('new', 'New'), ('rejected', 'Rejected'), ('confirmed', 'Confirmed'), ('blocked', 'Blocked')], default='new',
+        track_visibility="onchange")
+    name = fields.Char(string="Number", readonly=True, default='New')
+    labor_id = fields.Many2one('labor.profile', required=True)
     labor_name = fields.Char()
-    agency = fields.Many2one('res.partner',domain=[('agency','=',True)],required=True)
-    lc1 = fields.Many2one('labor.village',required=True)
-    lc2 = fields.Many2one('labor.parish',required=True)
-    lc3 = fields.Many2one('labor.subcounty',required=True)
-    district = fields.Many2one('labor.district',required=True)
-    job_title = fields.Selection([('house_maid', 'House Maid'), ('pro_maid', 'Pro Maid'),('pro_worker','Pro Worker')],required=True)
-    gender = fields.Selection([('Male', 'Male'), ('Female', 'Female')],required=True)
+    agency = fields.Many2one('res.partner', domain=[('agency', '=', True)], required=True)
+    lc1 = fields.Many2one('labor.village', required=True)
+    lc2 = fields.Many2one('labor.parish', required=True)
+    lc3 = fields.Many2one('labor.subcounty', required=True)
+    district = fields.Many2one('labor.district', required=True)
+    job_title = fields.Selection([('house_maid', 'House Maid'), ('pro_maid', 'Pro Maid'), ('pro_worker', 'Pro Worker')],
+                                 required=True)
+    gender = fields.Selection([('Male', 'Male'), ('Female', 'Female')], required=True)
     contact = fields.Char(required=True)
-    passport_no = fields.Char(related='labor_id.passport_no',store=True)
+    passport_no = fields.Char(related='labor_id.passport_no', store=True)
     agency_code = fields.Char(required=True)
-    destination_city = fields.Many2one('res.country.state',required=True)
-    destination_country = fields.Many2one('res.country',related='labor_id.country_id',store=True)
+    destination_city = fields.Many2one('res.country.state', required=True)
+    destination_country = fields.Many2one('res.country', related='labor_id.country_id', store=True)
 
     @api.multi
     def action_confirm(self):
         self.ensure_one()
-        stamping = self.env['labor.enjaz.stamping'].search([('type', '=', 'stamping'),('labor_id', '=', self.labor_id.id)])
+        stamping = self.env['labor.enjaz.stamping'].search(
+            [('type', '=', 'stamping'), ('labor_id', '=', self.labor_id.id)])
         if stamping.state == 'done':
             self.env['travel.company'].create({
                 'labor_id': self.labor_id.id,
@@ -69,7 +71,7 @@ class LaborClearance(models.Model):
         accounts = product.product.product_tmpl_id.get_product_accounts()
         invoice_line.append((0, 0, {
             'product_id': product.product.id,
-            'labors_id': [(6,0, append_labor)],
+            'labors_id': [(6, 0, append_labor)],
             'name': type,
             'uom_id': product.product.uom_id.id,
             'price_unit': price,
@@ -91,6 +93,7 @@ class LaborClearance(models.Model):
 
             })
         self.state = 'rejected'
+
     @api.model
     def create(self, vals):
         vals['name'] = self.env['ir.sequence'].next_by_code('labor.clearance')
@@ -108,3 +111,14 @@ class LaborProfile(models.Model):
     _inherit = 'labor.profile'
 
     clearance_ids = fields.One2many('labor.clearance', 'labor_id')
+    clearance_state = fields.Selection(
+        [('new', 'New'), ('rejected', 'Rejected'), ('confirmed', 'Confirmed'), ('blocked', 'Blocked')],
+        compute='get_clearance_state',
+        track_visibility="onchange")
+
+    @api.depends('clearance_ids.state')
+    def get_clearance_state(self):
+        for rec in self:
+            print("labor.clearance state")
+            clearance = self.env['labor.clearance'].search([('labor_id', '=', rec.id)], limit=1)
+            rec.clearance_state = clearance.state

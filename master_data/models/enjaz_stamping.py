@@ -282,4 +282,14 @@ class LaborEnjaz(models.Model):
 class LaborProfile(models.Model):
     _inherit = 'labor.profile'
 
-    enjaz_stamping_ids = fields.One2many('labor.enjaz.stamping','labor_id')
+    enjaz_stamping_ids = fields.One2many('labor.enjaz.stamping', 'labor_id')
+    stamping_state = fields.Selection(
+        [('new', 'New'), ('in_progress', 'InProgress'), ('rejected', 'Rejected'), ('done', 'Done'),
+         ('blocked', 'Blocked')],
+        compute="get_enjaz_state", store=True)
+
+    @api.depends('enjaz_stamping_ids.state')
+    def get_enjaz_state(self):
+        for rec in self:
+            enjaz = self.env['labor.enjaz.stamping'].search([('labor_id', '=', rec.id)], limit=1)
+            rec.stamping_state = enjaz.state

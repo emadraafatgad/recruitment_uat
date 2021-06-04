@@ -39,4 +39,14 @@ class PCRExam(models.Model):
 class LaborProfile(models.Model):
     _inherit = 'labor.profile'
 
-    pcr_exam_ids = fields.One2many( 'pcr.exam','labour_id')
+    pcr_exam_ids = fields.One2many('pcr.exam', 'labour_id')
+    pcr_state = fields.Selection(
+        [('new', 'new'), ('in_progress', 'InProgress'), ('positive', 'Positive'), ('negative', 'Negative'),
+         ('blocked', 'Blocked')],
+        store=True, compute='get_pcr_state')
+
+    @api.depends('pcr_exam_ids.state')
+    def get_pcr_state(self):
+        for rec in self:
+            pcr = self.env['pcr.exam'].search([('labour_id', '=', rec.id)])
+            rec.pcr_state = pcr.state

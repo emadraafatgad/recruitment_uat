@@ -240,3 +240,13 @@ class LaborProfile(models.Model):
     _inherit = 'labor.profile'
 
     passport_ids = fields.One2many('passport.request', 'labor_id')
+    passport_state = fields.Selection([('new', 'New'), ('to_invoice', 'To Invoice'), ('invoiced', 'Invoiced'),
+                                       ('releasing', 'Releasing'), ('rejected', 'Rejected'), ('done', 'Done'),
+                                       ('blocked', 'Blocked')], compute="get_passport_state",store=True)
+
+    @api.depends('passport_ids.state')
+    def get_passport_state(self):
+        for rec in self:
+            print("labor.passport state")
+            passport = self.env['passport.request'].search([('labor_id', '=', rec.id)], limit=1)
+            rec.passport_state = passport.state

@@ -8,20 +8,70 @@
             <xpath expr="//notebook" position="inside">
                 <page name="steps" string="All Cycle">
                     <group>
-                        <field name="big_medical_ids"/>
-                        <field name="clearance_ids"/>
-                        <field name="enjaz_stamping_ids"/>
-                        <field name="interpol_ids"/>
-                        <field name="accommodation_ids"/>
-                        <field name="nira_ids"/>
-                        <field name="passport_ids"/>
-                        <field name="pcr_exam_ids"/>
-                        <field name="training_ids"/>
+                        <group>
+                            <field name="medical_state"/>
+                            <field name="big_medical_ids"/>
+                        </group>
+                        <group>
+                            <field name="clearance_state"/>
+                            <field name="clearance_ids"/>
+                        </group>
+                        <group>
+                            <field name="interpol_state"/>
+                            <field name="interpol_ids"/>
+                        </group>
+                        <group>
+                            <field name="stamping_state"/>
+                            <field name="enjaz_stamping_ids"/>
+                        </group>
+                        <!--                        <group>-->
+                        <!--                            <field name="accommodation_ids"/>-->
+                        <!--                        </group>-->
+                        <group>
+                            <field name="nira_state"/>
+                            <field name="nira_ids"/>
+                        </group>
+                        <group>
+                            <field name="pcr_state"/>
+                            <field name="pcr_exam_ids"/>
+                        </group>
+                        <group>
+                            <field name="passport_state"/>
+                            <field name="passport_ids"/>
+                        </group>
+                        <group>
+                            <field name="training_state"/>
+                            <field name="training_ids"/>
+                        </group>
+                        <group>
+                            <field name="travel_state"/>
+                            <field name="travel_ids"/>
+                        </group>
                     </group>
                 </page>
             </xpath>
         </field>
     </record>
+
+    <record model="ir.ui.view" id="labor_profile_kanban_inherit_id">
+        <field name="name">Labor profile kanban search panel</field>
+        <field name="model">labor.profile</field>
+        <field name="inherit_id" ref="master_data.labor_profile_kanban_view"/>
+        <field name="arch" type="xml">
+                <xpath expr="//templates">
+                     <searchpanel>
+                         <field name="passport_state" icon="fa-users"/>
+                          <field name="training_state" icon="fa-users"/>
+                         <field name="interpol_state" icon="fa-users"/>
+                         <field name="medical_state" icon="fa-users"/>
+                         <field name="clearance_state" icon="fa-users"/>
+                         <field name="stamping_state" icon="fa-users"/>
+                         <field name="travel_state" icon="fa-users"/>
+                          <field name="pcr_state" icon="fa-users"/>
+                     </searchpanel>
+                </xpath>
+            </field>
+        </record>
 
 
 </odoo>

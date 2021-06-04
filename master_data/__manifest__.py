@@ -15,7 +15,7 @@
 
     'category': 'HR',
     'version': '0.1',
-    'depends': ['base','account','product','hr','mail','report_xlsx'],
+    'depends': ['base','account','product','hr','mail','report_xlsx','muk_web_searchpanel'],
     'data': [
         'security/registeration_security.xml',
         'views/menus.xml',

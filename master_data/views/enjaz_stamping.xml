@@ -129,13 +129,13 @@
                 <field name="city" readonly="1"/>
                 <field name="enjaz_no" attrs="{'readonly':['|',('state','=','done'),('type','=','stamping')]}"/>
                 <field name="visa_no" readonly="1"/>
-                <field name="visa_date" attrs="{'invisible':[('type','=','enjaz')],'readonly':[('state','=','done')]}"/>
-                <field name="visa_expiry_date"
+                <field name="visa_date" readonly="1" attrs="{'invisible':[('type','=','enjaz')],'readonly':[('state','=','done')]}"/>
+                <field name="visa_expiry_date"  readonly="1"
                        attrs="{'invisible':[('type','=','enjaz')],'readonly':[('state','=','done')]}"/>
                 <field name="state" readonly="1"/>
-                <button name="action_done" states="new"
-                        string="Done" type="object"
-                        class="oe_highlight"/>
+<!--                <button name="action_done" states="new"-->
+<!--                        string="Done" type="object"-->
+<!--                        class="oe_highlight"/>-->
 
             </tree>
         </field>

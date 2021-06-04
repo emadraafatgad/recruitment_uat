@@ -380,6 +380,7 @@
                         </div>
                     </t>
                 </templates>
+
             </kanban>
 
         </field>
@@ -403,6 +404,7 @@
                 <field name="agency"/>
                 <field name="state"/>
             </tree>
+
         </field>
     </record>
 
@@ -478,8 +480,17 @@
                 <filter string="Document" icon="terp-personal"
                         domain="[]"
                         context="{'group_by':'register_with'}"/>
-
             </group>
+            <searchpanel>
+                <field name="passport_state" icon="fa-users"/>
+                <field name="training_state" icon="fa-users"/>
+                <field name="interpol_state" icon="fa-users"/>
+                <field name="medical_state" icon="fa-users"/>
+                <field name="clearance_state" icon="fa-users"/>
+                <field name="stamping_state" icon="fa-users"/>
+                <field name="travel_state" icon="fa-users"/>
+                <field name="pcr_state" icon="fa-users"/>
+            </searchpanel>
 
         </field>
     </record>
@@ -567,6 +578,7 @@
             </field>
         </field>
     </record>
+
     <record id="account_payment_inherit_search" model="ir.ui.view">
         <field name="model">account.payment</field>
         <field name="inherit_id" ref="account.view_account_payment_search"/>
@@ -574,6 +586,7 @@
             <field name="name" position="after">
                 <field name="labor_id"/>
             </field>
+
         </field>
     </record>
     <!--<act_window id="action_send_cv"

@@ -157,3 +157,12 @@ class LaborProfile(models.Model):
     _inherit = 'labor.profile'
 
     nira_ids = fields.One2many('nira.letter.request', 'labourer_id')
+    nira_state = fields.Selection([('new', 'New'), ('releasing', 'Releasing'), ('done', 'Done'), ('rejected', 'Rejected'),
+                              ('blocked', 'Blocked')],  compute="get_nira_state",store=True)
+
+    @api.depends('nira_ids.state')
+    def get_nira_state(self):
+        for rec in self:
+            nira = self.env['nira.letter.request'].search([('labourer_id','=',rec.id)],limit=1)
+            if nira:
+                rec.nira_state = nira.state

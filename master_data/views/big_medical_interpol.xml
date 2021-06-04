@@ -23,6 +23,8 @@
                             class="btn-primary" confirm="Are you sure you want to update all Clearance?"/>
                     <button name="update_stamping_labours" string="Update Stamping" type="object"
                             class="btn-primary" confirm="Are you sure you want to update all Stamping?"/>
+                    <button name="update_profilel_labour" string="Update Status" type="object"
+                            class="btn-primary" confirm="Are you sure you want to update all status?"/>
 
                     <button string="Cancel" class="btn-secondary" special="cancel"/>
                 </footer>
@@ -31,7 +33,7 @@
     </record>
 
     <record id="action_interpol_compute" model="ir.actions.act_window">
-        <field name="name">Interpol Update Gcc</field>
+        <field name="name"> Update Status</field>
         <field name="res_model">interpol.gcc.update</field>
         <field name="view_type">form</field>
         <field name="view_mode">form</field>

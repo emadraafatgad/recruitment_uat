@@ -299,3 +299,14 @@ class LaborProfile(models.Model):
     _inherit = 'labor.profile'
 
     training_ids = fields.One2many('slave.training', "slave_id")
+    training_state = fields.Selection(
+        [('new', 'New'), ('in_progress', 'Inprogress'), ('rejected', 'Rejected'), ('finished', 'Finished'),
+         ('blocked', 'Blocked')],
+        compute="get_training_state", store=True)
+
+    @api.depends('training_ids.state')
+    def get_training_state(self):
+        for rec in self:
+            print("labor.clearance state")
+            training = self.env['slave.training'].search([('slave_id', '=', rec.id)], limit=1)
+            rec.training_state = training.state

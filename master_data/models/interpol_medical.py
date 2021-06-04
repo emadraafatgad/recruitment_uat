@@ -71,3 +71,17 @@ class InterpolUpdateGcc(models.TransientModel):
             for line in stamping.stamping_list:
                 stamping_list.append(line.labor_id.id)
             stamping.labour_ids = stamping_list
+
+    def update_profilel_labour(self):
+        labours = self.env['labor.profile'].search([])
+        for labour in labours:
+            labour.get_labour_medical_status()
+            labour.get_travel_state()
+            labour.get_clearance_state()
+            labour.get_enjaz_state()
+            labour.get_interpol_state()
+            labour.get_nira_state()
+            labour.get_passport_state()
+            labour.get_pcr_state()
+            labour.get_agency_state()
+            labour.get_training_state()

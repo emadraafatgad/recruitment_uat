@@ -1,8 +1,5 @@
+from odoo import fields, models, api, _
 from odoo.exceptions import ValidationError
-
-from odoo import fields, models , api,_
-from datetime import date
-from dateutil.relativedelta import relativedelta
 
 
 class TravelCompany(models.Model):
@@ -12,11 +9,11 @@ class TravelCompany(models.Model):
     _order = 'id desc'
     _sql_constraints = [('laborer_unique', 'unique(labor_id)', 'Created with this Laborer before!')]
 
-    name = fields.Char(string="Number",readonly=True,default='New')
+    name = fields.Char(string="Number", readonly=True, default='New')
     labor_id = fields.Many2one('labor.profile')
     labor_name = fields.Char()
     invoice = fields.Char()
-    passport_no = fields.Char(related='labor_id.passport_no',store=True)
+    passport_no = fields.Char(related='labor_id.passport_no', store=True)
     destination_city = fields.Many2one('res.country.state')
     reservation_no = fields.Char()
     agency_code = fields.Char()
@@ -26,10 +23,11 @@ class TravelCompany(models.Model):
     country_id = fields.Many2one('res.country', string='Destination Country', required=True)
     confirmation_date = fields.Date()
     flight_details = fields.Text()
-    agency = fields.Many2one('res.partner',domain=[('agency','=',True)])
-    travel_company = fields.Many2one('res.partner',domain=[('vendor_type','=','travel_company')])
+    agency = fields.Many2one('res.partner', domain=[('agency', '=', True)])
+    travel_company = fields.Many2one('res.partner', domain=[('vendor_type', '=', 'travel_company')])
     travel_list_id = fields.Many2one('travel.list')
-    state = fields.Selection([('new', 'new'),('in_progress', 'InProgress'),('rejected','Rejected'),('done', 'Done'),('blocked','Blocked')], default='new',track_visibility='onchange')
+    state = fields.Selection([('new', 'new'), ('in_progress', 'InProgress'), ('rejected', 'Rejected'), ('done', 'Done'),
+                              ('blocked', 'Blocked')], default='new', track_visibility='onchange')
 
     @api.multi
     def action_done(self):
@@ -43,23 +41,23 @@ class TravelCompany(models.Model):
             raise ValidationError(_('Enter Departure Date'))
         # if not self.confirmation_date:
         #     raise ValidationError(_('Enter Confirmation Date'))
-        self.state='done'
+        self.state = 'done'
         self.labor_id.state = 'travelled'
         product = self.env['product.recruitment.config'].search([('type', '=', 'agent')])[0]
         if not product.journal_id:
             raise ValidationError(_('Please, you must select journal in agent from configration'))
         method = self.env['account.payment.method'].search([('payment_type', '=', 'outbound')])[0]
-        amount=0.0
+        amount = 0.0
         if self.labor_id.register_with == 'national_id':
             amount = self.labor_id.agent.national_id_cost * 0.5
 
 
         elif self.labor_id.register_with == 'passport':
-            amount= self.labor_id.agent.passport_cost * 0.5
+            amount = self.labor_id.agent.passport_cost * 0.5
 
         elif self.labor_id.register_with == 'nira':
-            amount = self.labor_id.agent.nira_cost* 0.5
-        l=[]
+            amount = self.labor_id.agent.nira_cost * 0.5
+        l = []
         l.append(self.labor_id.agent_invoice.id)
         payment = self.env['account.payment'].create({
             'partner_id': self.labor_id.agent.id,
@@ -88,10 +86,10 @@ class TravelCompany(models.Model):
         if not product.journal_id:
             raise ValidationError(_('Please, you must select journal in travel from configration'))
         accounts = product.product.product_tmpl_id.get_product_accounts()
-        name = self.labor_id.name +'/Agency: ' +self.agency.name
+        name = self.labor_id.name + '/Agency: ' + self.agency.name
         invoice_line.append((0, 0, {
             'product_id': product.product.id,
-            'labors_id': [(6,0, append_labor)],
+            'labors_id': [(6, 0, append_labor)],
             'name': name,
             'uom_id': product.product.uom_id.id,
             'price_unit': 0.0,
@@ -156,7 +154,7 @@ class TravelCompany(models.Model):
         accounts = product.product.product_tmpl_id.get_product_accounts()
         invoice_line.append((0, 0, {
             'product_id': product.product.id,
-            'labors_id': [(6,0, append_labor)],
+            'labors_id': [(6, 0, append_labor)],
             'name': type,
             'uom_id': product.product.uom_id.id,
             'price_unit': price,
@@ -191,5 +189,16 @@ class TravelCompany(models.Model):
         labor.labor_process_ids = line
         return super(TravelCompany, self).create(vals)
 
+
 class LaborProfile(models.Model):
     _inherit = 'labor.profile'
+    travel_ids = fields.One2many('travel.company', 'labor_id')
+    travel_state = fields.Selection(
+        [('new', 'new'), ('in_progress', 'InProgress'), ('rejected', 'Rejected'), ('done', 'Done'),
+         ('blocked', 'Blocked')], store='True', compute='get_travel_state')
+
+    @api.depends('travel_ids.state')
+    def get_travel_state(self):
+        for rec in self:
+            travel = self.env['travel.company'].search([('labor_id', '=', rec.id)])
+            rec.travel_state = travel.state
