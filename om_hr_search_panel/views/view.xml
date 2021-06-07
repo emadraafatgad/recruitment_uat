@@ -7,14 +7,42 @@
             <field name="inherit_id" ref="hr.hr_kanban_view_employees"/>
             <field name="arch" type="xml">
                 <xpath expr="//templates">
-                     <searchpanel>
-                         <field name="company_id" groups="base.group_multi_company" icon="fa-building"/>
-                         <field name="department_id" icon="fa-users"/>
-                         <field name="job_id"/>
-                         <field name="category_ids" select="multi" icon="fa-tags"/>
-                     </searchpanel>
+                    <searchpanel>
+                        <field name="company_id" groups="base.group_multi_company" icon="fa-building"/>
+                        <field name="department_id" icon="fa-users"/>
+                        <field name="job_id"/>
+                        <field name="category_ids" select="multi" icon="fa-tags"/>
+                    </searchpanel>
                 </xpath>
             </field>
         </record>
+        <record id="hr_contract_form_view_inherit" model="ir.ui.view">
+            <field name="name">hr.contract.view.form.inherit</field>
+            <field name="model">hr.contract</field>
+            <field name="inherit_id" ref="hr_contract.hr_contract_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='currency_id']" position="replace">
+                    <field name="currency_id"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="hr_view_employee_form_inherit" model="ir.ui.view">
+            <field name="name">hr.employee.view.kanban.inherit</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='visa_no']" position="after">
+<!--                    <group string="Leaves" groups="base.group_no_one">-->
+<!--                        <label for="remaining_leaves"/>-->
+<!--                        <div>-->
+                            <field name="currency_id"/>
+<!--                            days-->
+<!--                        </div>-->
+<!--                    </group>-->
+                </xpath>
+            </field>
+        </record>
+
     </data>
 </odoo>

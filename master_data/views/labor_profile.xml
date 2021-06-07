@@ -595,6 +595,51 @@
             context="{'default_body': src_model.name}"
             res_model="mail.compose.message" src_model="labor.profile"
             view_mode="form" target="new" view_type="form" />-->
+    <!--    <record id="labor_profile_state_action_tree" model="ir.actions.act_window">-->
+<!--        <field name="name">Registration</field>-->
+<!--        <field name="res_model">labor.profile</field>-->
+<!--        <field name="view_type">form</field>-->
+<!--        <field name="view_mode">tree,form,search</field>-->
+<!--        <field eval="False" name="view_id"/>-->
+<!--        <field name="domain">[]</field>-->
+<!--        <field name="context">{}</field>-->
+<!--    </record>-->
+
+<!--    <record model="ir.ui.view" id="labor_profile_state_tree">-->
+<!--        <field name="name">Labor List</field>-->
+<!--        <field name="model">labor.profile</field>-->
+<!--        <field name="type">tree</field>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <tree string='Labor Information'>-->
+<!--                <field name="name"/>-->
+<!--                <field name="national_id"/>-->
+<!--                <field name="passport_no"/>-->
+<!--                <field name="agency"/>-->
+<!--                <field name="agency_state"/>-->
+<!--                <field name="passport_state"/>-->
+<!--                <field name="training_state"/>-->
+<!--                <field name="interpol_state"/>-->
+<!--                <field name="medical_state"/>-->
+<!--                <field name="clearance_state"/>-->
+<!--                <field name="stamping_state"/>-->
+<!--                <field name="travel_state"/>-->
+<!--                <field name="pcr_state"/>-->
+<!--            </tree>-->
+<!--        </field>-->
+<!--    </record>-->
+<!--    <record id="labor_profile_state_view_tree" model="ir.actions.act_window.view">-->
+<!--        <field eval="1" name="sequence"/>-->
+<!--        <field name="view_mode">tree</field>-->
+<!--        <field name="view_id" ref="labor_profile_state_tree"/>-->
+<!--        <field name="act_window_id" ref="labor_profile_state_action_tree"/>-->
+<!--    </record>-->
+<!--    <menuitem id="labor_profile_state"-->
+<!--              name="Follow Up"-->
+<!--              parent="menu_recruitment_root"-->
+<!--              sequence="11"-->
+<!--              action="labor_profile_state_action_tree"-->
+<!--              groups="master_data.group_registeration_user"-->
+<!--    />-->
 
     <menuitem id="labor_profile"
               name="Registration"

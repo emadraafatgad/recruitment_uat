@@ -223,7 +223,7 @@ class LaborProfile(models.Model):
 
     interpol_ids = fields.One2many('interpol.request', 'labor_id')
     interpol_state = fields.Selection([('new', 'New'), ('assigned', 'Assigned'), ('rejected', 'rejected'),
-                                       ('done', 'Done'), ('blocked', 'Blocked')], sture=True, compute="get_interpol_state")
+                                       ('done', 'Done'), ('blocked', 'Blocked')], store=True, compute="get_interpol_state")
     @api.depends('interpol_ids.state')
     def get_interpol_state(self):
         for rec in self:

@@ -195,7 +195,7 @@ class LaborProfile(models.Model):
     travel_ids = fields.One2many('travel.company', 'labor_id')
     travel_state = fields.Selection(
         [('new', 'new'), ('in_progress', 'InProgress'), ('rejected', 'Rejected'), ('done', 'Done'),
-         ('blocked', 'Blocked')], store='True', compute='get_travel_state')
+         ('blocked', 'Blocked')], store=True, compute='get_travel_state')
 
     @api.depends('travel_ids.state')
     def get_travel_state(self):
