@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+                <report
+            id="report_outstanding_print"
+            string="Outstanding Report"
+            model="res.partner"
+            report_type="qweb-pdf"
+            file="bi_customer_overdue_statement.report_outstanding_pdf"
+            name="bi_customer_overdue_statement.report_outstanding_pdf"
+            menu='False'
+        />
+
+		<report id="report_customer_monthly_print" string="Customer Monthly Statement"
+			model="res.partner" report_type="qweb-pdf"
+			file="bi_customer_overdue_statement.monthly_customer_statement"
+			name="bi_customer_overdue_statement.monthly_customer_statement" />
+	
+	
+		<report id="report_customert_print" string="Customer Statement"
+			model="res.partner" report_type="qweb-pdf" menu='True'
+			file="bi_customer_overdue_statement.report_customer" name="bi_customer_overdue_statement.report_customer" />
+
+<!-- 		<report id="account.action_report_print_overdue" model="res.partner"
+			report_type="qweb-html" string="Due Payments" name="account.report_overdue"
+			file="account.report_overdue" menu='True'/> -->
+        
+<!--         <report 
+            id="account.action_report_print_overdue"
+            model="res.partner"
+            report_type="qweb-html"
+            string="Due Payments"
+            name="account.report_overdue"
+            file="account.report_overdue"
+            print_report_name="'Due Payments - %s' % (object.name)"
+        /> -->
+
+		<report id="report_supplier_print" string="Supplier Statement"
+			model="res.partner" report_type="qweb-pdf" menu='True'
+			file="bi_customer_overdue_statement.report_supplier" name="bi_customer_overdue_statement.report_supplier" />
+
+		<report id="report_customer_statement_filter_print" string="Customer Statement"
+			model="res.partner" report_type="qweb-pdf" menu='False'
+			file="bi_customer_overdue_statement.filter_customer_statement" name="bi_customer_overdue_statement.filter_customer_statement" />
+
+		<report id="report_supplier_filter_print" string="Supplier Statement"
+			model="res.partner" report_type="qweb-pdf" menu='False' 
+			file="bi_customer_overdue_statement.report_supplier_filter" name="bi_customer_overdue_statement.report_supplier_filter" />
+
+		 <!-- QWeb Reports -->
+         <record id="action_bi_partner_ledger_filter" model="ir.actions.act_window">
+            <field name="name">Partner Ledger</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">account.report.partner.ledger</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="accounting_pdf_reports.account_report_partner_ledger_view"/>
+            <field name="context">{'default_partner_ids':active_ids}</field>
+            <field name="target">new</field>
+			<field name="binding_model_id" ref="account.model_res_partner" />
+        </record>
+
+
+	</data>
+</odoo>

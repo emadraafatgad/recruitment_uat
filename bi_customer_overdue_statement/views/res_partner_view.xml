@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_partner_inherit_followup_form" model="ir.ui.view">
+            <field name="name">res.partner</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <page name="accounting" position='after'>
+
+                    <page string="Customer Statements" groups="account.group_account_invoice"
+                          name="followup_tab" attrs="{'invisible':[('customer','!=',True)]}">
+                        <div class="oe_right" name="followup_button">
+                            <button name="do_button_print" type="object"
+                                    string="Print Overdue Payments" groups="account.group_account_user"
+                                    help="Print overdue payments report independent of follow-up line"/>
+                            <button name="do_partner_mail" type="object" string="Send Overdue Payment"
+                                    groups="account.group_account_user"
+                                    help="If not specified by the latest follow-up level, it will send from the default email template"/>
+                        </div>
+                        <div class="oe_right" name="statement_button">
+                            <button name="do_button_print_statement" type="object"
+                                    string="Print Customer Statement" groups="account.group_account_user"
+                                    help="Print Customer Statement"/>
+                            <button name="customer_send_mail" type="object" string="Send Statement"
+                                    groups="account.group_account_user"
+                                    help="Print overdue payments report independent of follow-up line"/>
+                        </div>
+                        <group></group>
+                        <separator string="Customer Statements Filter By Date"/>
+                        <group>
+                            <div>
+                                <div class="oe_left">
+                                    <label for="today_date"/>
+                                    <field name="today_date"/>
+                                </div>
+                                <div class="oe_left">
+                                    <label for="statement_from_date"/>
+                                    <field name="statement_from_date"/>
+                                </div>
+                                <div class="oe_left">
+                                    <label for="statement_to_date"/>
+                                    <field name="statement_to_date"/>
+                                </div>
+
+                                <!--								<div class="oe_left">-->
+                                <!--									<label for="aging_by" string="Aging By"/>-->
+                                <!--									<field name="aging_by" required="1"/>-->
+                                <!--								</div>-->
+
+                            </div>
+
+
+                        </group>
+
+                        <group invisible="1">
+                            <field name="first_thirty_day"/>
+                            <field name="thirty_sixty_days"/>
+                            <field name="sixty_ninty_days"/>
+                            <field name="ninty_plus_days"/>
+                            <field name="total"/>
+                        </group>
+                        <group invisible="1">
+                            <field name="first_thirty_day_filter"/>
+                            <field name="thirty_sixty_days_filter"/>
+                            <field name="sixty_ninty_days_filter"/>
+                            <field name="ninty_plus_days_filter"/>
+                            <field name="total_filter"/>
+                        </group>
+                        <group>
+                            <div class="oe_left">
+                                <button name="do_process_statement_filter" type="object"
+                                        string="Get Statement"/>
+                                <button name="do_print_statement_filter" type="object"
+                                        string="Print Filter Statement"/>
+                                <button name="do_send_statement_filter" type="object" string="Send Filter Statement"
+                                        groups="account.group_account_user"
+                                        help="Send Filter Statement Report From Filtered Lines"/>
+
+                            </div>
+
+                        </group>
+
+                        <field name="customer_statement_line_ids">
+                            <tree string="Statement lines" editable="bottom" create="false"
+                                  delete="false"
+                                  colors="red:(not date_due or date_due&lt;=current_date) and result&gt;0;green:result==0 ">
+                                <field name="date_invoice" readonly="True"/>
+                                <field name="number" string="Invoice Number" readonly="True"/>
+                                <field name="origin" string="SO Number" readonly="True"/>
+								<field name="labour_id"/>
+                                <field name="note" string="Credit Note" readonly="True"/>
+                                <field name="legacy_number" string="Legacy Number" readonly="True"/>
+                                <field name="company_id" readonly="True"
+                                       groups="base.group_multi_company"/>
+                                <field name="date_due" readonly="True"/>
+                                <field name="amount_total" readonly="True" string="Invoices/Debits"
+                                       sum="Total Debits "/>
+                                <field name="credit_amount" readonly="True" string="Payments/Credits"
+                                       sum="Total Credits"/>
+                                <field name="excluded"/>
+                                <field name="result" readonly="True" string="Balance"
+                                       sum="Total Balance"/>
+                                <field name="amount_total_signed" invisible="1"/>
+                                <field name="residual" invisible="1"/>
+                                <field name="residual_signed" invisible="1"/>
+                            </tree>
+                        </field>
+                        <separator string="Customer Statements"/>
+                        <field name="balance_invoice_ids">
+                            <tree string="Invoice line" editable="bottom" create="false"
+                                  delete="false"
+                                  colors="red:(not date_due or date_due&lt;=current_date) and result&gt;0">
+                                <field name="date_invoice" readonly="True"/>
+                                <field name="state" readonly="True" invisible="1"/>
+                                <field name="number" string="Invoice Number" readonly="True"/>
+                                <field name="origin" string="SO Number" readonly="True"/>
+                                <field name="labour_id"/>
+                                <field name="name" string="Credit Note" readonly="True"/>
+                                <field name="legacy_number" string="Legacy Number" readonly="True"/>
+
+                                <field name="company_id" readonly="True"
+                                       groups="base.group_multi_company"/>
+                                <field name="date_due" readonly="True"/>
+                                <field name="amount_total" readonly="True" string="Invoices/Debits"/>
+                                <field name="credit_amount" readonly="True" string="Payments/Credits"/>
+                                <field name="excluded" string="Excluded"/>
+                                <field name="result" readonly="True" string="Balance"/>
+                            </tree>
+                        </field>
+                        <group class="oe_subtotal_footer oe_right">
+                            <field name="payment_amount_due_amt"/>
+                        </group>
+                        <group class="oe_subtotal_footer oe_right">
+                            <field name="payment_amount_overdue_amt"/>
+                        </group>
+                    </page>
+
+                    <page string="Vendor Statements" groups="account.group_account_invoice"
+                          name="vendor_followup_tab" attrs="{'invisible':[('supplier','!=',True)]}">
+                        <div class="oe_right" name="vendor_statement_button">
+                            <button name="do_button_print_vendor_statement" type="object"
+                                    string="Print Vendor Statement" groups="account.group_account_user"
+                                    help="Print Vendor Statement"/>
+                        </div>
+                        <group></group>
+
+                        <separator string="Vendor Statements Filter By Date"/>
+                        <group>
+                            <div>
+                                <div class="oe_left">
+                                    <label for="vendor_statement_from_date"/>
+                                    <field name="vendor_statement_from_date"/>
+                                </div>
+                                <div class="oe_left">
+                                    <label for="vendor_statement_to_date"/>
+                                    <field name="vendor_statement_to_date"/>
+                                </div>
+                            </div>
+                        </group>
+                        <group>
+                            <div class="oe_left">
+                                <button name="do_process_vendor_statement_filter" type="object"
+                                        string="Get Statement"/>
+                                <button name="do_print_vendor_statement_filter" type="object"
+                                        string="Print Statement"/>
+                            </div>
+                        </group>
+
+
+                        <field name="vendor_statement_line_ids">
+                            <tree string="Statement lines" editable="bottom" create="false"
+                                  delete="false"
+                                  colors="red:(not date_due or date_due&lt;=current_date) and result&gt;0;green:result==0 ">
+                                <field name="date_invoice" readonly="True"/>
+                                <field name="number" readonly="True"/>
+                                <field name="company_id" readonly="True"
+                                       groups="base.group_multi_company"/>
+                                <field name="date_due" readonly="True"/>
+                                <field name="amount_total" readonly="True" string="Invoices/Debits"
+                                       sum="Total Debits "/>
+                                <field name="credit_amount" readonly="True" string="Payments/Credits"
+                                       sum="Total Credits"/>
+                                <field name="result" readonly="True" string="Balance"
+                                       sum="Total Balance"/>
+                                <field name="amount_total_signed" invisible="1"/>
+                                <field name="residual" invisible="1"/>
+                                <field name="residual_signed" invisible="1"/>
+                            </tree>
+                        </field>
+                        <separator string="Vendor Statements"/>
+                        <field name="supplier_invoice_ids">
+                            <tree string="Supplier Invoice line" editable="bottom"
+                                  create="false" delete="false"
+                                  colors="red:(not date_due or date_due&lt;=current_date) and result&gt;0">
+                                <field name="date_invoice" readonly="True"/>
+                                <field name="state" readonly="True" invisible="1"/>
+                                <field name="number" readonly="True"/>
+                                <field name="company_id" readonly="True"
+                                       groups="base.group_multi_company"/>
+                                <field name="date_due" readonly="True"/>
+                                <field name="amount_total" readonly="True" string="Invoices/Debits"/>
+                                <field name="credit_amount" readonly="True" string="Payments/Credits"/>
+                                <field name="result" readonly="True" string="Balance"/>
+                            </tree>
+                        </field>
+                        <group class="oe_subtotal_footer oe_right">
+                            <field name="payment_amount_due_amt_supplier"/>
+                            <field name="payment_amount_overdue_amt_supplier"/>
+                        </group>
+                    </page>
+
+                </page>
+            </field>
+        </record>
+
+        <record id="view_partner_inherit_followup_search" model="ir.ui.view">
+            <field name="name">res.partner.search.inherited</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_res_partner_filter"/>
+            <field name="arch" type="xml">
+                <xpath expr="//filter[@name='supplier']" position="after">
+                    <filter string="Overdue Customers" name="customer_overdue"
+                            domain="[('payment_amount_overdue_amt','>',0),('customer','=',True)]"/>
+                </xpath>
+            </field>
+        </record>
+        <!--		<act_window id="id_wizard_window_action"-->
+        <!--	domain="[('id','in',active_ids)]"-->
+        <!--	view_id='view_send_overdue_statement'-->
+        <!--    name="Send Overdue Payment"-->
+        <!--    src_model="res.partner"-->
+        <!--    res_model="send.overdue.statement"-->
+        <!--    view_type="form" view_mode="form"-->
+        <!--    key2="client_action_multi"-->
+        <!--    -->
+        <!--    target="new"/>-->
+
+    </data>
+</odoo>
+

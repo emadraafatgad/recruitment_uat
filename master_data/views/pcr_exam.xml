@@ -106,7 +106,7 @@
     </record>
 
     <menuitem id="menu_pcr_exam_root_id"
-              name="PRR Test"
+              name="PCR Test"
               parent="menu_recruitment_root"
               sequence="80"
                />

@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_bi_statement_line,bi_statement_line,model_bi_statement_line,,1,1,1,1
+access_bi_vendor_statement_line,bi_vendor_statement_line,model_bi_vendor_statement_line,,1,1,1,1
+access_monthly_statement_line,bi_monthly_statement_line,model_monthly_statement_line,,1,1,1,1

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<record
+			id="account_report_partner_ledger_form_view_inherit_field_partner_ids"
+			model="ir.ui.view">
+			<field name="name">account.report.partner.ledger.form.view.inherit.field.partner.ids
+			</field>
+			<field name="model">account.report.partner.ledger</field>
+			<field name="inherit_id" ref="account.account_common_report_view" />
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='journal_ids']" position="before">
+					<field name="partner_ids" widget="many2many_tags" />
+				</xpath>
+			</field>
+		</record>
+	</data>
+</odoo>

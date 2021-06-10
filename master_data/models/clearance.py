@@ -113,7 +113,9 @@ class LaborProfile(models.Model):
     clearance_ids = fields.One2many('labor.clearance', 'labor_id')
     clearance_state = fields.Selection(
         [('new', 'New'), ('rejected', 'Rejected'), ('confirmed', 'Confirmed'), ('blocked', 'Blocked')],
-        compute='get_clearance_state', store=True, track_visibility="onchange")
+        compute='get_clearance_state',
+        store=True,
+        track_visibility="onchange")
 
     @api.depends('clearance_ids.state')
     def get_clearance_state(self):
