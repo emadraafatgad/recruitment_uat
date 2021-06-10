@@ -88,7 +88,7 @@
                                 <field name="date_invoice" readonly="True"/>
                                 <field name="number" string="Invoice Number" readonly="True"/>
                                 <field name="origin" string="SO Number" readonly="True"/>
-								<field name="labour_id"/>
+                                <field name="labour_id" readonly="True"/>
                                 <field name="note" string="Credit Note" readonly="True"/>
                                 <field name="legacy_number" string="Legacy Number" readonly="True"/>
                                 <field name="company_id" readonly="True"
@@ -115,7 +115,7 @@
                                 <field name="state" readonly="True" invisible="1"/>
                                 <field name="number" string="Invoice Number" readonly="True"/>
                                 <field name="origin" string="SO Number" readonly="True"/>
-                                <field name="labour_id"/>
+<!--                                <field name="labour_id"/>-->
                                 <field name="name" string="Credit Note" readonly="True"/>
                                 <field name="legacy_number" string="Legacy Number" readonly="True"/>
 

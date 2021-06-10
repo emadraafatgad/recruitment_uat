@@ -199,7 +199,12 @@
 				                        <td class="text-center">
 				                            <span t-esc="l.origin"/>
 				                        </td>
+										<td class="text-center">
+											<t t-if="l.labour_id">
+				                            <span t-esc="l.labour_id.name"/>
+											</t>
 
+				                        </td>
 				                        <td class="text-right">
 				                            <t t-set="l_debit" t-value="l_debit + l.amount_total" />
 				                            <!--<span t-esc="set_amount(l.get('debit'))"/>-->

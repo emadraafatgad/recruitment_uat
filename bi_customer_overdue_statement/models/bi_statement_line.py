@@ -50,6 +50,7 @@ class bi_vendor_statement_line(models.Model):
 
     company_id = fields.Many2one('res.company', string='Company')
     partner_id = fields.Many2one('res.partner', string='Customer')
+    labour_id = fields.Many2one('labor.profile')
     name = fields.Char('Name')
     date_invoice = fields.Date('Invoice Date')
     date_due = fields.Date('Due Date')
