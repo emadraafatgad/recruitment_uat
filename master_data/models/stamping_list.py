@@ -1,6 +1,6 @@
-from odoo import fields, models, api, _
 from datetime import date
 
+from odoo import fields, models, api, _
 from odoo.exceptions import ValidationError
 
 
@@ -12,12 +12,35 @@ class StampingList(models.Model):
 
     name = fields.Char(string="Number", readonly=True, default='New')
     state = fields.Selection([('new', 'New'), ('in_progress', 'InProgress'), ('done', 'Done')], default='new',
-                             track_visibility="onchange")
+                             track_visibility="onchange", compute='get_sate_for_list', store=True)
+
+    @api.depends('stamping_list.state')
+    def get_sate_for_list(self):
+        for rec in self:
+            print(rec.state, "Rec")
+            state = "done"
+            if len(rec.stamping_list) > 0:
+                for stamp in rec.stamping_list:
+                    print(stamp.state)
+                    if stamp.state == "new":
+                        state = 'new'
+                        break
+                    elif stamp.state == 'in_progress':
+                        state = 'in_progress'
+                        break
+                    elif stamp.state == 'done':
+                        state = "done"
+                    print(stamp.state, "state")
+                rec.state = state
+            else:
+                rec.state = "new"
+
     stamping_list = fields.Many2many('labor.enjaz.stamping')
     list_total_count = fields.Integer(compute='_compute_value')
     assign_date = fields.Date()
     list_now_len = fields.Integer()
     labour_ids = fields.Many2many('labor.profile')
+
     def _get_embassy_default(self):
         embassy = self.env['res.partner'].search([('vendor_type', '=', 'embassy')])
         if not embassy:
@@ -83,7 +106,7 @@ class StampingList(models.Model):
             'price_unit': product.price,
             'discount': 0.0,
             'quantity': float(len(self.stamping_list)),
-            'account_id': accounts.get('stock_input') and accounts['stock_input'].id or \
+            'account_id': accounts.get('expense') and accounts['expense'].id or \
                           accounts['expense'].id,
         }))
         cr = self.env['account.invoice'].create({

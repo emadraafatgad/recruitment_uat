@@ -100,7 +100,7 @@ class PassportNumber(models.Model):
             'price_unit': self.broker_list_id.broker.cost,
             'discount': 0.0,
             'quantity': 1,
-            'account_id': accounts.get('stock_input') and accounts['stock_input'].id or \
+            'account_id': accounts.get('expense') and accounts['expense'].id or \
                           accounts['expense'].id,
         }))
         invoice = self.env['account.invoice'].search(
@@ -136,7 +136,7 @@ class PassportNumber(models.Model):
                 'price_unit': self.broker_list_id.broker.cost,
                 'discount': 0.0,
                 'quantity': 1,
-                'account_id': accounts.get('stock_input') and accounts['stock_input'].id or \
+                'account_id': accounts.get('expense') and accounts['expense'].id or \
                               accounts['income'].id,
             }))
             self.env['account.invoice'].create({
@@ -194,7 +194,7 @@ class PassportNumber(models.Model):
             'price_unit': price,
             'discount': 0.0,
             'quantity': 1,
-            'account_id': accounts.get('stock_input') and accounts['stock_input'].id or \
+            'account_id': accounts.get('expense') and accounts['expense'].id or \
                           accounts['expense'].id,
         }))
         if labor.labor_process_ids:

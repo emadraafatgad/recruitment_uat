@@ -89,6 +89,8 @@
         <field name="arch" type="xml">
             <search>
                  <field name="labour_ids" />
+                <field name="clearance_list" string="Labour Passport"
+                       filter_domain="[('clearance_list.labor_id', 'ilike', self)]"/>
                 <filter name="new" string="New"
                         domain="[('state','=','new')]"/>
                 <filter name="confirmed" string="Confirmed"

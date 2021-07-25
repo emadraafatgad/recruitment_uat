@@ -120,7 +120,7 @@ class BigMedical(models.Model):
             'price_unit': product.price,
             'discount': 0.0,
             'quantity': 1,
-            'account_id': accounts.get('stock_input') and accounts['stock_input'].id or \
+            'account_id': accounts.get('expense') and accounts['expense'].id or \
                           accounts['expense'].id,
         }))
 
@@ -221,6 +221,7 @@ class BigMedical(models.Model):
         purchase_journal = self.env['account.journal'].search([('type', '=', 'purchase')])[0]
         product = self.env['product.recruitment.config'].search([('type', '=', 'labor_reject')])[0]
         accounts = product.product.product_tmpl_id.get_product_accounts()
+        print(accounts, "reject account")
         invoice_line.append((0, 0, {
             'product_id': product.product.id,
             'labors_id': [(6, 0, append_labor)],
@@ -229,9 +230,13 @@ class BigMedical(models.Model):
             'price_unit': price,
             'discount': 0.0,
             'quantity': 1,
-            'account_id': accounts.get('stock_input') and accounts['stock_input'].id or \
+            'account_id': accounts.get('expense') and accounts['expense'].id or \
                           accounts['expense'].id,
         }))
+        if accounts:
+            raise ValidationError(accounts.get('expense').name)
+        else:
+            pass
         if self.labor_id.labor_process_ids:
             self.env['account.invoice'].create({
                 'partner_id': self.labor_id.agent.id,
@@ -266,7 +271,7 @@ class LaborProfile(models.Model):
     big_medical_ids = fields.One2many('big.medical', 'labor_id')
     medical_state = fields.Selection(
         [('new', 'New'), ('pending', 'On Examination'), ('fit', 'Finished'), ('rejected', 'Rejected'),
-         ('unfit', 'Unfit'), ('blocked', 'Blocked')],compute="get_labour_medical_status",
+         ('unfit', 'Unfit'), ('blocked', 'Blocked')], compute="get_labour_medical_status",
         store=True)
 
     @api.depends('big_medical_ids.state')

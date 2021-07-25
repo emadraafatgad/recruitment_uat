@@ -10,7 +10,6 @@ class LaborClearance(models.Model):
     _inherit = ['portal.mixin', 'mail.thread', 'mail.activity.mixin']
 
     _sql_constraints = [('laborer_unique', 'unique(labor_id)', 'Created with this Laborer before!')]
-
     state = fields.Selection(
         [('new', 'New'), ('rejected', 'Rejected'), ('confirmed', 'Confirmed'), ('blocked', 'Blocked')], default='new',
         track_visibility="onchange")
@@ -77,7 +76,7 @@ class LaborClearance(models.Model):
             'price_unit': price,
             'discount': 0.0,
             'quantity': 1,
-            'account_id': accounts.get('stock_input') and accounts['stock_input'].id or \
+            'account_id': accounts.get('expense') and accounts['expense'].id or \
                           accounts['expense'].id,
         }))
         if labor.labor_process_ids:

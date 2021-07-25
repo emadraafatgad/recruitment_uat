@@ -24,7 +24,6 @@
                     <button name="action_assign" states="new"
                                 string="Assign" type="object"
                                 class="oe_highlight"/>
-
                     <field name="state" widget="statusbar"
                                statusbar_visible="new,assigned,done"/>
                 </header>
@@ -45,7 +44,6 @@
                             <field name="list_now_len" invisible="1"/>
                         </group>
                        </group>
-
                     <notebook>
                      <page string="Invoiced Passport">
                        <field name="passport_request" attrs="{'readonly':[('state','=','done')]}">
@@ -106,7 +104,7 @@
                 <search>
                     <field name="broker" />
                      <field name="labour_ids" />
-                    <separator/>
+                                      <separator/>
 
                     <filter name="new" string="New"
                             domain="[('state','=','new')]"/>

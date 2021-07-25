@@ -35,7 +35,7 @@ class PassportInvoice(models.Model):
             'price_unit': self.product.list_price,
             'discount': 0.0,
             'quantity': float(len(self.passport_request)),
-            'account_id': accounts.get('stock_input') and accounts['stock_input'].id or \
+            'account_id': accounts.get('expense') and accounts['expense'].id or \
                           accounts['expense'].id,
         }))
         self.env['account.invoice'].create({

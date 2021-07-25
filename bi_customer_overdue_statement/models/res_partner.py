@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 # Part of BrowseInfo. See LICENSE file for full copyright and licensing details.
 ##############################################################################
-from odoo import api, fields, models, _
 from datetime import datetime, date
+
 from dateutil.relativedelta import relativedelta
-from odoo.tools import DEFAULT_SERVER_DATE_FORMAT
+
+from odoo import api, fields, models, _
+
 
 class Res_Partner(models.Model):
     _inherit = 'res.partner'
@@ -88,11 +90,11 @@ class Res_Partner(models.Model):
             partner.monthly_payment_amount_overdue_amt = monthly_amount_overdue_amt
 
     supplier_invoice_ids = fields.One2many('account.invoice', 'partner_id', 'Customer move lines', domain=[
-                                           '&', ('type', 'in', ['in_invoice', 'in_refund']), '&', ('state', 'in', ['open', 'paid'])])
+        '&', ('type', 'in', ['in_invoice', 'in_refund']), '&', ('state', 'in', ['open', 'paid'])])
     balance_invoice_ids = fields.One2many('account.invoice', 'partner_id', 'Customer move lines', domain=[
-                                          '&', ('type', 'in', ['out_invoice', 'out_refund']), '&', ('state', 'in', ['open', 'paid'])])
-#     customer_state_ids = fields.One2many('account.move.line', 'partner_id', 'Customer move lines', domain=[ '&', ('reconciled', '=', False), '&', ('account_id.internal_type', '=', 'receivable')])
-#     unreconciled_aml_ids = fields.One2many('account.move.line', 'partner_id', 'Move lines')
+        '&', ('type', 'in', ['out_invoice', 'out_refund']), '&', ('state', 'in', ['open', 'paid'])])
+    #     customer_state_ids = fields.One2many('account.move.line', 'partner_id', 'Customer move lines', domain=[ '&', ('reconciled', '=', False), '&', ('account_id.internal_type', '=', 'receivable')])
+    #     unreconciled_aml_ids = fields.One2many('account.move.line', 'partner_id', 'Move lines')
 
     payment_amount_due_amt = fields.Float(
         compute='_get_amounts_and_date_amount', string="Balance Due")
@@ -202,7 +204,7 @@ class Res_Partner(models.Model):
             move_lines = self.env['account.move.line'].search(domain)
             for ml in move_lines:
                 diff = today - ml.date_maturity
-                    # datetime.strptime(ml.date_maturity, DEFAULT_SERVER_DATE_FORMAT)
+                # datetime.strptime(ml.date_maturity, DEFAULT_SERVER_DATE_FORMAT)
                 if diff.days >= 0 and diff.days <= 30:
                     partner.first_thirty_day = partner.first_thirty_day + ml.amount_residual
 
@@ -221,15 +223,16 @@ class Res_Partner(models.Model):
         for partner in self:
             partner.total = 0.0
             partner.total = partner.ninty_plus_days + partner.sixty_ninty_days + \
-                partner.thirty_sixty_days + partner.first_thirty_day
+                            partner.thirty_sixty_days + partner.first_thirty_day
         return
 
-    @api.depends('ninty_plus_days_filter', 'sixty_ninty_days_filter', 'thirty_sixty_days_filter', 'first_thirty_day_filter')
+    @api.depends('ninty_plus_days_filter', 'sixty_ninty_days_filter', 'thirty_sixty_days_filter',
+                 'first_thirty_day_filter')
     def compute_total_filter(self):
         for partner in self:
             partner.total_filter = 0.0
             partner.total_filter = partner.ninty_plus_days_filter + partner.sixty_ninty_days_filter + \
-                partner.thirty_sixty_days_filter + partner.first_thirty_day_filter
+                                   partner.thirty_sixty_days_filter + partner.first_thirty_day_filter
         return
 
     @api.multi
@@ -303,14 +306,15 @@ class Res_Partner(models.Model):
                 final_initial_bal = 0.0
 
                 in_bal = account_invoice_obj.search([('partner_id', '=', record.id),
-                                                     ('type', 'in', ['out_invoice', 'out_refund']), ('state', 'in', ['open']), ('date_due', '<', from_date)])
+                                                     ('type', 'in', ['out_invoice', 'out_refund']),
+                                                     ('state', 'in', ['open']), ('date_due', '<', from_date)])
 
                 for inv in in_bal:
                     final_initial_bal += inv.residual
 
                 in_pay_bal = account_payment_obj.search([('partner_id', '=', record.id),
                                                          ('state', 'in', [
-                                                          'posted', 'reconciled']), ('payment_date', '<', from_date),
+                                                             'posted', 'reconciled']), ('payment_date', '<', from_date),
                                                          ('partner_type', '=', 'customer')])
 
                 for pay in in_pay_bal:
@@ -339,6 +343,7 @@ class Res_Partner(models.Model):
             payments = account_payment_obj.search(domain_payment)
             if invoices:
                 for invoice in invoices.sorted(key=lambda r: r.number):
+                    employer = self.env['specify.agent'].search([('labor_id', '=', invoice.laborer.id)],limit=1)
                     vals = {
                         'partner_id': invoice.partner_id.id or False,
                         'state': invoice.state or False,
@@ -347,6 +352,7 @@ class Res_Partner(models.Model):
                         'number': invoice.number or '',
                         'origin': invoice.origin or '',
                         'labour_id': invoice.laborer.id,
+                        'employer': employer.employer,
                         'note': invoice.name or '',
                         'legacy_number': invoice.legacy_number or '',
                         'result': invoice.result or 0.0,
@@ -446,14 +452,15 @@ class Res_Partner(models.Model):
                 final_initial_bal = 0.0
 
                 in_bal = account_invoice_obj.search([('partner_id', '=', record.id),
-                                                     ('type', 'in', ['in_invoice', 'in_refund']), ('state', 'in', ['open']), ('date_due', '<', from_date)])
+                                                     ('type', 'in', ['in_invoice', 'in_refund']),
+                                                     ('state', 'in', ['open']), ('date_due', '<', from_date)])
 
                 for inv in in_bal:
                     final_initial_bal += inv.residual
 
                 in_pay_bal = account_payment_obj.search([('partner_id', '=', record.id),
                                                          ('state', 'in', [
-                                                          'posted', 'reconciled']), ('payment_date', '<', from_date),
+                                                             'posted', 'reconciled']), ('payment_date', '<', from_date),
                                                          ('partner_type', '=', 'supplier')])
 
                 for pay in in_pay_bal:

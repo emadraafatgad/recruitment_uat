@@ -97,6 +97,7 @@
                         class="oe_highlight"/>
                 <field name="type" invisible="1"/>
                 <field name="labor_name" string="Labourer Name" readonly="1"/>
+                <field name="religion" readonly="1"/>
                 <field name="passport_no" readonly="1"/>
                 <field name="agency" readonly="1"/>
                 <field name="agency_code" invisible="1" string="Code/Agency" readonly="1"/>
@@ -123,6 +124,7 @@
                 <field name="type" invisible="1"/>
                 <field name="labor_name" string="Labourer Name" readonly="1"/>
                 <field name="passport_no" readonly="1"/>
+                <field name="religion" readonly="1"/>
                 <field name="agency" readonly="1"/>
                 <field name="agency_code" string="Code/Agency" readonly="1"/>
                 <field name="employer" readonly="1"/>
@@ -205,6 +207,7 @@
                 <field name="city"/>
                 <field name="visa_no"/>
                 <field name="enjaz_no"/>
+
                 <separator/>
                 <filter name="new" string="New"
                         domain="[('state','=','new')]"/>

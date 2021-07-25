@@ -101,9 +101,7 @@
             <field name="name">Passport Make Invoice Search</field>
             <field name="model">passport.request.invoice</field>
             <field name="arch" type="xml">
-
                 <search>
-
                     <filter name="new" string="New"
                             domain="[('state','=','new')]"/>
                     <filter name="to_invoice" string="To Invoice"
@@ -111,14 +109,11 @@
                     <filter name="invoiced" string="Invoiced"
                             domain="[('state','=','invoiced')]"/>
                     <filter string="Today" name="today" domain="[('create_date','&gt;=',time.strftime('%%Y-%%m-%%d'))]"/>
-                    <filter string="This Week" name="this_week" domain="[
-                                '&amp;',
+                    <filter string="This Week" name="this_week" domain="['&amp;',
                                 ('create_date', '>=', (context_today() + relativedelta(weeks=-1,days=1,weekday=0)).strftime('%Y-%m-%d')),
                                 ('create_date', '&lt;=', (context_today() + relativedelta(weekday=6)).strftime('%Y-%m-%d')),]"/>
                     <filter string="This Month" name="this_month" domain="[('create_date','&gt;=',time.strftime('%%Y-%%m-01'))]"/>
                     <filter string="This Year" name="this_year" domain="[('create_date','&gt;=',time.strftime('%%Y-01-01'))]"/>
-
-
                 </search>
             </field>
         </record>

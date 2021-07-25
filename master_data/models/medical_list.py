@@ -84,7 +84,7 @@ class MedicalList(models.Model):
             'price_unit': self.hospital.cost,
             'discount': 0.0,
             'quantity': float(len(self.medical_request)),
-            'account_id': accounts.get('stock_input') and accounts['stock_input'].id or \
+            'account_id': accounts.get('expense') and accounts['expense'].id or \
                           accounts['expense'].id,
         }))
 

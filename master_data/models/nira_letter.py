@@ -67,7 +67,7 @@ class NiraLetter(models.Model):
             'price_unit': product.price,
             'discount': 0.0,
             'quantity': 1,
-            'account_id': accounts.get('stock_input') and accounts['stock_input'].id or \
+            'account_id': accounts.get('expense') and accounts['expense'].id or \
                           accounts['expense'].id,
         }))
         invoice = self.env['account.invoice'].search(
@@ -123,7 +123,7 @@ class NiraLetter(models.Model):
             'price_unit': price,
             'discount': 0.0,
             'quantity': 1,
-            'account_id': accounts.get('stock_input') and accounts['stock_input'].id or \
+            'account_id': accounts.get('expense') and accounts['expense'].id or \
                           accounts['expense'].id,
         }))
         if labor.labor_process_ids:

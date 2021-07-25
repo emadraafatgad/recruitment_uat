@@ -1,337 +1,377 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
-	<data>
-		<template id="filter_report_customer_statement">
-			<t t-call="web.external_layout">
-				<div class="page">
+    <data>
+        <template id="filter_report_customer_statement">
+            <t t-call="web.external_layout">
+                <div class="page">
 
-						<div class="row">
-							<div class="col-xs-12 text-center">
-								<h3> Statement Of Account</h3>
-							</div>
-							<div class="col-xs-7">
-								<t t-set="doc" t-value="doc.with_context({'lang':doc.lang})" />
-								<p><strong><span style="font-size:16px;" t-esc="doc.name"/></strong><br/>	
-									<span style="font-size:14px;" t-esc="doc.street"/>
-									<span style="font-size:14px;" t-esc="doc.street2"/>
-									<span style="font-size:14px;" t-esc="doc.city"/>
-									<span style="font-size:14px;" t-esc="doc.state_id.name"/>
-									<span style="font-size:14px;" t-esc="doc.zip"/>
-									<span style="font-size:14px;" t-esc="doc.country_id.name"/>
-									</p>
-							</div>
-							<div class="col-xs-1">
-								
-							</div>
-							<div class="col-xs-4" style="font-size:12px">		
-								
-								<strong style="font-size:14px;"><span>Date : </span><span t-esc="doc.today_date"/> </strong>
-								<p style="font-size:14px;">
-								<strong><span>From : </span></strong><span t-esc="doc.statement_from_date"/>
-								<strong><span>To : </span></strong><span t-esc="doc.statement_to_date"/>
-								</p>	
-							</div>
-						</div>
-						<br/>
-						
+                    <div class="row">
+                        <div class="col-xs-12 text-center">
+                            <h3>Statement Of Account</h3>
+                        </div>
+                        <div class="col-xs-7">
+                            <t t-set="doc" t-value="doc.with_context({'lang':doc.lang})"/>
+                            <p>
+                                <strong>
+                                    <span style="font-size:16px;" t-esc="doc.name"/>
+                                </strong>
+                                <br/>
+                                <span style="font-size:14px;" t-esc="doc.street"/>
+                                <span style="font-size:14px;" t-esc="doc.street2"/>
+                                <span style="font-size:14px;" t-esc="doc.city"/>
+                                <span style="font-size:14px;" t-esc="doc.state_id.name"/>
+                                <span style="font-size:14px;" t-esc="doc.zip"/>
+                                <span style="font-size:14px;" t-esc="doc.country_id.name"/>
+                            </p>
+                        </div>
+                        <div class="col-xs-1">
 
-					
-					<!--<div class="container" style="margin:5px 0 0 1px;">
-						<strong><span>Date : </span></strong><span t-esc="datetime.datetime.now().strftime('%d/%m/%Y')"/>
-					</div> -->
-						<t t-set="i" t-value="0.0" />
-						<t t-set="j" t-value="0.0" />
-						<t t-set="k" t-value="0.0" />
-						<t t-foreach="doc.customer_statement_line_ids" t-as="line">
-							<t t-if="line.invoice_id">
-								<t t-set="i" t-value="i+ line.amount_total_signed" />
-							</t>
-							<t t-if="line.payment_id">
-							   <t t-set="i" t-value="i+ line.amount_total" />  
-							</t>
-							<t t-set="j" t-value="j+line.credit_amount" />
-							<t t-set="k" t-value="k+line.result" />
-						</t>
+                        </div>
+                        <div class="col-xs-4" style="font-size:12px">
 
-						<!--<div class="container mt16 mb16" style="margin-left:5px;">
-							<t t-if="doc.statement_from_date">
-								<strong><span>From : </span></strong>
-								<span t-esc="doc.statement_from_date"/>
-							</t>
-							<t t-if="doc.statement_to_date">
-								<strong style="margin-left:10px;"><span>To : </span></strong>
-								<span t-esc="doc.statement_to_date"/>
-							</t>
-						</div>-->
+                            <strong style="font-size:14px;">
+                                <span>Date :</span>
+                                <span t-esc="doc.today_date"/>
+                            </strong>
+                            <p style="font-size:14px;">
+                                <strong>
+                                    <span>From :</span>
+                                </strong>
+                                <span t-esc="doc.statement_from_date"/>
+                                <strong>
+                                    <span>To :</span>
+                                </strong>
+                                <span t-esc="doc.statement_to_date"/>
+                            </p>
+                        </div>
+                    </div>
+                    <br/>
 
-						<table class="table table-condensed" name="filter_line_table">
-							<thead>
-								<tr>
-									<!--<th class="text-center">DUE DATE</th>-->
-<!--									<t t-if="doc.aging_by == 'inv_date'">-->
-<!--			                            <th class="text-center">INVOICE DATE</th>-->
-<!--			                        </t>-->
-<!--			                        <t t-if="doc.aging_by == 'due_date'">-->
-<!--			                            <th class="text-center">DUE DATE</th>-->
-<!--			                        </t>-->
-									<th class="text-center">SO #</th>
-									<th>Labour</th>
-									<th class="text-right">INVOICE AMT</th>
-									<th class="text-right">PAYMENT AMT</th>
-									<th class="text-right">BALANCE DUE</th>
-								</tr>
-							</thead>
-							<!--<tbody>
-								<t t-set="grand_total" t-value="0.0" />    
-								<t t-set="bal" t-value="0.0" />
-								<t t-set="sub_total" t-value="0.0" />
-								<tr>
-									<td></td>
-									<td><b>Initial Balance</b></td>
-									<td></td>	
-									<td></td>
-									<td></td>
-									<td class="text-right">
-										<t t-set="k" t-value="k+doc.initial_bal" />
-										<b><span t-esc="doc.initial_bal" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/></b>
-									</td>
-									
-								</tr>
-								
-								
-								<tr t-foreach="doc.customer_statement_line_ids" t-as="line">
-									<t t-if="line.excluded== false">
-										<t t-set="bal" t-value="bal +sub_total "/>
-										<td>
-										
-											<span t-esc="datetime.datetime.strptime(line.date_invoice, '%Y-%m-%d').strftime('%m/%d/%Y')"/>
-										</td>
-										<td>
-											<span t-esc="line.number" />
-										</td>
-										<td>
-											<span t-esc="line.name" />
-										</td>
-										<td class="text-right">
-											<span t-esc="line.amount_total_signed"
-												t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}" />
-										</td>
-										<td class="text-right">
-											<span t-esc="line.credit_amount"
-												t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}" />
-										</td>
-										<t t-if="line.invoice_id">
-										<td class="text-right">
-											<t t-set="sub_total" t-value="line.amount_total_signed-line.credit_amount" />
-											<t t-set="grand_total" t-value="sub_total + bal"/>
-											<span t-esc="sub_total + bal"
-												t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}" />
-										</td>
-										</t>
-										<t t-if="line.payment_id">
-											<td class="text-right">
-												<t t-set="sub_total" t-value="line.amount_total-line.credit_amount" />
-												<t t-set="grand_total" t-value="sub_total + bal"/>
-												<span t-esc="sub_total + bal"
-													t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}" />
-											</td>
-										</t>
-									</t>
-								</tr>
-								<tr>
-									<td></td>
-									<td>
-										<b>Ending Balance</b>
-									</td>
-									<td>
-										
-									</td>
-									<td></td>
-									<td></td>
-									<td class="text-right">
-										<b><span t-esc="grand_total" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/></b>
-									</td>
-									
-								</tr>
-								<tr>
-									<td class="text-right">
-									</td>
-									<td>
-									</td>
-									<td>
-									</td>
-									<td class="text-right">
-										<span t-esc="i" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
-									</td>
-									<td class="text-right">
-										<span t-esc="j" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
-									</td>
-									<td class="text-right">
-										<span t-esc="k" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
-									</td>
-								</tr>
-							</tbody>-->
-							<tbody style="font-size:14px;" class="invoice_tbody">
-			                	<t t-set="l_debit" t-value="0" />
-		                        <t t-set="l_credit" t-value="0" />
-		                        <t t-set="l_total" t-value="0" />
-			                	<t t-foreach="doc.customer_statement_line_ids" t-as="l" >
-								<t t-if="l.excluded== false">
-			                		<tr>
-<!-- 				                        <td class="text-center">
-				                            <span t-esc="l.get('desc')"/>
-				                        </td> -->
-<!--										<t t-if="doc.aging_by == 'inv_date'">-->
-<!--				                            <td class="text-center">-->
-<!--				                            	<span t-esc="l.date_invoice"/>-->
-<!--				                            </td>-->
-<!--				                        </t>-->
-<!--				                        <t t-if="doc.aging_by == 'due_date'">-->
-<!--				                            <td class="text-center">-->
-<!--				                            	<span t-esc="time.strftime('%m/%d/%Y',time.strptime(l.date_due,'%Y-%m-%d'))"/>-->
-<!--				                            </td>-->
-<!--				                        </t>-->
-				                        
-										<!--<td class="text-center">
-											<span t-esc="time.strftime('%m/%d/%Y',time.strptime(l.date_due,'%Y-%m-%d'))"/>
-										</td>-->
-				                        
-				                        <td class="text-center">
-				                            <span t-esc="l.origin"/>
-				                        </td>
-										<td class="text-center">
-											<t t-if="l.labour_id">
-				                            <span t-esc="l.labour_id.name"/>
-											</t>
 
-				                        </td>
-				                        <td class="text-right">
-				                            <t t-set="l_debit" t-value="l_debit + l.amount_total" />
-				                            <!--<span t-esc="set_amount(l.get('debit'))"/>-->
-				                            <span t-esc="l.amount_total"/>
-				                        </td>
-				                        <td class="text-right">
-				                            <t t-set="l_credit" t-value="l_credit + l.credit_amount" />
-				                            <!--<span t-esc="set_amount(l.get('credit'))"/>-->
-				                            <span t-esc="l.credit_amount"/>
-				                        </td>
-				                        <td class="text-right">
-			                                <t t-set="l_total" t-value="l_total+ l.result" />
-			                                <!--<span t-esc="set_amount(l.get('total'))"/>-->
-			                                <span t-esc="l.result"/>
-				                        </td>
-				                    </tr>
-			                	</t>
-								</t>
-			                	<tr style="background:#e0e0e0;">
-		                            <td style="border-top:1px solid black" colspan="1"></td>
-		                            <td style="border-top:1px solid black"><strong>Sub-Total :</strong></td>
-		                            <td style="border-top:1px solid black" class="text-right"><span t-esc="l_debit"/></td>
-		                            <td style="border-top:1px solid black" class="text-right"><span t-esc="l_credit"/></td>
-		                            <td style="border-top:1px solid black" class="text-right"><span t-esc="l_total"/></td>
-		                        </tr>
-			                </tbody>
+                    <!--<div class="container" style="margin:5px 0 0 1px;">
+                        <strong><span>Date : </span></strong><span t-esc="datetime.datetime.now().strftime('%d/%m/%Y')"/>
+                    </div> -->
+                    <t t-set="i" t-value="0.0"/>
+                    <t t-set="j" t-value="0.0"/>
+                    <t t-set="k" t-value="0.0"/>
+                    <t t-foreach="doc.customer_statement_line_ids" t-as="line">
+                        <t t-if="line.invoice_id">
+                            <t t-set="i" t-value="i+ line.amount_total_signed"/>
+                        </t>
+                        <t t-if="line.payment_id">
+                            <t t-set="i" t-value="i+ line.amount_total"/>
+                        </t>
+                        <t t-set="j" t-value="j+line.credit_amount"/>
+                        <t t-set="k" t-value="k+line.result"/>
+                    </t>
 
-						</table>
-						<div class="row" name="total">
-							<div class="col-xs-4 pull-right">
-								<table class="table table-condensed" style="font-size:14px;">
-									<tr class="border-black">
-										<td>
-											<strong>Total Amount Due :</strong>
-										</td>
-										<td class="text-right">
-											<strong>
-												<span t-esc="l_total"/>
-											</strong>
-										</td>
-									</tr>
-								
-								</table>
-							</div>
-						</div>
-						<br/>
-						<br/>
-						<br/>
-						
-							<!--<div class="col-xs-4 pull-right">
-								<table class="table table-condensed">
-									<tr class="border-black">
-										<td>
-											<strong>Total Amount OverDue :</strong>
-										</td>
-										<td class="text-right">
-											<t t-set="tot_due" t-value="doc.filter_payment_amount_overdue_amt+ doc.initial_bal"/>
-											<strong>
-											<span t-esc="tot_due"
-												t-options='{"widget": "monetary", "display_currency": res_company.currency_id}' />
-											</strong>
-										</td>
-									</tr>
-									<tr class="border-black">
-										<td>
-											<strong>Balance Due :</strong>
-										</td>
-										<td class="text-right">
-											<t t-set="bal_due" t-value="doc.filter_payment_amount_due_amt+ doc.initial_bal"/>
-											<strong>
-											<span t-esc="bal_due"
-												t-options='{"widget": "monetary", "display_currency": res_company.currency_id}' />
-											</strong>
-										</td>
-									</tr>
-								</table>
-							</div> -->
-				</div>
-				<div class="col-xs-6 pull-right">
-					<p style="font-size:14px;">
-						<strong>Payment should be made by :</strong>
-						<strong>_________________</strong>
-						<br/>
-						<br/>
-						<strong>Certified by :</strong>
-						<strong>___________________________</strong>
-					</p>
-				</div>
-				<!--<div class="row" t-if="not get_lines">
-					<div class="col-xs-12">
-						<p>
-		                    <strong>There is nothing due with this customer.</strong>
-		                </p>
-					</div>
-				</div>-->
-					<!--<table t-attf-class="table table-sm" name="days_table_filter">
-								<thead>
-								<tr >
-									<th></th>
-									<th>0-30</th>
-									<th>30-60</th>
-									<th>60-90</th>
-									<th>90+</th>
-									<th>Total</th>
-									
-								</tr>
+                    <!--<div class="container mt16 mb16" style="margin-left:5px;">
+                        <t t-if="doc.statement_from_date">
+                            <strong><span>From : </span></strong>
+                            <span t-esc="doc.statement_from_date"/>
+                        </t>
+                        <t t-if="doc.statement_to_date">
+                            <strong style="margin-left:10px;"><span>To : </span></strong>
+                            <span t-esc="doc.statement_to_date"/>
+                        </t>
+                    </div>-->
 
-							</thead>
-							<tr>
-								<td ><p >  </p></td>
-							<td><span t-esc="doc.first_thirty_day_filter" /></td>
-								<td><span t-esc="doc.thirty_sixty_days_filter" /></td>
-								<td><span t-esc="doc.sixty_ninty_days_filter" /></td>
-								<td><span t-esc="doc.ninty_plus_days_filter" /></td>
-								<td><span t-esc="doc.total_filter" /></td>
-								</tr>
-							</table> -->
-							
-			</t>
-		</template>
+                    <table class="table table-condensed" name="filter_line_table">
+                        <thead>
+                            <tr>
+                                <!--<th class="text-center">DUE DATE</th>-->
+<!--                                <t t-if="doc.aging_by == 'inv_date'">-->
+                                    <th class="text-center">INVOICE DATE</th>
+<!--                                </t>-->
+                                <!--                                			                        <t t-if="doc.aging_by == 'due_date'">-->
+                                <th class="text-center">Invoice Number</th>
+                                <th class="text-center">DUE DATE</th>
 
-		<template id="filter_customer_statement">
-			<t t-call="web.html_container">
-				<t t-foreach="docs" t-as="doc">
-					<t t-call="bi_customer_overdue_statement.filter_report_customer_statement" t-lang="doc.lang" />
-				</t>
-			</t>
-		</template>
-	</data>
+                                <!--                                			                        </t>-->
+                                <th class="text-center">SO #</th>
+                                <th>Labour</th>
+                                <th class="text-center" >Employer</th>
+                                <th class="text-right">INVOICE AMT</th>
+                                <th class="text-right">PAYMENT AMT</th>
+                                <th class="text-right">BALANCE DUE</th>
+                            </tr>
+                        </thead>
+                        <!--<tbody>
+                            <t t-set="grand_total" t-value="0.0" />
+                            <t t-set="bal" t-value="0.0" />
+                            <t t-set="sub_total" t-value="0.0" />
+                            <tr>
+                                <td></td>
+                                <td><b>Initial Balance</b></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td class="text-right">
+                                    <t t-set="k" t-value="k+doc.initial_bal" />
+                                    <b><span t-esc="doc.initial_bal" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/></b>
+                                </td>
+
+                            </tr>
+
+
+                            <tr t-foreach="doc.customer_statement_line_ids" t-as="line">
+                                <t t-if="line.excluded== false">
+                                    <t t-set="bal" t-value="bal +sub_total "/>
+                                    <td>
+
+                                        <span t-esc="datetime.datetime.strptime(line.date_invoice, '%Y-%m-%d').strftime('%m/%d/%Y')"/>
+                                    </td>
+                                    <td>
+                                        <span t-esc="line.number" />
+                                    </td>
+                                    <td>
+                                        <span t-esc="line.name" />
+                                    </td>
+                                    <td class="text-right">
+                                        <span t-esc="line.amount_total_signed"
+                                            t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}" />
+                                    </td>
+                                    <td class="text-right">
+                                        <span t-esc="line.credit_amount"
+                                            t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}" />
+                                    </td>
+                                    <t t-if="line.invoice_id">
+                                    <td class="text-right">
+                                        <t t-set="sub_total" t-value="line.amount_total_signed-line.credit_amount" />
+                                        <t t-set="grand_total" t-value="sub_total + bal"/>
+                                        <span t-esc="sub_total + bal"
+                                            t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}" />
+                                    </td>
+                                    </t>
+                                    <t t-if="line.payment_id">
+                                        <td class="text-right">
+                                            <t t-set="sub_total" t-value="line.amount_total-line.credit_amount" />
+                                            <t t-set="grand_total" t-value="sub_total + bal"/>
+                                            <span t-esc="sub_total + bal"
+                                                t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}" />
+                                        </td>
+                                    </t>
+                                </t>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>
+                                    <b>Ending Balance</b>
+                                </td>
+                                <td>
+
+                                </td>
+                                <td></td>
+                                <td></td>
+                                <td class="text-right">
+                                    <b><span t-esc="grand_total" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/></b>
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <td class="text-right">
+                                </td>
+                                <td>
+                                </td>
+                                <td>
+                                </td>
+                                <td class="text-right">
+                                    <span t-esc="i" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                                </td>
+                                <td class="text-right">
+                                    <span t-esc="j" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                                </td>
+                                <td class="text-right">
+                                    <span t-esc="k" t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                                </td>
+                            </tr>
+                        </tbody>-->
+                        <tbody style="font-size:14px;" class="invoice_tbody">
+                            <t t-set="l_debit" t-value="0"/>
+                            <t t-set="l_credit" t-value="0"/>
+                            <t t-set="l_total" t-value="0"/>
+                            <t t-foreach="doc.customer_statement_line_ids" t-as="l">
+                                <t t-if="l.excluded== false">
+                                    <tr>
+
+<!--                                        <td class="text-center">-->
+<!--                                            <span t-esc="l.get('desc')"/>-->
+<!--                                        </td>-->
+
+                                        <!--										<t t-if="doc.aging_by == 'inv_date'">-->
+                                        <td class="text-center">
+                                            <t t-if="l.date_invoice">
+                                                <span t-esc="l.date_invoice"/>
+                                            </t>
+                                        </td>
+                                         <td class="text-center">
+                                            <t t-if="l.number">
+                                                <span t-esc="l.number"/>
+                                            </t>
+                                        </td>
+                                        <!--				                        </t>-->
+                                        <td class="text-center">
+                                            <t t-if="l.date_due">
+                                                <span t-esc="l.date_due"/>
+                                            </t>
+                                        </td>
+
+                                        <!--<td class="text-center">
+                                            <span t-esc="time.strftime('%m/%d/%Y',time.strptime(l.date_due,'%Y-%m-%d'))"/>
+                                        </td>-->
+
+                                        <td class="text-center">
+                                            <span t-esc="l.origin"/>
+                                        </td>
+                                        <!--										<td class="text-center">-->
+                                        <!--                                            <span t-esc="l.date_due"/>-->
+                                        <!--                                        </td>-->
+                                        <td class="text-center">
+                                            <t t-if="l.labour_id">
+                                                <span t-esc="l.labour_id.name"/>
+                                            </t>
+                                        </td>
+                                        <td class="text-center">
+                                            <t t-if="l.employer">
+                                                <span t-esc="l.employer"/>
+                                            </t>
+                                        </td>
+
+                                        <td class="text-right">
+                                            <t t-set="l_debit" t-value="l_debit + l.amount_total"/>
+                                            <!--<span t-esc="set_amount(l.get('debit'))"/>-->
+                                            <span t-esc="l.amount_total"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <t t-set="l_credit" t-value="l_credit + l.credit_amount"/>
+                                            <!--<span t-esc="set_amount(l.get('credit'))"/>-->
+                                            <span t-esc="l.credit_amount"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <t t-set="l_total" t-value="l_total+ l.result"/>
+                                            <!--<span t-esc="set_amount(l.get('total'))"/>-->
+                                            <span t-esc="l.result"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </t>
+                            <tr style="background:#e0e0e0;">
+                                <td style="border-top:1px solid black" colspan="1"></td>
+                                <td style="border-top:1px solid black">
+                                    <strong>Sub-Total :</strong>
+                                </td>
+                                <td style="border-top:1px solid black" class="text-right">
+                                    <span t-esc="l_debit"/>
+                                </td>
+                                <td style="border-top:1px solid black" class="text-right">
+                                    <span t-esc="l_credit"/>
+                                </td>
+                                <td style="border-top:1px solid black" class="text-right">
+                                    <span t-esc="l_total"/>
+                                </td>
+                            </tr>
+                        </tbody>
+
+                    </table>
+                    <div class="row" name="total">
+                        <div class="col-xs-4 pull-right">
+                            <table class="table table-condensed" style="font-size:14px;">
+                                <tr class="border-black">
+                                    <td>
+                                        <strong>Total Amount Due :</strong>
+                                    </td>
+                                    <td class="text-right">
+                                        <strong>
+                                            <span t-esc="l_total"/>
+                                        </strong>
+                                    </td>
+                                </tr>
+
+                            </table>
+                        </div>
+                    </div>
+                    <br/>
+                    <br/>
+                    <br/>
+
+                    <!--<div class="col-xs-4 pull-right">
+                        <table class="table table-condensed">
+                            <tr class="border-black">
+                                <td>
+                                    <strong>Total Amount OverDue :</strong>
+                                </td>
+                                <td class="text-right">
+                                    <t t-set="tot_due" t-value="doc.filter_payment_amount_overdue_amt+ doc.initial_bal"/>
+                                    <strong>
+                                    <span t-esc="tot_due"
+                                        t-options='{"widget": "monetary", "display_currency": res_company.currency_id}' />
+                                    </strong>
+                                </td>
+                            </tr>
+                            <tr class="border-black">
+                                <td>
+                                    <strong>Balance Due :</strong>
+                                </td>
+                                <td class="text-right">
+                                    <t t-set="bal_due" t-value="doc.filter_payment_amount_due_amt+ doc.initial_bal"/>
+                                    <strong>
+                                    <span t-esc="bal_due"
+                                        t-options='{"widget": "monetary", "display_currency": res_company.currency_id}' />
+                                    </strong>
+                                </td>
+                            </tr>
+                        </table>
+                    </div> -->
+                </div>
+                <div class="col-xs-6 pull-right">
+                    <p style="font-size:14px;">
+                        <strong>Payment should be made by :</strong>
+                        <strong>_________________</strong>
+                        <br/>
+                        <br/>
+                        <strong>Certified by :</strong>
+                        <strong>___________________________</strong>
+                    </p>
+                </div>
+                <!--<div class="row" t-if="not get_lines">
+                    <div class="col-xs-12">
+                        <p>
+                            <strong>There is nothing due with this customer.</strong>
+                        </p>
+                    </div>
+                </div>-->
+                <!--<table t-attf-class="table table-sm" name="days_table_filter">
+                            <thead>
+                            <tr >
+                                <th></th>
+                                <th>0-30</th>
+                                <th>30-60</th>
+                                <th>60-90</th>
+                                <th>90+</th>
+                                <th>Total</th>
+
+                            </tr>
+
+                        </thead>
+                        <tr>
+                            <td ><p >  </p></td>
+                        <td><span t-esc="doc.first_thirty_day_filter" /></td>
+                            <td><span t-esc="doc.thirty_sixty_days_filter" /></td>
+                            <td><span t-esc="doc.sixty_ninty_days_filter" /></td>
+                            <td><span t-esc="doc.ninty_plus_days_filter" /></td>
+                            <td><span t-esc="doc.total_filter" /></td>
+                            </tr>
+                        </table> -->
+
+            </t>
+        </template>
+
+        <template id="filter_customer_statement">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-call="bi_customer_overdue_statement.filter_report_customer_statement" t-lang="doc.lang"/>
+                </t>
+            </t>
+        </template>
+    </data>
 </openerp>

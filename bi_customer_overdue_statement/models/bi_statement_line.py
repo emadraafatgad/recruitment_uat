@@ -15,6 +15,7 @@ class bi_statement_line(models.Model):
     date_invoice = fields.Date('Invoice Date')
     date_due = fields.Date('Due Date')
     labour_id = fields.Many2one('labor.profile')
+    employer = fields.Char()
     number = fields.Char('Number')
     origin = fields.Char(string='Source Document',
                          help="Reference of the document that generated this sales order request.")
@@ -51,6 +52,7 @@ class bi_vendor_statement_line(models.Model):
     company_id = fields.Many2one('res.company', string='Company')
     partner_id = fields.Many2one('res.partner', string='Customer')
     labour_id = fields.Many2one('labor.profile')
+    employer = fields.Char()
     name = fields.Char('Name')
     date_invoice = fields.Date('Invoice Date')
     date_due = fields.Date('Due Date')

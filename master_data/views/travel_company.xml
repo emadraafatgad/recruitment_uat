@@ -1,5 +1,5 @@
 <odoo>
-     <record id="travel_company_code" model="ir.sequence">
+    <record id="travel_company_code" model="ir.sequence">
         <field name="name">Travel Company Code</field>
         <field name="code">travel.company</field>
         <field name="prefix">TR/%(year)s/</field>
@@ -22,35 +22,35 @@
         <field name="arch" type="xml">
             <form>
                 <header>
-<!--                    <button name="action_done" states="new"-->
-<!--                                string="Done" type="object"-->
-<!--                                class="oe_highlight"/>-->
-                     <field name="state" widget="statusbar"
-                               statusbar_visible="new,in_progress,done"/>
+                    <!--                    <button name="action_done" states="new"-->
+                    <!--                                string="Done" type="object"-->
+                    <!--                                class="oe_highlight"/>-->
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="new,in_progress,done"/>
                 </header>
                 <sheet>
                     <h1>
                         <field name="name"/>
                     </h1>
                     <group>
-                       <group>
-                        <field name="labor_id" readonly="1"/>
-                        <field name="agency_code"  string="Code/Agency" readonly="1"/>
-                        <field name="passport_no" readonly="1"/>
-                        <field name="destination_city" readonly="1"/>
-                        <field name="country_id" readonly="1"/>
-                        <field name="visa_no" readonly="1"/>
-                        <field name="agency" readonly="1"/>
-                        <field name="employer" readonly="1"/>
-                       </group>
-                         <group>
+                        <group>
+                            <field name="labor_id" readonly="1"/>
+                            <field name="agency_code" string="Code/Agency" readonly="1"/>
+                            <field name="passport_no" readonly="1"/>
+                            <field name="destination_city" readonly="1"/>
+                            <field name="country_id" readonly="1"/>
+                            <field name="visa_no" readonly="1"/>
+                            <field name="agency" readonly="1"/>
+                            <field name="employer" readonly="1"/>
+                        </group>
+                        <group>
 
-                        <field name="travel_company"/>
-                        <field name="reservation_no"/>
-                        <field name="departure_date"/>
-                        <field name="confirmation_date" invisible="1"/>
-                        <field name="flight_details"/>
-                       </group>
+                            <field name="travel_company"/>
+                            <field name="reservation_no"/>
+                            <field name="departure_date"/>
+                            <field name="confirmation_date" invisible="1"/>
+                            <field name="flight_details"/>
+                        </group>
                     </group>
                 </sheet>
                 <div class="oe_chatter">
@@ -66,9 +66,9 @@
         <field name="name">Travel Company Tree</field>
         <field name="model">travel.company</field>
         <field name="arch" type="xml">
-            <tree >
+            <tree>
                 <field name="name"/>
-                <field name="agency_code"  string="Code/Agency"/>
+                <field name="agency_code" string="Code/Agency"/>
                 <field name="labor_id"/>
                 <field name="passport_no"/>
                 <field name="employer"/>
@@ -79,16 +79,16 @@
                 <field name="departure_date"/>
                 <field name="flight_details" invisible="1"/>
                 <field name="state"/>
-             </tree>
+            </tree>
         </field>
     </record>
     <record id="view_travel_company_search" model="ir.ui.view">
-            <field name="name">Travel Company Search</field>
-            <field name="model">travel.company</field>
-            <field name="arch" type="xml">
+        <field name="name">Travel Company Search</field>
+        <field name="model">travel.company</field>
+        <field name="arch" type="xml">
 
-                <search>
-               <field name="agency_code"  string="Code/Agency"/>
+            <search>
+                <field name="agency_code" string="Code/Agency"/>
                 <field name="labor_name"/>
                 <field name="passport_no"/>
                 <field name="employer"/>
@@ -96,24 +96,26 @@
                 <field name="agency"/>
                 <field name="destination_city"/>
                 <separator/>
-                    <filter name="new" string="New"
-                            domain="[('state','=','new')]"/>
-                    <filter name="done" string="Done"
-                            domain="[('state','=','done')]"/>
-                    <filter string="Today" name="today" domain="[('create_date','&gt;=',time.strftime('%%Y-%%m-%%d'))]"/>
-                    <filter string="This Week" name="this_week" domain="[
+                <filter name="new" string="New"
+                        domain="[('state','=','new')]"/>
+                <filter name="done" string="Done"
+                        domain="[('state','=','done')]"/>
+                <filter string="Today" name="today" domain="[('create_date','&gt;=',time.strftime('%%Y-%%m-%%d'))]"/>
+                <filter string="This Week" name="this_week" domain="[
                                 '&amp;',
                                 ('create_date', '>=', (context_today() + relativedelta(weeks=-1,days=1,weekday=0)).strftime('%Y-%m-%d')),
                                 ('create_date', '&lt;=', (context_today() + relativedelta(weekday=6)).strftime('%Y-%m-%d')),]"/>
-                    <filter string="This Month" name="this_month" domain="[('create_date','&gt;=',time.strftime('%%Y-%%m-01'))]"/>
-                    <filter string="This Year" name="this_year" domain="[('create_date','&gt;=',time.strftime('%%Y-01-01'))]"/>
+                <filter string="This Month" name="this_month"
+                        domain="[('create_date','&gt;=',time.strftime('%%Y-%%m-01'))]"/>
+                <filter string="This Year" name="this_year"
+                        domain="[('create_date','&gt;=',time.strftime('%%Y-01-01'))]"/>
 
 
-                </search>
-            </field>
-        </record>
+            </search>
+        </field>
+    </record>
 
-    <menuitem id="menu_travel_company" sequence="65" name="Travel Company" parent="menu_recruitment_root" />
+    <menuitem id="menu_travel_company" sequence="65" name="Travel Company" parent="menu_recruitment_root"/>
     <menuitem id="menu_travel_company_request" sequence="1" name="Candidates" parent="menu_travel_company"
               action="travel_company_action" groups="group_travel_company_read"/>
 </odoo>

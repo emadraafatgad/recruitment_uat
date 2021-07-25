@@ -232,9 +232,8 @@
             <field name="model">slave.training</field>
             <field name="arch" type="xml">
                 <search string="Search Labor Training">
-                    <field name='slave_id' string="Code or Name"/>
+                    <field name='slave_id' string="Name or Passport"/>
                     <field name='phone' string="phone"/>
-
                     <separator/>
                      <filter name="new" string="New"
                             domain="[('state','=','new')]"/>

@@ -63,6 +63,15 @@ class LaborProfile(models.Model):
         currency = self.env['res.currency'].search([('currency_subunit_label', '=', 'Halala')])
         return currency
 
+    @api.model
+    def _name_search(self, name, args=None, operator='ilike', limit=100):
+        if args is None:
+            args = []
+        if name:
+            actions = self.search(['|', ('name', operator, name), ('passport_no', operator, name)] + args, limit=limit)
+            return actions.name_get()
+        return super(LaborProfile, self)._name_search(name, args=args, operator=operator, limit=limit)
+
     currency = fields.Many2one('res.currency', default=get_default_currency)
     agent = fields.Many2one('res.partner', domain=[('vendor_type', '=', 'agent')], required=True)
     experience = fields.Selection([('first_time', 'First Time'), ('has_experience', 'Has Experience')],
@@ -471,7 +480,7 @@ class LaborProfile(models.Model):
                 'price_unit': price_total,
                 'discount': 0.0,
                 'quantity': 1,
-                'account_id': accounts.get('stock_input') and accounts['stock_input'].id or \
+                'account_id': accounts.get('expense') and accounts['expense'].id or \
                               accounts['expense'].id,
             }))
             cr = self.env['account.invoice'].create({
@@ -561,8 +570,58 @@ class LaborProfile(models.Model):
         for rec in accommodation:
             rec.state = 'blocked'
         price = 0.0
+        currency_id = self.env['product.recruitment.config'].search([('type', '=', "agent")]).currency_id
+        process_price = 0
         for record in self.labor_process_ids:
-            price += record.total_cost
+            process_price = 0
+            conf_type = self.env['product.recruitment.config'].search([('type', '=', record.type)])
+            if conf_type.type == 'agency':
+                continue
+            if conf_type.type == 'clearance':
+                continue
+            if conf_type:
+                proc_currency_id = conf_type.currency_id
+                process_price = proc_currency_id._convert(record.total_cost, currency_id, self.env.user.company_id,
+                                     fields.Date.today())
+                print(conf_type.currency_id.name,"Currency Name")
+                print(conf_type.type, "type Name")
+                print(proc_currency_id.name, "process currency")
+                print(currency_id.name, "agent currency")
+                print(process_price, "process_price")
+            elif record.type == "big_medical":
+                conf_type = self.env['product.recruitment.config'].search([('type', '=', "hospital")])
+                proc_currency_id = conf_type.currency_id
+                process_price = proc_currency_id._convert(record.total_cost, currency_id, self.env.user.company_id,
+                                                          fields.Date.today())
+                print(conf_type.currency_id.name, "Currency Name")
+                print(conf_type.type, "type Name")
+                print(proc_currency_id.name, "process currency")
+                print(currency_id.name, "agent currency")
+                print(process_price, "process_price")
+            elif record.type == "stamping":
+                conf_type = self.env['product.recruitment.config'].search([('type', '=', "embassy")])
+                proc_currency_id = conf_type.currency_id
+                process_price = proc_currency_id._convert(record.total_cost, currency_id, self.env.user.company_id,
+                                                          fields.Date.today())
+                print(conf_type.currency_id.name, "Currency Name")
+                print(conf_type.type, "type Name")
+                print(proc_currency_id.name, "process currency")
+                print(currency_id.name, "agent currency")
+                print(process_price, "process_price")
+            elif record.type == "agent_payment":
+                conf_type = self.env['product.recruitment.config'].search([('type', '=', "agent")])
+                proc_currency_id = conf_type.currency_id
+                process_price = proc_currency_id._convert(record.total_cost, currency_id, self.env.user.company_id,
+                                                          fields.Date.today())
+                print(conf_type.currency_id.name, "Currency Name")
+                print(conf_type.type, "type Name")
+                print(proc_currency_id.name, "process currency")
+                print(currency_id.name, "agent currency")
+                print(process_price, "process_price")
+            price += process_price
+            print(price, "price")
+        # if price:
+        #     raise ValidationError((price))
         append_labor = []
         append_labor.append(self.id)
         invoice_line = []
@@ -578,7 +637,7 @@ class LaborProfile(models.Model):
             'price_unit': price,
             'discount': 0.0,
             'quantity': 1,
-            'account_id': accounts.get('stock_input') and accounts['stock_input'].id or \
+            'account_id': accounts.get('expense') and accounts['expense'].id or \
                           accounts['expense'].id,
         }))
         self.env['account.invoice'].create({
@@ -614,7 +673,7 @@ class LaborProfile(models.Model):
             'price_unit': product.price,
             'discount': 0.0,
             'quantity': 1,
-            'account_id': accounts.get('stock_input') and accounts['stock_input'].id or \
+            'account_id': accounts.get('expense') and accounts['expense'].id or \
                           accounts['expense'].id,
         }))
         self.env['account.invoice'].create({
@@ -809,6 +868,30 @@ class LaborProfile(models.Model):
         ('id_uniqe', 'unique(national_id)', 'National ID must be unique!')
         , ('passport_uniqe', 'unique(passport_no)', 'Passport No must be unique!')
     ]
+    # type = fields.Selection([('pre_medical_check', 'Pre Medical Check'), ('agent', 'Agent'), ('nira', 'Nira Broker'),
+    #                          ('passport', 'Passport Broker'), ('passport_placing_issue', 'Internal affairs'),
+    #                          ('interpol', 'Interpol Broker'), ('gcc', 'GCC'), ('hospital', 'Big Medical'),
+    #                          ('agency', 'Agency'), ('enjaz', 'Enjaz'), ('embassy', 'Stamping'),
+    #                          ('travel_company', 'Travel'), ('training', 'Training'), ('lab', 'Lab'),
+    #                          ('accommodation', 'Accommodation'),
+    #                          ('labor_reject', 'Labor Reject')],
+    #                         string='Type', track_visibility="onchange", required=True)
+    # # @api.depends('labor_process_ids.state')
+    # def labour_process_total_cost(self):
+    #     if if
+
+
+    # def labour_process_total_cost(self):
+    #     for rec in self:
+    #         total_cost = 0
+    #         for line in rec.labor_process_ids:
+    #             type = line.type
+    #             type_conf = self.env['product.recruitment.config'].search([('type','=',type)])
+    #             if type in ['gcc','embassy','travel_company']:
+    #                 cost =
+    #             elif type in ['pre_medical_check','agent','nira','passport','passport_placing_issue','interpol','hospital','enjaz',]:
+    #
+    #
 
     @api.onchange('date_of_birth')
     def _compute_slave_age(self):

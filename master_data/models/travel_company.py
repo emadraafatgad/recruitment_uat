@@ -31,18 +31,11 @@ class TravelCompany(models.Model):
 
     @api.multi
     def action_done(self):
-        self.ensure_one()
         list = self.env['travel.company'].search([('id', '=', self.id), ('state', '=', 'done')])
         if list:
             raise ValidationError(_('Done before '))
-        # if not self.reservation_no:
-        #     raise ValidationError(_('Enter Reservation No.'))
         if not self.departure_date:
             raise ValidationError(_('Enter Departure Date'))
-        # if not self.confirmation_date:
-        #     raise ValidationError(_('Enter Confirmation Date'))
-        self.state = 'done'
-        self.labor_id.state = 'travelled'
         product = self.env['product.recruitment.config'].search([('type', '=', 'agent')])[0]
         if not product.journal_id:
             raise ValidationError(_('Please, you must select journal in agent from configration'))
@@ -50,11 +43,8 @@ class TravelCompany(models.Model):
         amount = 0.0
         if self.labor_id.register_with == 'national_id':
             amount = self.labor_id.agent.national_id_cost * 0.5
-
-
         elif self.labor_id.register_with == 'passport':
             amount = self.labor_id.agent.passport_cost * 0.5
-
         elif self.labor_id.register_with == 'nira':
             amount = self.labor_id.agent.nira_cost * 0.5
         l = []
@@ -79,6 +69,18 @@ class TravelCompany(models.Model):
 
         }))
         self.labor_id.labor_process_ids = line
+        self.labor_id.state = 'travelled'
+        self.state = "done"
+        if self.travel_list_id:
+            if all(l.state == 'done' for l in self.travel_list_id.travel_list):
+                self.travel_list_id.state = 'done'
+
+    @api.multi
+    def action_in_progress(self,travel_company,list_name):
+        self.ensure_one()
+        list = self.env['travel.company'].search([('id', '=', self.id), ('state', '=', 'in_progress')])
+        if list:
+            raise ValidationError(_('state already in progress before for labor {}'.format(self.labor_id.name)))
         append_labor = []
         append_labor.append(self.labor_id.id)
         invoice_line = []
@@ -95,30 +97,37 @@ class TravelCompany(models.Model):
             'price_unit': 0.0,
             'discount': 0.0,
             'quantity': 1,
-            'account_id': accounts.get('stock_input') and accounts['stock_input'].id or \
+            'account_id': accounts.get('expense') and accounts['expense'].id or \
                           accounts['expense'].id,
         }))
-        invoice = self.env['account.invoice'].search(
-            [('origin', '=', self.travel_list_id.name), ('state', '=', 'draft')])
+        invoice = self.env['account.invoice'].search([('partner_id','=',travel_company.id),
+            ('origin', '=', list_name), ('state', '=', 'draft')])
         if invoice:
             invoice.write({'invoice_line_ids': invoice_line})
         else:
+            print("=============1")
+            # travel_list_ids = self.env['travel.list'].search([('state','=','new')])
+            #
+            # for line in travel_list_ids:
+            #     print(line,"====================line")
+            #     print( self.id ,"=====----====",line.travel_list)
+            #     if self.id in line.travel_list.ids:
+            #         print(line.travel_list,"travel_list",self.id)
+            #         travel_company = line.travel_company
             self.env['account.invoice'].create({
-                'partner_id': self.travel_company.id,
+                'partner_id': travel_company.id,
                 'currency_id': product.currency_id.id,
                 'state': 'draft',
                 'type': 'in_invoice',
-                'partner_type': self.travel_company.vendor_type,
-                'origin': self.travel_list_id.name,
+                'partner_type': travel_company.vendor_type,
+                'origin': list_name,
                 'journal_id': product.journal_id.id,
-                'account_id': self.travel_company.property_account_payable_id.id,
+                'account_id': travel_company.property_account_payable_id.id,
                 'invoice_line_ids': invoice_line,
 
             })
+        self.state = 'in_progress'
 
-        if self.travel_list_id:
-            if all(l.state == 'done' for l in self.travel_list_id.travel_list):
-                self.travel_list_id.state = 'done'
         self.create_pcr(self.labor_id.id)
 
     def create_pcr_list(self):
@@ -152,6 +161,7 @@ class TravelCompany(models.Model):
         if not product.journal_id:
             raise ValidationError(_('Please, you must select journal in laborer reject from configration'))
         accounts = product.product.product_tmpl_id.get_product_accounts()
+        print(accounts,"Accounts")
         invoice_line.append((0, 0, {
             'product_id': product.product.id,
             'labors_id': [(6, 0, append_labor)],
@@ -160,7 +170,7 @@ class TravelCompany(models.Model):
             'price_unit': price,
             'discount': 0.0,
             'quantity': 1,
-            'account_id': accounts.get('stock_input') and accounts['stock_input'].id or \
+            'account_id': accounts.get('expense') and accounts['expense'].id or \
                           accounts['expense'].id,
         }))
         if labor.labor_process_ids:

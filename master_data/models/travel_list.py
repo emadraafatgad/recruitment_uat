@@ -29,16 +29,8 @@ class TravelList(models.Model):
             rec.travel_company = self.travel_company.id
 
     @api.multi
-    def action_inprogress(self):
-        list = self.env['travel.list'].search([('id', '=', self.id), ('state', '=', 'in_progress')])
-        if list:
-            raise ValidationError(_('Done before '))
-        if not self.travel_company:
-            raise ValidationError(_('Enter Tavel Company Partner'))
-        for rec in self.travel_list:
-            rec.state = 'in_progress'
-        self.list_now_len = len(self.travel_list)
-        self.state = 'in_progress'
+    def action_done_all_list(self):
+        self.state = 'done'
 
     @api.onchange('travel_list')
     def domain_list(self):
@@ -50,9 +42,10 @@ class TravelList(models.Model):
         domain = {'travel_list': [('id', 'not in', line),('state', '=', 'new')]}
         return {'domain': domain}
 
-    def action_done_all_list(self):
+    def action_inprogress(self):
         for line in self.travel_list:
-            line.action_done()
+            line.action_in_progress(self.travel_company,self.name)
+            self.state = 'in_progress'
 
 
     # @api.multi

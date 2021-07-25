@@ -1,8 +1,7 @@
 # from extra.master_data.models.interpol_request import InterpolRequest
-from odoo import fields, models , api,_
 from datetime import date
-from dateutil.relativedelta import relativedelta
 
+from odoo import fields, models, api, _
 from odoo.exceptions import ValidationError
 
 
@@ -11,8 +10,8 @@ class ClearanceList(models.Model):
     _order = 'id desc'
     _inherit = ['portal.mixin', 'mail.thread', 'mail.activity.mixin']
 
-    state = fields.Selection([('new','New'),('confirmed','Confirmed')],default='new',track_visibility="onchange")
-    name = fields.Char(string="Number",readonly=True,default='New')
+    state = fields.Selection([('new', 'New'), ('confirmed', 'Confirmed')], default='new', track_visibility="onchange")
+    name = fields.Char(string="Number", readonly=True, default='New')
     reference_no = fields.Char(string="Reference #")
     assign_date = fields.Date()
     receive_date = fields.Date(string="Issued date")
@@ -20,6 +19,7 @@ class ClearanceList(models.Model):
     list_total_count = fields.Integer(compute='_compute_value')
     list_now_len = fields.Integer()
     labour_ids = fields.Many2many('labor.profile')
+
     @api.one
     @api.depends('clearance_list')
     def _compute_value(self):
@@ -45,7 +45,7 @@ class ClearanceList(models.Model):
         for record in request:
             for rec in record.clearance_list:
                 line.append(rec.id)
-        domain = {'clearance_list': [('id', 'not in', line),('state', '=', 'new')]}
+        domain = {'clearance_list': [('id', 'not in', line), ('state', '=', 'new')]}
         return {'domain': domain}
 
     @api.multi
@@ -58,8 +58,8 @@ class ClearanceList(models.Model):
         # if not self.state == 'new':
         #     if self.list_total_count > self.list_now_len:
         #         raise ValidationError(_('You cannot add lines in this state'))
-            # if self.list_total_count < self.list_now_len:
-            #     raise ValidationError(_('You cannot remove lines in this state'))
+        # if self.list_total_count < self.list_now_len:
+        #     raise ValidationError(_('You cannot remove lines in this state'))
 
     @api.multi
     def unlink(self):
@@ -73,5 +73,3 @@ class ClearanceList(models.Model):
         vals['name'] = self.env['ir.sequence'].next_by_code('clearance.list')
         vals['assign_date'] = date.today()
         return super(ClearanceList, self).create(vals)
-
-

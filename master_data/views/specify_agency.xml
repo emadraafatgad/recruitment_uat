@@ -102,7 +102,7 @@
                             class="oe_highlight" states="draft"/>
                     <button name="set_to_draft"
                             string="Set Draft" type="object"
-                            class="oe_highlight" states="available,sent" confirm="Are you sure you want to set draft?"/>
+                            class="oe_highlight"  confirm="Are you sure you want to set draft?"/>
                     <button name="action_send_cv" attrs="{'invisible':[('state', '!=','available')]}"
                             string="Send CV By Email" type="object"
                             class="oe_highlight"/>
@@ -198,7 +198,7 @@
                 <field name="big_medical_state"/>-->
                 <button name="set_to_draft"
                         string="Set Draft" type="object"
-                        class="oe_highlight" states="available" confirm="Are you sure you want to set draft?"/>
+                        class="oe_highlight"  confirm="Are you sure you want to set draft?"/>
             </tree>
         </field>
     </record>

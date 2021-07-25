@@ -95,7 +95,7 @@ class AccommodationList(models.Model):
                 'price_unit': self.training_center.accommodation_cost,
                 'discount': 0.0,
                 'quantity':  float(self.accommodation_period),
-                'account_id': accounts.get('stock_input') and accounts['stock_input'].id or \
+                'account_id': accounts.get('expense') and accounts['expense'].id or \
                               accounts['expense'].id,
             }))
         cr = self.env['account.invoice'].create({

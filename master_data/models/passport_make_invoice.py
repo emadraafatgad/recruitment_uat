@@ -90,7 +90,7 @@ class PassportInvoice(models.Model):
             'price_unit': self.placing_issue.cost if not self.is_express else self.placing_issue.express_passport_cost,
             'discount': 0.0,
             'quantity': float(len(self.passport_request)),
-            'account_id': accounts.get('stock_input') and accounts['stock_input'].id or \
+            'account_id': accounts.get('expense') and accounts['expense'].id or \
                           accounts['expense'].id,
         }))
         cr =self.env['account.invoice'].create({
@@ -120,7 +120,7 @@ class PassportInvoice(models.Model):
                     'price_unit': self.placing_issue.cost,
                     'discount': 0.0,
                     'quantity': 1,
-                    'account_id': accounts.get('stock_input') and accounts['stock_input'].id or \
+                    'account_id': accounts.get('expense') and accounts['expense'].id or \
                                   accounts['income'].id,
                 }))
                 self.env['account.invoice'].create({

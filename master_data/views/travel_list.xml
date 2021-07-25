@@ -26,8 +26,8 @@
                             string="InProgress" type="object"
                             class="oe_highlight"
                             confirm="Are you sure you want to change this state to Inprogress state?"/>
-                    <button name="action_done_all_list" states="in_progress" class="oe_highlight" type="object"
-                            string="Confirm" confirm="Are You Sure You Will Confirm ?"/>
+<!--                    <button name="action_done_all_list" states="in_progress" class="oe_highlight" type="object"-->
+<!--                            string="Confirm" confirm="Are You Sure You Will Confirm ?"/>-->
                     <field name="state" widget="statusbar"
                            statusbar_visible="new,in_progress,done"/>
                 </header>
@@ -96,7 +96,8 @@
         <field name="name">Travel List Search</field>
         <field name="model">travel.list</field>
         <field name="arch" type="xml">
-
+<!--            <field name="travel_list" string="Labour"-->
+<!--                   filter_domain="[('travel_list.labor_id', 'ilike', self)]"/>-->
             <search>
                 <separator/>
                 <field name="travel_company"/>
@@ -113,9 +114,9 @@
                         domain="[('create_date','&gt;=',time.strftime('%%Y-%%m-01'))]"/>
                 <filter string="This Year" name="this_year"
                         domain="[('create_date','&gt;=',time.strftime('%%Y-01-01'))]"/>
-                </search>
-            </field>
-        </record>
+            </search>
+        </field>
+    </record>
     <menuitem id="menu_travel_list" sequence="2" name="Bookings" parent="menu_travel_company"
               action="travel_list_action" groups="group_travel_company_read"/>
 

@@ -109,7 +109,7 @@ class PCRExamList(models.Model):
                     'price_unit': self.lab_id.cost,
                     'discount': 0.0,
                     'quantity': 1,
-                    'account_id': accounts.get('stock_input') and accounts['stock_input'].id or \
+                    'account_id': accounts.get('expense') and accounts['expense'].id or \
                                   accounts['expense'].id,
                 }))
                 print(invoice_line)

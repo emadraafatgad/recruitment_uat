@@ -137,7 +137,6 @@
         <field name="name">GCC and medical search</field>
         <field name="model">big.medical</field>
         <field name="arch" type="xml">
-
             <search>
                 <field name="labor_id" string="Labour Name"/>
                 <field name="passport_no" string="Passport"/>

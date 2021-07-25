@@ -251,7 +251,9 @@ class SpecifyAgent(models.Model):
             if rec.labor_id.occupation == 'house_maid':
                 training = self.env['slave.training'].search([('slave_id', '=', rec.labor_id.id)])
                 if training.state == 'finished' and interpol.state == 'done':
-                    self.env['labor.clearance'].create({
+                    print("rec labour name",rec.labor_id.name,"clearance")
+                    lab_clearance = self.env['labor.clearance'].search([('labor_id','=',rec.labor_id.id)],limit=1)
+                    values ={
                         'labor_id': rec.labor_id.id,
                         'labor_name': rec.labor_name,
                         'passport_no': rec.passport_no,
@@ -265,10 +267,20 @@ class SpecifyAgent(models.Model):
                         'agency': rec.agency.id,
                         'agency_code': rec.name,
                         'destination_city': rec.destination_city.id,
-                    })
+                    }
+                    if lab_clearance:
+                        print("Update")
+                        print(values)
+                        lab_cle = lab_clearance.write(values)
+                        print(lab_cle)
+                    else:
+                        print("Create")
+                        lab_cle_c = self.env['labor.clearance'].create(values)
+                        print(lab_cle_c)
             else:
                 if interpol.state == 'done':
-                    self.env['labor.clearance'].create({
+                    lab_clearance = self.env['labor.clearance'].search([('labor_id', '=', rec.labor_id.id)], limit=1)
+                    values = {
                         'labor_id': rec.labor_id.id,
                         'labor_name': rec.labor_name,
                         'passport_no': rec.passport_no,
@@ -281,7 +293,17 @@ class SpecifyAgent(models.Model):
                         'district': rec.labor_id.district.id,
                         'agency': rec.agency.id,
                         'agency_code': rec.name,
-                        'destination_city': rec.destination_city.id, })
+                        'destination_city': rec.destination_city.id,
+                    }
+                    if lab_clearance:
+                        print("Update")
+                        print(values)
+                        lab_cle = lab_clearance.write(values)
+                        print(lab_cle)
+                    else:
+                        print("Create")
+                        lab_cle_c = self.env['labor.clearance'].create(values)
+                        print(lab_cle_c)
 
     @api.multi
     def select(self):

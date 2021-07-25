@@ -1,5 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <record model="ir.ui.view" id="labor_profile_tree">
+        <field name="name">Labor List</field>
+        <field name="model">labor.profile</field>
+        <field name="type">tree</field>
+        <field eval="1" name="priority"/>
+        <field name="arch" type="xml">
+            <tree string='Labor Information'>
+                <field name="identification_code"/>
+                <field name="name"/>
+                <field name="register_with"/>
+                <field name="national_id"/>
+                <field name="passport_no"/>
+                <field name="agent"/>
+                <field name="religion"/>
+                <field name="age"/>
+                <field name="pre_medical_check"/>
+                <field name="agency"/>
+                <field name="state"/>
+            </tree>
+
+        </field>
+    </record>
 
     <record id="labor_profile_action_tree" model="ir.actions.act_window">
         <field name="name">Registration</field>
@@ -8,6 +30,7 @@
         <field name="view_mode">tree,form,kanban,search</field>
         <field name="domain">[]</field>
         <field name="context">{}</field>
+        <field name="view_id" ref="labor_profile_tree"/>
     </record>
     <record model="ir.ui.view" id="labor_profile_view_id">
         <field name="name">Labor profile</field>
@@ -386,63 +409,128 @@
         </field>
     </record>
 
-    <record model="ir.ui.view" id="labor_profile_tree">
+
+    <record model="ir.ui.view" id="labor_profile_state_tree_view">
         <field name="name">Labor List</field>
         <field name="model">labor.profile</field>
         <field name="type">tree</field>
         <field name="arch" type="xml">
             <tree string='Labor Information'>
-                <field name="identification_code"/>
                 <field name="name"/>
-                <field name="register_with"/>
-                <field name="national_id"/>
                 <field name="passport_no"/>
-                <field name="agent"/>
-                <field name="religion"/>
-                <field name="age"/>
-                <field name="pre_medical_check"/>
-                <field name="agency"/>
-                <field name="state"/>
+                <!--                <field name="agent"/>-->
+                <field name="agency_state"/>
+                <field name="passport_state"/>
+                <field name="training_state"/>
+                <field name="interpol_state"/>
+                <field name="medical_state"/>
+                <field name="clearance_state"/>
+                <field name="stamping_state"/>
+                <field name="travel_state"/>
+                <field name="pcr_state"/>
             </tree>
-
         </field>
     </record>
+    <record id="view_profile_labor_status_filter" model="ir.ui.view">
+        <field name="name">labor.profile.select</field>
+        <field name="model">labor.profile</field>
+        <field name="type">search</field>
+        <field name="arch" type="xml">
+            <separator orientation="vertical"/>
+            <field name="name" select="1"/>
+            <field name="national_id" string="national ID" select="1"/>
+            <field name="passport_no"/>
+            <field name="identification_code" string="code" select="1"/>
+            <field name="phone"/>
 
-<!--    <record id="labor_profile_state_action" model="ir.actions.act_window">-->
-<!--        <field name="name">Follow Up</field>-->
-<!--        <field name="res_model">labor.profile</field>-->
-<!--        <field name="view_type">form</field>-->
-<!--        <field name="view_mode">tree,form,search</field>-->
-<!--        <field name="domain">[]</field>-->
-<!--        <field name="context">{}</field>-->
-<!--    </record>-->
+            <filter name="document_id" string="Document/National ID"
+                    domain="[('register_with','=','national_id')]"/>
+            <filter name="document_nira" string="Document/Nira"
+                    domain="[('register_with','=','nira')]"/>
+            <filter name="document_passport" string="Document/Passport"
+                    domain="[('register_with','=','passport')]"/>
+            <filter name="house_maid" string="House Maid"
+                    domain="[('occupation','=','house_maid')]"/>
+            <filter name="pro_maid" string="Pro Maid"
+                    domain="[('occupation','=','pro_maid')]"/>
+            <filter name="pro_worker" string="Pro Worker"
+                    domain="[('occupation','=','pro_worker')]"/>
+            <filter string="Today" name="today" domain="[('create_date','&gt;=',time.strftime('%%Y-%%m-%%d'))]"/>
+            <filter string="This Week" name="this_week" domain="[
+                                '&amp;',
+                                ('create_date', '>=', (context_today() + relativedelta(weeks=-1,days=1,weekday=0)).strftime('%Y-%m-%d')),
+                                ('create_date', '&lt;=', (context_today() + relativedelta(weekday=6)).strftime('%Y-%m-%d')),]"/>
+            <filter string="This Month" name="this_month"
+                    domain="[('create_date','&gt;=',time.strftime('%%Y-%%m-01'))]"/>
+            <filter string="This Year" name="this_year" domain="[('create_date','&gt;=',time.strftime('%%Y-01-01'))]"/>
 
-<!--    <record model="ir.ui.view" id="labor_profile_state_tree_view">-->
-<!--        <field name="name">Labor List</field>-->
-<!--        <field name="model">labor.profile</field>-->
-<!--        <field name="type">tree</field>-->
-<!--        <field name="arch" type="xml">-->
-<!--            <tree string='Labor Information'>-->
-<!--                <field name="name"/>-->
-<!--                <field name="national_id"/>-->
-<!--                <field name="passport_no"/>-->
-<!--                <field name="agent"/>-->
-<!--                <field name="agency"/>-->
-<!--            </tree>-->
-<!--        </field>-->
-<!--    </record>-->
-<!--    <record id="labor_profile_action_state_tree" model="ir.actions.act_window.view">-->
-<!--        <field eval="1" name="sequence"/>-->
-<!--        <field name="view_mode">tree</field>-->
-<!--        <field name="view_id" ref="labor_profile_state_tree_view"/>-->
-<!--        <field name="act_window_id" ref="labor_profile_state_action"/>-->
-<!--    </record>-->
-<!--    <record id="labor_profile_action_tree" model="ir.actions.act_window.view">-->
-<!--        <field eval="1" name="sequence"/>-->
-<!--        <field name="view_mode">tree</field>-->
-<!--        <field name="view_id" ref="labor_profile_tree"/>-->
-<!--        <field name="act_window_id" ref="labor_profile_action_tree"/>-->
-<!--    </record>-->
+            <group>
+                <filter name="agency_state" string="Agency" domain="[]" context="{'group_by':'agency_state'}"/>
+                <filter name="passport_state" string="Passport" icon="terp-personal"
+                        domain="[]"
+                        context="{'group_by':'passport_state'}"/>
+                <filter name="training_state" string="Training" icon="terp-personal"
+                        domain="[]"
+                        context="{'group_by':'training_state'}"/>
+                <filter name="interpol_state" string="Interpol" icon="terp-personal"
+                        domain="[]"
+                        context="{'group_by':'interpol_state'}"/>
+                <filter name="medical_state" icon="fa-users" string="Medical"
+                        domain="[]"
+                        context="{'group_by':'medical_state'}"/>
+                <filter name="clearance_state" icon="fa-users" string="Clearance"
+                        domain="[]"
+                        context="{'group_by':'clearance_state'}"/>
+                <filter name="stamping_state" icon="fa-users" string="Stamping"
+                        domain="[]"
+                        context="{'group_by':'stamping_state'}"/>
+                <filter name="travel_state" icon="fa-users" string="Travel"
+                        domain="[]"
+                        context="{'group_by':'travel_state'}"/>
+                <filter name="pcr_state" icon="fa-users" string="PCR"
+                        domain="[]"
+                        context="{'group_by':'pcr_state'}"/>
+            </group>
+        </field>
+    </record>
+    <record id="labor_profile_state_action" model="ir.actions.act_window">
+        <field name="name">Follow Up</field>
+        <field name="res_model">labor.profile</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,search</field>
+        <field name="view_id" ref="labor_profile_state_tree_view"/>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+        <field name="search_view_id"
+               ref="view_profile_labor_status_filter"/>
+    </record>
+
+
+    <record id="labor_profile_action_state_tree" model="ir.actions.act_window.view">
+        <field eval="10" name="sequence"/>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="labor_profile_state_tree_view"/>
+        <field name="act_window_id" ref="labor_profile_state_action"/>
+    </record>
+    <!--    <record id="labor_profile_action_state_search" model="ir.actions.act_window.view">-->
+    <!--        <field eval="10" name="sequence"/>-->
+    <!--        <field name="view_mode">search</field>-->
+    <!--        <field name="view_id" ref="view_profile_labor_status_filter"/>-->
+    <!--        <field name="act_window_id" ref="labor_profile_state_action"/>-->
+    <!--    </record>-->
+    <record id="labor_profile_action_state_form" model="ir.actions.act_window.view">
+        <field eval="10" name="sequence"/>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="labor_profile_view_id"/>
+        <field name="act_window_id" ref="labor_profile_state_action"/>
+    </record>
+
+    <!--    <record id="labor_profile_action" model="ir.actions.act_window.view">-->
+    <!--        <field eval="1" name="sequence"/>-->
+    <!--        <field name="view_mode">tree</field>-->
+    <!--        <field name="view_id" ref="labor_profile_tree"/>-->
+    <!--        <field name="act_window_id" ref="labor_profile_action_tree"/>-->
+    <!--    </record>-->
 
 
     <record id="view_profile_labor_filter" model="ir.ui.view">
@@ -639,5 +727,11 @@
               action="labor_profile_action_tree"
               groups="master_data.group_registeration_user"
     />
-
+<menuitem id="labor_profile_status_id"
+              name="Follow Up"
+              parent="menu_recruitment_root"
+              sequence="10"
+              action="labor_profile_state_action"
+              groups="master_data.group_registeration_user"
+    />
 </odoo>

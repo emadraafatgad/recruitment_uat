@@ -71,7 +71,7 @@ class SlaveTraining(models.Model):
             'price_unit': price,
             'discount': 0.0,
             'quantity': 1,
-            'account_id': accounts.get('stock_input') and accounts['stock_input'].id or \
+            'account_id': accounts.get('expense') and accounts['expense'].id or \
                           accounts['expense'].id,
         }))
         if labor.labor_process_ids:
@@ -268,7 +268,7 @@ class TrainingList(models.Model):
             'price_unit': self.training_center.cost,
             'discount': 0.0,
             'quantity': len(self.training_requests),
-            'account_id': accounts.get('stock_input') and accounts['stock_input'].id or \
+            'account_id': accounts.get('expense') and accounts['expense'].id or \
                           accounts['expense'].id,
         }))
         cr = self.env['account.invoice'].create({
