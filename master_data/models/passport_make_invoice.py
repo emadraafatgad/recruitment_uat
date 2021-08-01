@@ -78,7 +78,7 @@ class PassportInvoice(models.Model):
             desc += description.prn + ','
             append_labor.append(description.labor_id.id)
         invoice_line = []
-        product = self.env['product.recruitment.config'].search([('type', '=', 'passport_placing_issue')])[0]
+        product = self.env['product.recruitment.config'].search([('type', '=', 'passport_placing_issue')],limit=1)
         if not product.journal_id:
             raise ValidationError(_('Please, you must select journal in internal affairs from configration'))
         accounts = product.product.product_tmpl_id.get_product_accounts()

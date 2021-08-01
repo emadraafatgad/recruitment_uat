@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="laborer_claims_code" model="ir.sequence">
+        <field name="name">Laborer Claims</field>
+        <field name="code">laborer.claims</field>
+        <field name="prefix">Claim/%(year)s/</field>
+        <field name="padding">4</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+    <record id="laborer_claims_action" model="ir.actions.act_window">
+        <field name="name">Laborer Claims</field>
+        <field name="res_model">laborer.claims</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+    </record>
+
+       <record id="view_laborer_claims_form" model="ir.ui.view">
+        <field name="name">Laborer Claims</field>
+        <field name="model">laborer.claims</field>
+        <field name="arch" type="xml">
+            <form string="Laborer Claims">
+                <header>
+                    <button name="action_claim_in_progress" states="new"
+                                string="Start" type="object"
+                                class="oe_highlight"/>
+                    <button name="action_claim_done" states="in_progress"
+                                string="Done" type="object"
+                                class="oe_highlight"/>
+
+                    <field name="state" widget="statusbar"
+                               statusbar_visible="new,in_progress,done"/>
+                </header>
+                <sheet>
+                    <h1>
+                        <field name="name" readonly="1"/>
+                    </h1>
+                    <group>
+                        <group>
+                             <field name="date"/>
+                            <field name="labor_id" string="Labour"/>
+                            <field name="contact"/>
+                            <field name="passport_no"/>
+                            <field name="agency"/>
+                            <field name="employer"/>
+                        </group>
+                        <group>
+                           <field name="destination_city"/>
+<!--                           <field name="destination_country"/>-->
+                           <field name="visa_no"/>
+<!--                           <field name="reservation_no"/>-->
+                           <field name="departure_date"/>
+<!--                           <field name="travel_company"/>-->
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="problem"/>
+                        </group>
+                        <group>
+                            <field name="response"/>
+                        </group>
+                    </group>
+                </sheet>
+                 <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_laborer_claims_tree">
+        <field name="name">Laborer Claims Tree</field>
+        <field name="model">laborer.claims</field>
+        <field name="arch" type="xml">
+            <tree string="Claims">
+                            <field name="name"/>
+                            <field name="labor_id" string="Laborer"/>
+                            <field name="contact"/>
+                            <field name="passport_no"/>
+                            <field name="agency"/>
+                            <field name="employer"/>
+                            <field name="destination_city"/>
+<!--                            <field name="destination_country"/>-->
+                            <field name="visa_no"/>
+                            <field name="reservation_no"/>
+                            <field name="state"/>
+<!--                            <field name="travel_company"/>-->
+            </tree>
+        </field>
+    </record>
+    <record model="ir.ui.view" id="view_laborer_claims_search">
+        <field name="name">Laborer Claims Seach</field>
+        <field name="model">laborer.claims</field>
+        <field name="arch" type="xml">
+            <search string="Claims">
+                            <field name="name"/>
+                            <field name="labor_id" string="Labour"/>
+                            <field name="contact"/>
+                            <field name="passport_no"/>
+                            <field name="agency"/>
+                            <field name="employer"/>
+                            <field name="destination_city"/>
+<!--                            <field name="destination_country"/>-->
+                            <field name="visa_no"/>
+                <field name="state"/>
+            </search>
+        </field>
+    </record>
+      <menuitem id="main_menu_laborer_claims" sequence="81" name="Laborer Claims" parent="menu_recruitment_root"  />
+      <menuitem id="menu_laborer_claims"  name="Claims" parent="main_menu_laborer_claims" action="laborer_claims_action" />
+
+
+</odoo>

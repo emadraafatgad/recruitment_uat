@@ -101,4 +101,6 @@ access_account_payment_registration,account.payment,account.model_account_paymen
 access_interpol_medical_registration,interpol medical registration,model_interpol_gcc_update,master_data.group_registeration_user,1,1,1,1
 access_accommodation_list_general,accommodation_list_general,model_accommodation_list,,1,0,0,0
 access_accommodation_list,accommodation_list,model_accommodation_list,master_data.group_registeration_user,1,1,1,1
+access_laborer_claims,acc_laborer_claims,model_laborer_claims,master_data.group_registeration_user,1,1,1,1
+
 

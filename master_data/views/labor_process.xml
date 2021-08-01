@@ -17,11 +17,11 @@
                 <sheet>
                     <group>
                         <group>
-                            <field name="labor" invisible="1"/>
-                            <field name="type"/>
-                            <field name="total_cost"/>
-                            <field name="cost"/>
-                            <field name="state"/>
+                            <field name="labor" readonly="1"/>
+                            <field name="type" readonly="1"/>
+                            <field name="total_cost" readonly="1"/>
+                            <field name="cost" readonly="1"/>
+                            <field name="state" readonly="1"/>
                         </group>
                     </group>
                 </sheet>
@@ -39,15 +39,25 @@
         <field name="model">labor.process</field>
         <field name="arch" type="xml">
             <tree>
-                <field name="labor" invisible="1"/>
+                <field name="labor" />
                 <field name="type"/>
                 <field name="total_cost"/>
                 <field name="cost"/>
-                <field name="state"/>
+<!--                <field name="state"/>-->
             </tree>
         </field>
     </record>
+    <record model="ir.ui.view" id="view_labor_process_search">
+        <field name="name">Process Search</field>
+        <field name="model">labor.process</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="labor"/>
+                <field name="type"/>
+            </search>
+        </field>
+    </record>
 <!--      <menuitem id="menu_labor_process_main" sequence="90" name="Labor Process" parent="menu_recruitment_root" />-->
-<!--    <menuitem name="Labors Process" id="labor_process_menu_ids" parent="menu_recruitment_root" action="labor_process_action" sequence="1" groups="master_data.group_registeration_manager"/>-->
+    <menuitem name="Labors Process" id="labor_process_menu_ids" parent="menu_recruitment_root" action="labor_process_action" sequence="1" groups="master_data.group_registeration_manager"/>
 
 </odoo>

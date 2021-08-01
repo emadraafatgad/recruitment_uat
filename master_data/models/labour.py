@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 import base64
-from datetime import datetime
-from dateutil.relativedelta import relativedelta
-from odoo import api, SUPERUSER_ID, fields, models, _
 from datetime import date
+from datetime import datetime
+
+from dateutil.relativedelta import relativedelta
+
+from odoo import api, fields, models, _
 from odoo.exceptions import UserError, ValidationError
 
 
@@ -572,81 +574,66 @@ class LaborProfile(models.Model):
         price = 0.0
         currency_id = self.env['product.recruitment.config'].search([('type', '=', "agent")]).currency_id
         process_price = 0
-        for record in self.labor_process_ids:
-            process_price = 0
-            conf_type = self.env['product.recruitment.config'].search([('type', '=', record.type)])
-            if conf_type.type == 'agency':
-                continue
-            if conf_type.type == 'clearance':
-                continue
-            if conf_type:
-                proc_currency_id = conf_type.currency_id
-                process_price = proc_currency_id._convert(record.total_cost, currency_id, self.env.user.company_id,
-                                     fields.Date.today())
-                print(conf_type.currency_id.name,"Currency Name")
-                print(conf_type.type, "type Name")
-                print(proc_currency_id.name, "process currency")
-                print(currency_id.name, "agent currency")
-                print(process_price, "process_price")
-            elif record.type == "big_medical":
-                conf_type = self.env['product.recruitment.config'].search([('type', '=', "hospital")])
-                proc_currency_id = conf_type.currency_id
-                process_price = proc_currency_id._convert(record.total_cost, currency_id, self.env.user.company_id,
-                                                          fields.Date.today())
-                print(conf_type.currency_id.name, "Currency Name")
-                print(conf_type.type, "type Name")
-                print(proc_currency_id.name, "process currency")
-                print(currency_id.name, "agent currency")
-                print(process_price, "process_price")
-            elif record.type == "stamping":
-                conf_type = self.env['product.recruitment.config'].search([('type', '=', "embassy")])
-                proc_currency_id = conf_type.currency_id
-                process_price = proc_currency_id._convert(record.total_cost, currency_id, self.env.user.company_id,
-                                                          fields.Date.today())
-                print(conf_type.currency_id.name, "Currency Name")
-                print(conf_type.type, "type Name")
-                print(proc_currency_id.name, "process currency")
-                print(currency_id.name, "agent currency")
-                print(process_price, "process_price")
-            elif record.type == "agent_payment":
-                conf_type = self.env['product.recruitment.config'].search([('type', '=', "agent")])
-                proc_currency_id = conf_type.currency_id
-                process_price = proc_currency_id._convert(record.total_cost, currency_id, self.env.user.company_id,
-                                                          fields.Date.today())
-                print(conf_type.currency_id.name, "Currency Name")
-                print(conf_type.type, "type Name")
-                print(proc_currency_id.name, "process currency")
-                print(currency_id.name, "agent currency")
-                print(process_price, "process_price")
-            price += process_price
-            print(price, "price")
-        # if price:
-        #     raise ValidationError((price))
         append_labor = []
         append_labor.append(self.id)
         invoice_line = []
-        product = self.env['product.recruitment.config'].search([('type', '=', 'agent')])[0]
-        if not product.journal_id:
-            raise ValidationError(_('Please, you must select journal in agent from configration'))
-        accounts = product.product.product_tmpl_id.get_product_accounts()
-        invoice_line.append((0, 0, {
-            'product_id': product.product.id,
-            'labors_id': [(6, 0, append_labor)],
-            'name': 'Block Laborer',
-            'uom_id': product.product.uom_id.id,
-            'price_unit': price,
-            'discount': 0.0,
-            'quantity': 1,
-            'account_id': accounts.get('expense') and accounts['expense'].id or \
-                          accounts['expense'].id,
-        }))
+        for record in self.labor_process_ids:
+            process_price = 0
+            price = 0.0
+            if record.type != 'agent_payment' and record.total_cost > 0:
+                conf_type = self.env['product.recruitment.config'].search([('type', '=', record.type)])
+                if conf_type.type == 'agency':
+                    continue
+                if conf_type.type == 'clearance':
+                    continue
+                if conf_type.type == 'travel_company':
+                    continue
+                if conf_type:
+                    proc_currency_id = conf_type.currency_id
+                    accounts = conf_type.product.product_tmpl_id.get_product_accounts()
+                    process_price = proc_currency_id._convert(record.total_cost, currency_id, self.env.user.company_id,
+                                                              fields.Date.today())
+
+                elif record.type == "big_medical":
+                    conf_type = self.env['product.recruitment.config'].search([('type', '=', "hospital")])
+                    accounts = conf_type.product.product_tmpl_id.get_product_accounts()
+                    proc_currency_id = conf_type.currency_id
+                    process_price = proc_currency_id._convert(record.total_cost, currency_id, self.env.user.company_id,
+                                                              fields.Date.today())
+
+                elif record.type == "stamping":
+                    conf_type = self.env['product.recruitment.config'].search([('type', '=', "embassy")])
+                    accounts = conf_type.product.product_tmpl_id.get_product_accounts()
+                    proc_currency_id = conf_type.currency_id
+                    process_price = proc_currency_id._convert(record.total_cost, currency_id, self.env.user.company_id,
+                                                              fields.Date.today())
+                elif record.type == "agent_commission":
+                    conf_type = self.env['product.recruitment.config'].search([('type', '=', "agent")])
+                    accounts = conf_type.product.product_tmpl_id.get_product_accounts()
+                    proc_currency_id = conf_type.currency_id
+                    process_price = proc_currency_id._convert(record.total_cost, currency_id, self.env.user.company_id,
+                                                              fields.Date.today())
+                price += process_price
+
+                invoice_line.append((0, 0, {
+                    'product_id': conf_type.product.id,
+                    'labors_id': [(6, 0, append_labor)],
+                    'name': 'Block Laborer',
+                    'uom_id': conf_type.product.uom_id.id,
+                    'price_unit': price,
+                    'discount': 0.0,
+                    'quantity': 1,
+                    'account_id': accounts.get('expense') and accounts['expense'].id or \
+                                  accounts['expense'].id,
+                }))
+        agent_conf = self.env['product.recruitment.config'].search([('type', '=', "agent")])
         self.env['account.invoice'].create({
             'partner_id': self.agent.id,
-            'currency_id': product.currency_id.id,
             'type': 'in_refund',
+            'currency_id': currency_id,
             'partner_type': self.agent.vendor_type,
             'origin': self.identification_code,
-            'journal_id': product.journal_id.id,
+            'journal_id': agent_conf.journal_id.id,
             'account_id': self.agent.property_account_payable_id.id,
             'invoice_line_ids': invoice_line,
 
@@ -868,6 +855,7 @@ class LaborProfile(models.Model):
         ('id_uniqe', 'unique(national_id)', 'National ID must be unique!')
         , ('passport_uniqe', 'unique(passport_no)', 'Passport No must be unique!')
     ]
+
     # type = fields.Selection([('pre_medical_check', 'Pre Medical Check'), ('agent', 'Agent'), ('nira', 'Nira Broker'),
     #                          ('passport', 'Passport Broker'), ('passport_placing_issue', 'Internal affairs'),
     #                          ('interpol', 'Interpol Broker'), ('gcc', 'GCC'), ('hospital', 'Big Medical'),
@@ -879,7 +867,6 @@ class LaborProfile(models.Model):
     # # @api.depends('labor_process_ids.state')
     # def labour_process_total_cost(self):
     #     if if
-
 
     # def labour_process_total_cost(self):
     #     for rec in self:
@@ -1221,7 +1208,7 @@ class LaborProcessline(models.Model):
     state = fields.Char(compute='compute_state')
     payment = fields.Selection([('first', 'First'), ('last', 'Last')])
     cost = fields.Float('Paid Cost')
-    total_cost = fields.Float(compute='compute_total_cost')
+    total_cost = fields.Float(compute='compute_total_cost', store=True)
 
     @api.depends('type')
     def compute_total_cost(self):
@@ -1313,7 +1300,6 @@ class LaborProcessline(models.Model):
     @api.one
     @api.depends('type')
     def compute_state(self):
-
         if self.type == 'agent_payment' and self.payment == 'first':
             first_payment = self.env['account.payment'].search(
                 [('labor_id', '=', self.labor.id), ('payment', '=', 'first')])
@@ -1325,35 +1311,56 @@ class LaborProcessline(models.Model):
         if self.type == 'agent_commission':
             self.state = dict(self.labor.agent_invoice._fields['state'].selection).get(self.labor.agent_invoice.state)
         if self.type == 'training':
-            training = self.env['slave.training'].search([('slave_id', '=', self.labor.id)])
+            training = self.env['slave.training'].search([('slave_id', '=', self.labor.id)], limit=1)
+            if len(training) > 1:
+                raise ValidationError('This Laobur Has {} records of training'.format(len(training)))
             self.state = dict(training._fields['state'].selection).get(training.state)
         if self.type == 'nira':
-            nira = self.env['nira.letter.request'].search([('labourer_id', '=', self.labor.id)])
+            nira = self.env['nira.letter.request'].search([('labourer_id', '=', self.labor.id)], limit=1)
+            if len(nira) > 1:
+                raise ValidationError('This Laobur Has {} records of nira'.format(len(nira)))
             self.state = dict(nira._fields['state'].selection).get(nira.state)
         if self.type == 'passport':
-            passport = self.env['passport.request'].search([('labor_id', '=', self.labor.id)])
+            passport = self.env['passport.request'].search([('labor_id', '=', self.labor.id)], limit=1)
+            if len(passport) > 1:
+                raise ValidationError('This Laobur Has {} records of passport'.format(len(passport)))
             self.state = dict(passport._fields['state'].selection).get(passport.state)
         if self.type == 'interpol':
-            interpol = self.env['interpol.request'].search([('labor_id', '=', self.labor.id)])
+            interpol = self.env['interpol.request'].search([('labor_id', '=', self.labor.id)], limit=1)
+            if len(interpol) > 1:
+                raise ValidationError('This Laobur Has {} records of interpol'.format(len(interpol)))
             self.state = dict(interpol._fields['state'].selection).get(interpol.state)
         if self.type == 'big_medical':
-            big_medical = self.env['big.medical'].search([('labor_id', '=', self.labor.id)])
+            big_medical = self.env['big.medical'].search([('labor_id', '=', self.labor.id)], limit=1)
+            if len(big_medical) > 1:
+                raise ValidationError('This Laobur Has {} records of big medical'.format(len(big_medical)))
             self.state = dict(big_medical._fields['state'].selection).get(big_medical.state)
         if self.type == 'agency':
-            agency = self.env['specify.agent'].search([('labor_id', '=', self.labor.id)])
+            agency = self.env['specify.agent'].search([('labor_id', '=', self.labor.id)], limit=1)
+            if len(agency) > 1:
+                raise ValidationError('This Laobur Has {} records of qgeny'.format(len(agency)))
             self.state = dict(agency._fields['state'].selection).get(agency.state)
         if self.type == 'enjaz':
-            enjaz = self.env['labor.enjaz.stamping'].search([('labor_id', '=', self.labor.id), ('type', '=', 'enjaz')])
+            enjaz = self.env['labor.enjaz.stamping'].search([('labor_id', '=', self.labor.id), ('type', '=', 'enjaz')],
+                                                            limit=1)
+            if len(enjaz) > 1:
+                raise ValidationError('This Laobur Has {} records of enjaz'.format(len(enjaz)))
             self.state = dict(enjaz._fields['state'].selection).get(enjaz.state)
         if self.type == 'stamping':
             stamping = self.env['labor.enjaz.stamping'].search(
-                [('labor_id', '=', self.labor.id), ('type', '=', 'stamping')])
+                [('labor_id', '=', self.labor.id), ('type', '=', 'stamping')], limit=1)
+            if len(stamping) > 1:
+                raise ValidationError('This Laobur Has {} records of stamping'.format(len(stamping)))
             self.state = dict(stamping._fields['state'].selection).get(stamping.state)
         if self.type == 'clearance':
-            clearance = self.env['labor.clearance'].search([('labor_id', '=', self.labor.id)])
+            clearance = self.env['labor.clearance'].search([('labor_id', '=', self.labor.id)], limit=1)
+            if len(clearance) > 1:
+                raise ValidationError('This Laobur Has {} records of clearance'.format(len(clearance)))
             self.state = dict(clearance._fields['state'].selection).get(clearance.state)
         if self.type == 'travel_company':
-            travel_company = self.env['travel.company'].search([('labor_id', '=', self.labor.id)])
+            travel_company = self.env['travel.company'].search([('labor_id', '=', self.labor.id)], limit=1)
+            if len(travel_company) > 1:
+                raise ValidationError('This Laobur Has {} records of travel_company'.format(len(travel_company)))
             self.state = dict(travel_company._fields['state'].selection).get(travel_company.state)
 
 
@@ -1414,3 +1421,11 @@ class PaymentRequest(models.Model):
     _inherit = ['portal.mixin', 'mail.thread', 'mail.activity.mixin']
 
     name = fields.Char(string="Number", readonly=True, default='New')
+
+
+class LaborerClaims(models.Model):
+    _name = 'laborer.claims'
+    _description = 'laborer Claim'
+    _inherit = ['portal.mixin', 'mail.thread', 'mail.activity.mixin']
+
+    labor_id = fields.Many2one('labor.profile', track_visibility="onchange")

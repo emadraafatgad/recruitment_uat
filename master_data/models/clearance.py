@@ -56,37 +56,72 @@ class LaborClearance(models.Model):
         if request:
             raise ValidationError(_('Done before'))
         labor = self.env['labor.profile'].search([('id', '=', self.labor_id.id)])
+        currency_id = self.env['product.recruitment.config'].search([('type', '=', "agent")]).currency_id
         type = ''
+        process_price = 0.0
         price = 0.0
-        for record in labor.labor_process_ids:
-            if record.type != 'agent_payment':
-                type += record.type + ' , '
-                price += record.total_cost
+        invoice_line = []
         append_labor = []
         append_labor.append(self.labor_id.id)
-        invoice_line = []
-        purchase_journal = self.env['account.journal'].search([('type', '=', 'purchase')])[0]
-        product = self.env['product.recruitment.config'].search([('type', '=', 'labor_reject')])[0]
-        accounts = product.product.product_tmpl_id.get_product_accounts()
-        invoice_line.append((0, 0, {
-            'product_id': product.product.id,
-            'labors_id': [(6, 0, append_labor)],
-            'name': type,
-            'uom_id': product.product.uom_id.id,
-            'price_unit': price,
-            'discount': 0.0,
-            'quantity': 1,
-            'account_id': accounts.get('expense') and accounts['expense'].id or \
-                          accounts['expense'].id,
-        }))
+        for record in self.labor_id.labor_process_ids:
+            price = 0.0
+            process_price = 0.0
+            type = ''
+            if record.type != 'agent_payment' and record.total_cost > 0:
+                conf_type = self.env['product.recruitment.config'].search([('type', '=', record.type)])
+                if conf_type.type == 'agency':
+                    continue
+                if conf_type.type == 'clearance':
+                    continue
+                if conf_type.type == 'travel_company':
+                    continue
+                if conf_type:
+                    proc_currency_id = conf_type.currency_id
+                    accounts = conf_type.product.product_tmpl_id.get_product_accounts()
+                    process_price = proc_currency_id._convert(record.total_cost, currency_id, self.env.user.company_id,
+                                                              fields.Date.today())
+
+                elif record.type == "big_medical":
+                    conf_type = self.env['product.recruitment.config'].search([('type', '=', "hospital")])
+                    accounts = conf_type.product.product_tmpl_id.get_product_accounts()
+                    proc_currency_id = conf_type.currency_id
+                    process_price = proc_currency_id._convert(record.total_cost, currency_id, self.env.user.company_id,
+                                                              fields.Date.today())
+
+                elif record.type == "stamping":
+                    conf_type = self.env['product.recruitment.config'].search([('type', '=', "embassy")])
+                    accounts = conf_type.product.product_tmpl_id.get_product_accounts()
+                    proc_currency_id = conf_type.currency_id
+                    process_price = proc_currency_id._convert(record.total_cost, currency_id, self.env.user.company_id,
+                                                              fields.Date.today())
+                elif record.type == "agent_commission":
+                    conf_type = self.env['product.recruitment.config'].search([('type', '=', "agent")])
+                    accounts = conf_type.product.product_tmpl_id.get_product_accounts()
+                    proc_currency_id = conf_type.currency_id
+                    process_price = proc_currency_id._convert(record.total_cost, currency_id, self.env.user.company_id,
+                                                              fields.Date.today())
+                type += record.type + '/ Laborer Reject'
+                price += process_price
+                invoice_line.append((0, 0, {
+                    'product_id': conf_type.product.id,
+                    'labors_id': [(6, 0, append_labor)],
+                    'name': type,
+                    'uom_id': conf_type.product.uom_id.id,
+                    'price_unit': price,
+                    'discount': 0.0,
+                    'quantity': 1,
+                    'account_id': accounts.get('expense') and accounts['expense'].id or \
+                                  accounts['expense'].id,
+                }))
+        agent_conf = self.env['product.recruitment.config'].search([('type', '=', "agent")])
         if labor.labor_process_ids:
             self.env['account.invoice'].create({
                 'partner_id': labor.agent.id,
-                'currency_id': product.currency_id.id,
+                'currency_id': currency_id.id,
                 'type': 'in_refund',
                 'partner_type': labor.agent.vendor_type,
                 'origin': self.name,
-                'journal_id': purchase_journal.id,
+                'journal_id': agent_conf.journal_id.id,
                 'account_id': labor.agent.property_account_payable_id.id,
                 'invoice_line_ids': invoice_line,
 

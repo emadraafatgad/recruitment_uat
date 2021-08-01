@@ -94,7 +94,7 @@ class StampingList(models.Model):
             append_labor.append(rec.labor_id.id)
             name += rec.labor_name
         invoice_line = []
-        product = self.env['product.recruitment.config'].search([('type', '=', 'embassy')])[0]
+        product = self.env['product.recruitment.config'].search([('type', '=', 'embassy')],limit=1)
         if not product.journal_id:
             raise ValidationError(_('Please, you must select journal in stamping from configration'))
         accounts = product.product.product_tmpl_id.get_product_accounts()

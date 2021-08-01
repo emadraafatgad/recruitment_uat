@@ -64,7 +64,7 @@ class MedicalList(models.Model):
         self.state = 'invoiced'
         self.list_now_len = len(self.medical_request)
         invoice_line = []
-        product = self.env['product.recruitment.config'].search([('type', '=', 'hospital')])[0]
+        product = self.env['product.recruitment.config'].search([('type', '=', 'hospital')],limit=1)
         if not product.journal_id:
             raise ValidationError(_('Please, you must select journal in big medical from configration'))
         accounts = product.product.product_tmpl_id.get_product_accounts()

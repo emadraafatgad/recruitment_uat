@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_laborer_claims,laborer_claims,model_laborer_claim,master_data.group_registeration_user,1,1,1,1
