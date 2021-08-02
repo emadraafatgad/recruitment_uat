@@ -27,8 +27,9 @@ class LaborClearance(models.Model):
     contact = fields.Char(required=True)
     passport_no = fields.Char(related='labor_id.passport_no', store=True)
     agency_code = fields.Char(required=True)
-    destination_city = fields.Many2one('res.country.state', required=True)
+    destination_city = fields.Many2one('res.country.state')
     destination_country = fields.Many2one('res.country', related='labor_id.country_id', store=True)
+    clearance_list = fields.Many2one('clearance.list')
 
     @api.multi
     def action_confirm(self):

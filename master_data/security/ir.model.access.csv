@@ -59,7 +59,7 @@ access_labor_clearance_training_user,labor_clearance_training_user,model_labor_c
 access_labor_clearance_specify_agency,labor_clearance_specify_agency,model_labor_clearance,group_specify_agency,1,1,1,0
 access_labor_clearance_interpol_user,labor_clearance_interpol_user,model_labor_clearance,group_interpol_user,1,1,1,0
 access_labor_clearance_general,labor_clearance_general,model_labor_clearance,,1,0,0,0
-access_travel_company,travel_company,model_travel_company,group_travel_company_user,1,1,1,0
+access_travel_company,travel_company,model_travel_company,group_travel_company_user,1,1,1,1
 access_travel_company_clearance_user,travel_company_clearance_user,model_travel_company,group_clearance_user,1,1,1,0
 access_travel_company_general,travel_company_general,model_travel_company,,1,0,0,0
 access_labor_enjaz_stamping,labor_enjaz_stamping,model_labor_enjaz_stamping,,1,0,0,0
@@ -102,5 +102,6 @@ access_interpol_medical_registration,interpol medical registration,model_interpo
 access_accommodation_list_general,accommodation_list_general,model_accommodation_list,,1,0,0,0
 access_accommodation_list,accommodation_list,model_accommodation_list,master_data.group_registeration_user,1,1,1,1
 access_laborer_claims,acc_laborer_claims,model_laborer_claims,master_data.group_registeration_user,1,1,1,1
+access_labor_activity,labor_activiy,model_labor_activity,,1,1,1,1
 
 

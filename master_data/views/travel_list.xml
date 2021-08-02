@@ -68,6 +68,8 @@
                                     <button name="action_done" states="in_progress"
                                             string="Done" type="object"
                                             class="oe_highlight" confirm="Are you sure you want to confirm that?"/>
+                                    <field name="clearance_list" invisible="1"/>
+                                    <button name="action_view_clearance_list"  string="View Clearnce List" type="object" class="oe_highlight"/>
                                 </tree>
                             </field>
                         </page>

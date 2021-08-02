@@ -43,17 +43,26 @@ class TravelList(models.Model):
         return {'domain': domain}
 
     def action_inprogress(self):
+        self.list_now_len = len(self.travel_list)
         for line in self.travel_list:
             line.action_in_progress(self.travel_company,self.name)
             self.state = 'in_progress'
 
+    @api.onchange('travel_list')
+    def onchange_travel_list(self):
+        if not self.state == 'new':
+            if self.list_total_count > self.list_now_len:
+                raise ValidationError(_('You cannot add lines in this state'))
+            if self.list_total_count < self.list_now_len:
+                raise ValidationError(_('You cannot remove lines in this state'))
 
-    # @api.multi
-    # def unlink(self):
-    #     for rec in self:
-    #         if rec.state != 'new':
-    #             raise ValidationError(_('You cannot delete %s as it is not in new state') % rec.name)
-    #     return super(TravelList, self).unlink()
+
+    @api.multi
+    def unlink(self):
+       for rec in self:
+             if rec.state != 'new':
+                raise ValidationError(_('You cannot delete %s as it is not in new state') % rec.name)
+       return super(TravelList, self).unlink()
 
     @api.model
     def create(self, vals):

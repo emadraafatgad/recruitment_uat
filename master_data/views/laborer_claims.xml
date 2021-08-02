@@ -39,8 +39,8 @@
                     </h1>
                     <group>
                         <group>
-                             <field name="date"/>
-                            <field name="labor_id" string="Labour"/>
+                             <field name="date" attrs="{'readonly':[('state', '!=', 'new')]}"/>
+                            <field name="labor_id" string="Labour" attrs="{'readonly':[('state', '!=', 'new')]}"/>
                             <field name="contact"/>
                             <field name="passport_no"/>
                             <field name="agency"/>
@@ -57,10 +57,10 @@
                     </group>
                     <group>
                         <group>
-                            <field name="problem"/>
+                            <field name="problem" attrs="{'readonly':[('state', '=', 'done')]}"/>
                         </group>
                         <group>
-                            <field name="response"/>
+                            <field name="response" attrs="{'readonly':[('state', '=', 'done')]}"/>
                         </group>
                     </group>
                 </sheet>

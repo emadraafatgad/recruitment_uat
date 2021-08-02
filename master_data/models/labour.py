@@ -3,9 +3,10 @@ import base64
 from datetime import date
 from datetime import datetime
 
+import PIL.ImageChops
 from dateutil.relativedelta import relativedelta
 
-from odoo import api, fields, models, _
+from odoo import api, fields, models, tools, _
 from odoo.exceptions import UserError, ValidationError
 
 
@@ -60,6 +61,7 @@ class LaborProfile(models.Model):
         [('house_maid', 'House Maid'), ('pro_maid', 'Pro Maid'), ('pro_worker', 'Pro Worker')],
         default="house_maid", track_visibility="onchange", string='Occupation')
     salary = fields.Float(default=900, track_visibility="onchange")
+    activity_id = fields.Many2one('labor.activity')
 
     def get_default_currency(self):
         currency = self.env['res.currency'].search([('currency_subunit_label', '=', 'Halala')])
@@ -193,6 +195,32 @@ class LaborProfile(models.Model):
                 'target': 'new',
                 'res_id': record.id,
             }
+
+
+    @api.multi
+    def apply_activity(self):
+        view_id = self.env.ref('master_data.labor_activity_wizard')
+        context = dict(self._context or {})
+        active_ids = context.get('active_ids', []) or []
+        labors_list = []
+        for record in self.env['labor.profile'].browse(active_ids):
+            labors_list.append(record.id)
+        return {
+            'name': _('Activity'),
+            'type': 'ir.actions.act_window',
+            'res_model': 'labor.activity',
+            'view_type': 'form',
+            'view_mode': 'form',
+            'view_id': view_id.id,
+            'views': [(view_id.id, 'form')],
+            'target': 'new',
+            'context': {
+                'default_labor_ids': labors_list,
+
+
+            }
+
+        }
 
     @api.multi
     def action_update_passport(self):
@@ -1025,6 +1053,55 @@ class LaborProfile(models.Model):
 
         })
         return super(LaborProfile, self).copy(default)
+
+class LaborActivity(models.Model):
+    _name = 'labor.activity'
+    labor_ids = fields.One2many('labor.profile','activity_id')
+    activity_type_id = fields.Many2one('mail.activity.type', 'Activity',domain="[('res_model_id', '=', False)]", ondelete='restrict')
+    activity_category = fields.Selection(related='activity_type_id.category', readonly=True)
+    summary = fields.Char()
+    date_deadline = fields.Date('Due Date', index=True, required=True, default=fields.Date.context_today)
+    user_id = fields.Many2one('res.users', 'Assigned to', default=lambda self: self.env.user,index=True, required=True)
+    note = fields.Html()
+
+    @api.multi
+    def action_assign(self):
+        for record in self.labor_ids:
+            model_id = self.env['ir.model']._get(record._name).id
+            self.env['mail.activity'].create({
+                'res_model_id':model_id,
+                'res_id': record.id,
+                'activity_type_id': self.activity_type_id.id,
+                'summary': self.summary,
+                'note': self.note,
+                'date_deadline': self.date_deadline,
+                'user_id': self.user_id.id,
+            })
+
+    @api.multi
+    def action_create_calendar_event(self):
+        self.ensure_one()
+        activity_ids = []
+        action = self.env.ref('calendar.action_calendar_event').read()[0]
+        for record in self.labor_ids:
+            model_id = self.env['ir.model']._get(record._name).id
+            activity = self.env['mail.activity'].create({
+                'res_model_id':model_id,
+                'res_id': record.id,
+                'activity_type_id': self.activity_type_id.id,
+                'summary': self.summary,
+                'note': self.note,
+                'date_deadline': self.date_deadline,
+                'user_id': self.user_id.id,
+            })
+            activity_ids.append(activity.id)
+        action['context'] = {
+            'default_activity_type_id': self.activity_type_id.id,
+            'default_name': self.summary,
+            'default_description': self.note and tools.html2plaintext(self.note).strip() or '',
+            'default_activity_ids': [(6, 0, activity_ids)],
+        }
+        return action
 
 
 class Expeience(models.Model):

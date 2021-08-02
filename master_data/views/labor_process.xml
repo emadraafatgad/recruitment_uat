@@ -58,6 +58,6 @@
         </field>
     </record>
 <!--      <menuitem id="menu_labor_process_main" sequence="90" name="Labor Process" parent="menu_recruitment_root" />-->
-    <menuitem name="Labors Process" id="labor_process_menu_ids" parent="menu_recruitment_root" action="labor_process_action" sequence="1" groups="master_data.group_registeration_manager"/>
+<!--    <menuitem name="Labors Process"  id="labor_process_menu_ids" parent="menu_recruitment_root" action="labor_process_action" sequence="1" groups="master_data.group_registeration_manager"/>-->
 
 </odoo>

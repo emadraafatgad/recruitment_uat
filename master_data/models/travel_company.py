@@ -28,6 +28,17 @@ class TravelCompany(models.Model):
     travel_list_id = fields.Many2one('travel.list')
     state = fields.Selection([('new', 'new'), ('in_progress', 'InProgress'), ('rejected', 'Rejected'), ('done', 'Done'),
                               ('blocked', 'Blocked')], default='new', track_visibility='onchange')
+    clearance_list = fields.Many2one('clearance.list',compute='compute_clearance_list')
+
+    @api.one
+    @api.depends('labor_id')
+    def compute_clearance_list(self):
+        list = self.env['clearance.list'].search([])
+        for record in list:
+            for lab in record.clearance_list:
+                if lab.labor_id == self.labor_id:
+                    self.clearance_list = record.id
+                    break
 
     @api.multi
     def action_done(self):
@@ -84,9 +95,11 @@ class TravelCompany(models.Model):
         append_labor = []
         append_labor.append(self.labor_id.id)
         invoice_line = []
-        product = self.env['product.recruitment.config'].search([('type', '=', 'travel_company')])[0]
+        product = self.env['product.recruitment.config'].search([('type', '=', 'travel_company')],limit=1)
+        if not product:
+            raise ValidationError(_('Please, you must add configuration for Travel'))
         if not product.journal_id:
-            raise ValidationError(_('Please, you must select journal in travel from configration'))
+            raise ValidationError(_('Please, you must select journal in travel from configuration'))
         accounts = product.product.product_tmpl_id.get_product_accounts()
         name = self.labor_id.name + '/Agency: ' + self.agency.name
         invoice_line.append((0, 0, {
@@ -219,6 +232,19 @@ class TravelCompany(models.Model):
 
             })
         self.state = 'rejected'
+
+    @api.multi
+    def action_view_clearance_list(self):
+        return {
+            'name': _('View Laborer Clearance List'),
+            'type': 'ir.actions.act_window',
+            'res_model': 'clearance.list',
+            'view_type': 'form',
+            'view_mode': 'form',
+            'target': 'new',
+            'res_id': self.clearance_list.id,
+            # 'flags': {'form': {'action_buttons': False}}
+        }
 
     @api.model
     def create(self, vals):
